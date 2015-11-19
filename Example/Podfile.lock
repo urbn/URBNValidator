@@ -1,0 +1,14 @@
+PODS:
+  - URBNValidator (0.1.0)
+
+DEPENDENCIES:
+  - URBNValidator (from `../`)
+
+EXTERNAL SOURCES:
+  URBNValidator:
+    :path: ../
+
+SPEC CHECKSUMS:
+  URBNValidator: 5022fa22a67722b35496e7bc5d157120fc3974bb
+
+COCOAPODS: 0.39.0
