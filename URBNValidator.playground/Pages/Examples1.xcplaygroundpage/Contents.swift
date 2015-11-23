@@ -8,48 +8,16 @@ ruleset
 */
 
 
-import Foundation
+//: Create the rule
+let r = URBNRequiredRule()
 
+//: Calling the required rule with something that's nil will be invalid
+r.validateValue(nil)
 
-@objc protocol ValidationRule {
-    var localizationKey: String { get set }
-    func validateValue(value: AnyObject?) -> Bool
-}
+//: Passing a valid non-nil object will result valid
+r.validateValue("")
 
-class RequiredRule: ValidationRule {
-    @objc var localizationKey: String = "ls_urbnv_required"
-    
-    @objc func validateValue(value: AnyObject?) -> Bool {
-        return value != nil
-    }
-}
-
-
-class Object {
-    var string: String?
-    var data: NSDate?
-    var integer: Int?
-}
-
-
-
-let obj = Object()
-
-
-let r = RequiredRule()
-r.validateValue(obj.string)
-obj.string = ""
-r.validateValue(obj.string)
-
-
-
-
-
-
-
-
-
-
-
+//: You may also optionally pass a localized_key override here
+r.validateValue(nil, key: "test_localized")
 
 //: [Next](@next)

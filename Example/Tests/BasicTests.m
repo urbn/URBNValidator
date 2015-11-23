@@ -18,12 +18,69 @@
 
 @implementation BasicTests
 
-- (void)testSampleCall {
+- (void)testRequiredRule {
     
     URBNRequiredRule *requiredRule = [URBNRequiredRule new];
     
     XCTAssertFalse([requiredRule validateValue:nil], @"Should not validate nil");
     XCTAssertTrue([requiredRule validateValue:@"yo"], @"Should validate non-nil");
+}
+
+- (void)testMinLengthRule {
+    URBNMinLengthRule *lengthRule = [[URBNMinLengthRule alloc] initWithMinLength:5];
+    
+    // String validations
+    XCTAssertFalse([lengthRule validateValue:nil], @"Should not validate nil");
+    XCTAssertFalse([lengthRule validateValue:@"1324"], @"Should not validate anything < 5");
+    XCTAssertTrue([lengthRule validateValue:@"12345"], @"Should validate anything >= 5");
+    XCTAssertTrue([lengthRule validateValue:@"123456"], @"Should validate anything >= 5");
+    
+    // Array validations
+    XCTAssertFalse([lengthRule validateValue:@[]], @"Should not validate array with count < 5");
+    XCTAssertFalse([lengthRule validateValue:@[@1]], @"Should not validate array with count < 5");
+    NSArray *a = @[@1,@2,@3,@4,@5];
+    XCTAssertTrue([lengthRule validateValue:a], @"Should validate array with count == 5");
+    XCTAssertTrue([lengthRule validateValue:[a arrayByAddingObject:@6]], @"Should validate array with count > 5");
+    
+    // Dictionary validations
+    XCTAssertFalse([lengthRule validateValue:@{}], @"Should not validate dictionary with count < 5");
+    XCTAssertFalse([lengthRule validateValue:@{@1: @"2"}], @"Should not validate dictionary with count < 5");
+    NSDictionary *d = @{@"1": @1, @"2": @2, @"3": @3, @"4": @4, @"5": @5};
+    XCTAssertTrue([lengthRule validateValue:d], @"Should validate dictionary with count == 5");
+}
+
+- (void)testMaxLengthRule {
+    URBNMaxLengthRule *lengthRule = [[URBNMaxLengthRule alloc] initWithMaxLength:5];
+    
+    // String validations
+    XCTAssertFalse([lengthRule validateValue:nil], @"Should not validate nil");
+    XCTAssertFalse([lengthRule validateValue:@"132456"], @"Should not validate anything > 5");
+    XCTAssertTrue([lengthRule validateValue:@"1234"], @"Should validate anything <= 5");
+    XCTAssertTrue([lengthRule validateValue:@"12345"], @"Should validate anything <= 5");
+    
+    // Array validations
+    NSArray *a = @[@1,@2,@3,@4,@5,@6];
+    XCTAssertFalse([lengthRule validateValue:a], @"Should not validate array with count > 5");
+    a = @[@1,@2,@3,@4,@5];
+    XCTAssertTrue([lengthRule validateValue:a], @"Should validate array with count == 5");
+    XCTAssertTrue([lengthRule validateValue:@[@1]], @"Should validate array with count < 5");
+    
+    // Dictionary validations
+    NSDictionary *d = @{@"1": @1, @"2": @2, @"3": @3, @"4": @4, @"5": @5, @"6": @6};
+    XCTAssertFalse([lengthRule validateValue:d], @"Should not validate dictionary with count > 5");
+    d = @{@"1": @1, @"2": @2, @"3": @3, @"4": @4, @"5": @5};
+    XCTAssertTrue([lengthRule validateValue:d], @"Should validate dictionary with count == 5");
+    XCTAssertTrue([lengthRule validateValue:@{@"1": @1}], @"Should validate dictionary with count < 5");
+}
+
+- (void)testBlockRule {
+    URBNBlockRule *blockRule = [[URBNBlockRule alloc] initWithValidator:^BOOL(id obj) {
+        return [obj isKindOfClass:[NSArray class]];
+    }];
+    
+    XCTAssertFalse([blockRule validateValue:nil], @"Should not validate nil since nil is not an array class");
+    XCTAssertFalse([blockRule validateValue:@"2343"], @"Should not validate String since String is not an array class");
+    XCTAssertTrue([blockRule validateValue:@[]], @"Should validate since we're passing an array");
 }
 
 @end
