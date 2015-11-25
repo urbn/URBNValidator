@@ -14,6 +14,15 @@ import Foundation
     func validateValue(value: AnyObject?, rules: [ValidationRule]) -> NSError?
 }
 
+@objc public protocol Validateable {
+    
+    func validationMap() -> [String: [ValidationRule]]
+    
+    optional
+    // Allows each model to supply a custom validator if it sees fit
+    var validator: URBNValidator { get }
+}
+
 
 public class URBNValidator: NSObject, Validator {
     var localizationTable: String?

@@ -7,7 +7,6 @@ Our first requirement is single value validation with a given
 ruleset
 */
 
-
 //: Create the rule
 let r = URBNRequiredRule()
 
@@ -20,4 +19,4 @@ r.validateValue("")
 //: You may also optionally pass a localized_key override here
 r.validateValue(nil, key: "test_localized")
 
-//: [Next](@next)
+//: [Length Rules](@next)
