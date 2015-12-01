@@ -7,7 +7,7 @@ Here we've got a built in rule to handle length requirements.
 This will verify lengths of anything that conforms to our Lengthable
 protocol.   Which by default handles strings, arrays and dictionaries
 */
-
+import URBNValidator
 
 /*:
 ### Max Length

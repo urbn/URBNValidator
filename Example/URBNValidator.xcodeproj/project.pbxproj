@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		3E8964B1F9A3E4AB265D33FD /* Pods_URBNValidator_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33BF3BA3B1970034FE528166 /* Pods_URBNValidator_Tests.framework */; };
 		607FACEC1AFB9204008FA782 /* BasicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* BasicTests.swift */; };
+		D81462AF1C0CA259003892B4 /* ObjectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D81462AE1C0CA259003892B4 /* ObjectTests.m */; };
+		D869D4121C0D0549000CFDA9 /* en.lproj in Resources */ = {isa = PBXBuildFile; fileRef = D869D4111C0D0549000CFDA9 /* en.lproj */; };
+		D869D4141C0D05A8000CFDA9 /* Localizable.strings in Sources */ = {isa = PBXBuildFile; fileRef = D869D4131C0D05A8000CFDA9 /* Localizable.strings */; };
 		D86E46241BFE1FAB0011B659 /* BasicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D86E46231BFE1FAB0011B659 /* BasicTests.m */; };
 /* End PBXBuildFile section */
 
@@ -20,7 +23,10 @@
 		607FACEB1AFB9204008FA782 /* BasicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicTests.swift; sourceTree = "<group>"; };
 		8098A375A79CA7E62ABF61F2 /* URBNValidator.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = URBNValidator.podspec; path = ../URBNValidator.podspec; sourceTree = "<group>"; };
 		A718C7CD66BFAE40143B4620 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		D81462AE1C0CA259003892B4 /* ObjectTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjectTests.m; sourceTree = "<group>"; };
 		D8531D931BFBCD5700734482 /* URBNValidator.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; name = URBNValidator.playground; path = ../URBNValidator.playground; sourceTree = "<group>"; };
+		D869D4111C0D0549000CFDA9 /* en.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = en.lproj; sourceTree = "<group>"; };
+		D869D4131C0D05A8000CFDA9 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Localizable.strings; path = Tests/en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D86E46231BFE1FAB0011B659 /* BasicTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BasicTests.m; sourceTree = "<group>"; };
 		E69A4D0B7B9F0587A7C1A7A1 /* Pods-URBNValidator_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-URBNValidator_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-URBNValidator_Tests/Pods-URBNValidator_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		EA7AF906B427B28407BAB403 /* Pods-URBNValidator_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-URBNValidator_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-URBNValidator_Tests/Pods-URBNValidator_Tests.release.xcconfig"; sourceTree = "<group>"; };
@@ -41,6 +47,7 @@
 		607FACC71AFB9204008FA782 = {
 			isa = PBXGroup;
 			children = (
+				D869D4131C0D05A8000CFDA9 /* Localizable.strings */,
 				D8531D931BFBCD5700734482 /* URBNValidator.playground */,
 				607FACF51AFB993E008FA782 /* Podspec Metadata */,
 				607FACE81AFB9204008FA782 /* Tests */,
@@ -64,6 +71,7 @@
 				607FACEB1AFB9204008FA782 /* BasicTests.swift */,
 				D86E46231BFE1FAB0011B659 /* BasicTests.m */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
+				D81462AE1C0CA259003892B4 /* ObjectTests.m */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -71,6 +79,7 @@
 		607FACE91AFB9204008FA782 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				D869D4111C0D0549000CFDA9 /* en.lproj */,
 				607FACEA1AFB9204008FA782 /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -165,6 +174,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D869D4121C0D0549000CFDA9 /* en.lproj in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -223,7 +233,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D869D4141C0D05A8000CFDA9 /* Localizable.strings in Sources */,
 				607FACEC1AFB9204008FA782 /* BasicTests.swift in Sources */,
+				D81462AF1C0CA259003892B4 /* ObjectTests.m in Sources */,
 				D86E46241BFE1FAB0011B659 /* BasicTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

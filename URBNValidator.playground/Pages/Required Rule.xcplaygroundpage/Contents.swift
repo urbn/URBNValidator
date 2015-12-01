@@ -7,6 +7,8 @@ Our first requirement is single value validation with a given
 ruleset
 */
 
+import URBNValidator
+
 //: Create the rule
 let r = URBNRequiredRule()
 

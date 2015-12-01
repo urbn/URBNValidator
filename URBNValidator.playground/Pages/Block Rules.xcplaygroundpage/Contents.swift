@@ -8,7 +8,7 @@ Now we're getting into the fun stuff.   This is a simple rule
 that takes a closure which returns true or false to determine
 validity.
 */
-
+import URBNValidator
 
 // We'll expand this for clarity.   Below is a better example of usage of 
 // this kind of rule in swift
