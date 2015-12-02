@@ -54,4 +54,16 @@ public class URBNBlockRule: URBNBaseRule {
     }
 }
 
-
+public class URBNRegexRule: URBNBaseRule {
+    internal var pattern: String
+    
+    public init(pattern: String) {
+        self.pattern = pattern
+        super.init()
+    }
+    
+    public override func validateValue(value: AnyObject?) -> Bool {
+        let pred = NSPredicate(format: "SELF MATCHES[cd] %@", self.pattern)
+        return pred.evaluateWithObject(value)
+    }
+}

@@ -14,10 +14,10 @@ class Tester: Validateable {
     var requiredString: String?
     var children = [String]()
     
-    @objc func validationMap() -> [String : [ValidationRule]] {
+    @objc func validationMap() -> [String : ValidatingValue] {
         return [
-            "requiredString": [URBNRequiredRule()],
-            "children": [URBNRequiredRule(), URBNMinLengthRule(minLength: 3)]
+            "requiredString": ValidatingValue(value: self.requiredString, rules: URBNRequiredRule()),
+            "children": ValidatingValue(value: self.children, rules: URBNRequiredRule(), URBNMinLengthRule(minLength: 3))
         ]
     }
     

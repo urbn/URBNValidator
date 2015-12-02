@@ -78,9 +78,29 @@
         return [obj isKindOfClass:[NSArray class]];
     }];
     
+    
     XCTAssertFalse([blockRule validateValue:nil], @"Should not validate nil since nil is not an array class");
     XCTAssertFalse([blockRule validateValue:@"2343"], @"Should not validate String since String is not an array class");
     XCTAssertTrue([blockRule validateValue:@[]], @"Should validate since we're passing an array");
+}
+
+- (void)testRegexRule {
+    URBNRegexRule *regexRule = [[URBNRegexRule alloc] initWithPattern:@"\\d+"];
+    
+    XCTAssertFalse([regexRule validateValue:nil], @"Null should not be valid for the number only pattern");
+    XCTAssertFalse([regexRule validateValue:@"143k"], @"Anything but numbers should be considered failure");
+    XCTAssertTrue([regexRule validateValue:@"123451880"], @"Numbers only should validate");
+}
+
+- (void)testLocalizationOverride {
+    URBNValidator *v = [URBNValidator new];
+    URBNRequiredRule *r = [URBNRequiredRule new];
+    r.localizationKey = @"URBNRequiredRule_Override";
+    
+    NSError *error = nil;
+    [v validate:nil value:nil rule:r error:&error];
+    XCTAssertEqual(error.isMultiError, NO);
+    XCTAssertEqualObjects(error.localizedDescription, @"What the hell");
 }
 
 @end

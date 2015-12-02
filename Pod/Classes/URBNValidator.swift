@@ -9,45 +9,34 @@
 import Foundation
 
 
-public enum ErrorDomains: String {
-    case ValidationError
-    case MultiValidationError
-}
-
-public extension NSError {
+@objc public class ValidatingValue: NSObject {
+    public var value: AnyObject?
+    public var rules: [ValidationRule]
     
-    public var isMultiError: Bool {
-        get {
-            return self.domain == ErrorDomains.MultiValidationError.rawValue
-        }
+    public init(_ value: AnyObject?, rules: [ValidationRule]) {
+        self.value = value
+        self.rules = rules
+        super.init()
     }
     
-    public var underlyingErrors: [NSError]? {
-        get {
-            if !self.isMultiError { return nil }
-            return self.userInfo["multi_errors"] as? [NSError]
-        }
-    }
-    
-    class func multiErrorWithErrors(errors: [NSError]) -> NSError {
-        let userInfo: [NSObject: AnyObject] = [
-            NSLocalizedDescriptionKey: "Multiple errors occurred",
-            "multi_errors": errors
-        ]
-        
-        return NSError(domain: ErrorDomains.MultiValidationError.rawValue, code: 500, userInfo: userInfo)
+    public convenience init(value: AnyObject?, rules: ValidationRule...) {
+        self.init(value, rules: rules)
     }
 }
 
 @objc public protocol Validator {
     func localizationBundle() -> NSBundle
+    /**
+     Used to validate a single @value with the given rule.
+     If invalid, then will `throw` an error with the localized reason
+     why the value failed
+    **/
+    func validate(key: String?, value: AnyObject?, rule: ValidationRule) throws
     func validate(item: Validateable, stopOnFirstError: Bool) throws
 }
 
 @objc public protocol Validateable {
-    
-    func validationMap() -> [String: [ValidationRule]]
-    func valueForKey(key: String) -> AnyObject?
+    func validationMap() -> [String: ValidatingValue]
 }
 
 public class URBNValidator: NSObject, Validator {
@@ -62,11 +51,12 @@ public class URBNValidator: NSObject, Validator {
     The purpose of this function is to wrap up our localization fallback logic, and handle
     replacing any values necessary in the result of the localized string 
     */
-    func localizeableString(rule: ValidationRule, key: String, value: AnyObject?) -> String {
+    func localizeableString(rule: ValidationRule, key: String?, value: AnyObject?) -> String {
         let ruleKey = "ls_URBNValidator_\(rule.localizationKey)"
         
         // First we try to localize against the mainBundle.
         let mainBundleStr = NSLocalizedString(ruleKey, tableName: self.localizationTable, comment: "")
+        print("Main Bundle: ", mainBundleStr)
         let str =  NSLocalizedString(mainBundleStr, tableName: self.localizationTable, bundle: self.localizationBundle(), value: "", comment: "")
         
         // Now we're going to regex the resulting string and replace {{field}}, {{value}}
@@ -75,10 +65,12 @@ public class URBNValidator: NSObject, Validator {
             replacementValue = value!.description
         }
         let options: NSRegularExpressionOptions = [NSRegularExpressionOptions.CaseInsensitive]
+        
+        
         return [
-            // Considering the try! fine here because this is a dev issue.   If you write an invalid 
+            // Considering the try! fine here because this is a dev issue.   If you write an invalid
             // regex, then that's your own fault.   Once it's written properly it's guaranteed to not crash
-            key: try! NSRegularExpression(pattern: "\\{\\{field\\}\\}", options: options),
+            (key ?? " "): try! NSRegularExpression(pattern: "\\{\\{field\\}\\}", options: options),
             replacementValue: try! NSRegularExpression(pattern: "\\{\\{value\\}\\}", options: options),
         ].reduce(str) { (s, replacement: (key: String, pattern: NSRegularExpression)) -> String in
             return replacement.pattern.stringByReplacingMatchesInString(s,
@@ -89,23 +81,32 @@ public class URBNValidator: NSObject, Validator {
         }
     }
     
+    public func validate(key: String? = nil, value: AnyObject?, rule: ValidationRule) throws {
+        if rule.validateValue(value) {
+            return
+        }
+        
+        throw NSError(domain: ErrorDomains.ValidationError.rawValue, code: 200, userInfo: [NSLocalizedDescriptionKey: localizeableString(rule, key: key, value: value)])
+    }
+    
     public func validate(item: Validateable, stopOnFirstError: Bool = false) throws {
         
         /// Nothing to validate here.   We're all good
         if item.validationMap().count == 0 { return }
         
         var errs: [NSError] = [NSError]()
-        for (key, rules) in item.validationMap() {
-            let value = item.valueForKey(key)
-            for rule in rules {
-                if rule.validateValue(value) { continue }
+        for (key, v) in item.validationMap() {
+            let value = v.value;
+            for rule in v.rules {
                 
-                let err = NSError(domain: ErrorDomains.ValidationError.rawValue, code: 200, userInfo: [NSLocalizedDescriptionKey: localizeableString(rule, key: key, value: value)])
-                if stopOnFirstError {
-                    throw err
-                }
-                else {
-                    errs.append(err)
+                do {
+                    try validate(key, value: value, rule: rule)
+                } catch let err as NSError {
+                    if stopOnFirstError {
+                        throw err
+                    } else {
+                        errs.append(err)
+                    }
                 }
             }
         }

@@ -1,0 +1,10 @@
+/* 
+  Localizable.strings
+  URBNValidator
+
+  Created by Joseph Ridenour on 12/2/15.
+  Copyright © 2015 CocoaPods. All rights reserved.
+*/
+
+
+"ls_URBNValidator_URBNRequiredRule_Override" = "What the hell";
