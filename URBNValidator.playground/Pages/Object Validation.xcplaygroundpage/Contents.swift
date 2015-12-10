@@ -17,7 +17,7 @@ class Tester: Validateable {
     @objc func validationMap() -> [String : ValidatingValue] {
         return [
             "requiredString": ValidatingValue(value: self.requiredString, rules: URBNRequiredRule()),
-            "children": ValidatingValue(value: self.children, rules: URBNRequiredRule(), URBNMinLengthRule(minLength: 3))
+            "children": ValidatingValue(value: self.children, rules: URBNMinLengthRule(minLength: 3))
         ]
     }
     
@@ -38,7 +38,7 @@ do {
     try validator.validate(obj)
 }
 catch let err as NSError {
-    print(err)
+    print(err.underlyingErrors!.map({ $0.localizedDescription }))
 }
 
 //: [Next](@next)

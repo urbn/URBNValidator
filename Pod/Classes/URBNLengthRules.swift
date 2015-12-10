@@ -43,8 +43,9 @@ extension NSDictionary: Lengthable {
     }
 }
 
-public class URBNMinLengthRule: URBNBaseRule {
+public class URBNMinLengthRule: URBNBaseRule, URBNRequirement {
     public var minLength: Int = 0
+    public var isRequired: Bool = false
     
     public init(minLength: Int) {
         self.minLength = minLength
@@ -52,6 +53,7 @@ public class URBNMinLengthRule: URBNBaseRule {
     }
     
     public override func validateValue(value: AnyObject?) -> Bool {
+        if !isRequired && value == nil { return true }
         
         if value is Lengthable {
             return (value as! Lengthable).length >= minLength
@@ -61,8 +63,9 @@ public class URBNMinLengthRule: URBNBaseRule {
     }
 }
 
-public class URBNMaxLengthRule: URBNBaseRule {
+public class URBNMaxLengthRule: URBNBaseRule, URBNRequirement {
     public var maxLength: Int = 10
+    public var isRequired: Bool = false
     
     public init(maxLength: Int) {
         self.maxLength = maxLength
@@ -70,6 +73,8 @@ public class URBNMaxLengthRule: URBNBaseRule {
     }
     
     public override func validateValue(value: AnyObject?) -> Bool {
+        if !isRequired && value == nil { return true }
+        
         if value is Lengthable {
             return (value as! Lengthable).length <= maxLength
         }

@@ -10,6 +10,7 @@
 		3E8964B1F9A3E4AB265D33FD /* Pods_URBNValidator_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33BF3BA3B1970034FE528166 /* Pods_URBNValidator_Tests.framework */; };
 		607FACEC1AFB9204008FA782 /* BasicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* BasicTests.swift */; };
 		D81462AF1C0CA259003892B4 /* ObjectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D81462AE1C0CA259003892B4 /* ObjectTests.m */; };
+		D8573E051C19E83B00C3BD6C /* ObjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8573E041C19E83B00C3BD6C /* ObjectTests.swift */; };
 		D869D4361C0F6421000CFDA9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D869D4351C0F6421000CFDA9 /* AppDelegate.swift */; };
 		D869D4381C0F6421000CFDA9 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D869D4371C0F6421000CFDA9 /* MasterViewController.swift */; };
 		D869D43A1C0F6421000CFDA9 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D869D4391C0F6421000CFDA9 /* DetailViewController.swift */; };
@@ -40,6 +41,7 @@
 		A718C7CD66BFAE40143B4620 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		D81462AE1C0CA259003892B4 /* ObjectTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjectTests.m; sourceTree = "<group>"; };
 		D8531D931BFBCD5700734482 /* URBNValidator.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; name = URBNValidator.playground; path = ../URBNValidator.playground; sourceTree = "<group>"; };
+		D8573E041C19E83B00C3BD6C /* ObjectTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjectTests.swift; sourceTree = "<group>"; };
 		D869D4331C0F6421000CFDA9 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D869D4351C0F6421000CFDA9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D869D4371C0F6421000CFDA9 /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 				D86E46231BFE1FAB0011B659 /* BasicTests.m */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 				D81462AE1C0CA259003892B4 /* ObjectTests.m */,
+				D8573E041C19E83B00C3BD6C /* ObjectTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -207,7 +210,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0710;
 				LastUpgradeCheck = 0710;
-				ORGANIZATIONNAME = CocoaPods;
+				ORGANIZATIONNAME = URBN;
 				TargetAttributes = {
 					607FACE41AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
@@ -313,6 +316,7 @@
 			files = (
 				607FACEC1AFB9204008FA782 /* BasicTests.swift in Sources */,
 				D81462AF1C0CA259003892B4 /* ObjectTests.m in Sources */,
+				D8573E051C19E83B00C3BD6C /* ObjectTests.swift in Sources */,
 				D86E46241BFE1FAB0011B659 /* BasicTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -547,6 +551,7 @@
 				D869D4461C0F6421000CFDA9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

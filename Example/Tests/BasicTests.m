@@ -3,7 +3,7 @@
 //  URBNValidator
 //
 //  Created by Joseph Ridenour on 11/19/15.
-//  Copyright © 2015 CocoaPods. All rights reserved.
+//  Copyright © 2015 URBN. All rights reserved.
 //
 
 #import <XCTest/XCTest.h>
@@ -30,7 +30,7 @@
     URBNMinLengthRule *lengthRule = [[URBNMinLengthRule alloc] initWithMinLength:5];
     
     // String validations
-    XCTAssertFalse([lengthRule validateValue:nil], @"Should not validate nil");
+    XCTAssertTrue([lengthRule validateValue:nil], @"Nil should validate by default");
     XCTAssertFalse([lengthRule validateValue:@"1324"], @"Should not validate anything < 5");
     XCTAssertTrue([lengthRule validateValue:@"12345"], @"Should validate anything >= 5");
     XCTAssertTrue([lengthRule validateValue:@"123456"], @"Should validate anything >= 5");
@@ -53,7 +53,7 @@
     URBNMaxLengthRule *lengthRule = [[URBNMaxLengthRule alloc] initWithMaxLength:5];
     
     // String validations
-    XCTAssertFalse([lengthRule validateValue:nil], @"Should not validate nil");
+    XCTAssertTrue([lengthRule validateValue:nil], @"Nil should validate by default");
     XCTAssertFalse([lengthRule validateValue:@"132456"], @"Should not validate anything > 5");
     XCTAssertTrue([lengthRule validateValue:@"1234"], @"Should validate anything <= 5");
     XCTAssertTrue([lengthRule validateValue:@"12345"], @"Should validate anything <= 5");
@@ -87,7 +87,7 @@
 - (void)testRegexRule {
     URBNRegexRule *regexRule = [[URBNRegexRule alloc] initWithPattern:@"\\d+"];
     
-    XCTAssertFalse([regexRule validateValue:nil], @"Null should not be valid for the number only pattern");
+    XCTAssertTrue([regexRule validateValue:nil], @"Null should be valid by default");
     XCTAssertFalse([regexRule validateValue:@"143k"], @"Anything but numbers should be considered failure");
     XCTAssertTrue([regexRule validateValue:@"123451880"], @"Numbers only should validate");
 }

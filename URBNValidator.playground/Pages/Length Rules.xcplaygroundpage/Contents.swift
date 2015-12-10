@@ -24,8 +24,19 @@ maxLengthRule.validateValue("")
 maxLengthRule.validateValue(["": 1])
 maxLengthRule.validateValue("12345")
 
+/*:
+For the anything that is `URBNRequirement` we specify 
+an isRequired flag.  The purpose of `isRequired` is to 
+let the rule know whether or not it accepts nil.   If required,
+then nil will not be valid
+*/
+maxLengthRule.isRequired = true
+maxLengthRule.validateValue(nil)    // Not Valid because isRequired=true
+maxLengthRule.isRequired = false
+maxLengthRule.validateValue(nil)    // Valid
+
+
 // These are invalid
-maxLengthRule.validateValue(nil)
 maxLengthRule.validateValue([1,2,3,4,5,6])
 maxLengthRule.validateValue("123456")
 
@@ -45,9 +56,15 @@ minLengthRule.validateValue([1,2])
 minLengthRule.validateValue([1:1,2:2])
 
 // These are invalid
-minLengthRule.validateValue(nil)
 minLengthRule.validateValue("1")
 minLengthRule.validateValue([])
 minLengthRule.validateValue(["1":1])
+
+// Requirements
+minLengthRule.isRequired = true
+minLengthRule.validateValue(nil)    // Not Valid because isRequired=true
+minLengthRule.isRequired = false
+minLengthRule.validateValue(nil)    // Valid
+
 
 //: [Block Rules](@next)

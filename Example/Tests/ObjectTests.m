@@ -3,7 +3,7 @@
 //  URBNValidator
 //
 //  Created by Joseph Ridenour on 11/30/15.
-//  Copyright © 2015 CocoaPods. All rights reserved.
+//  Copyright © 2015 URBN. All rights reserved.
 //
 
 #import <XCTest/XCTest.h>
@@ -39,14 +39,27 @@
 - (void)testSimpleModelValidaion {
     
     TestObject *obj = [TestObject new];
+    obj.requiredList = @[@1, @2, @3];
     
     NSError *error = nil;
     BOOL success = [self.vd validate:obj stopOnFirstError:YES error:&error];
     XCTAssertFalse(success, @"Should not be success");
-    XCTAssertNotNil(error, @"We should have an error here");
+    XCTAssertEqualObjects(error.domain, ValidationErrorDomain, @"Error domain should be the invalid one");
+    XCTAssertEqual(error.code, ValidationErrorFieldInvalid, @"Single field error here");
     XCTAssertFalse([error isMultiError], @"We should not get a multi-error if we use stopOnFirst");
-    XCTAssertEqualObjects(error.domain, @"ValidationError");
     XCTAssertEqualObjects(error.localizedDescription, @"\"requiredString\" is required");
+}
+
+- (void)testMutlipleErrorValidation {
+    TestObject *obj = [TestObject new];
+    
+    NSError *error = nil;
+    BOOL success = [self.vd validate:obj stopOnFirstError:NO error:&error];
+    XCTAssertFalse(success, @"Should not be success");
+    XCTAssertEqualObjects(error.domain, ValidationErrorDomain, @"Error domain should be the invalid one");
+    XCTAssertEqual(error.code, ValidationErrorMultiFieldInvalid, @"Multiple field error here");
+    XCTAssertTrue([error isMultiError], @"We should get a multi-error if stopOnFirst is NO");
+    XCTAssertEqual([error underlyingErrors].count, 3, @"We should have 1 error for every invalid rule (3 in this case)");
 }
 
 @end

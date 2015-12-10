@@ -15,6 +15,11 @@ import Foundation
     func validateValue(value: AnyObject?, key: String) -> Bool
 }
 
+@objc public protocol URBNRequirement {
+    var isRequired: Bool { get set }
+}
+
+
 public class URBNBaseRule: NSObject, ValidationRule {
     public var localizationKey = "URBNBaseRule"
     
@@ -40,6 +45,12 @@ public class URBNRequiredRule: URBNBaseRule {
     }
 }
 
+public class URBNNotRequiredRule: URBNBaseRule {
+    public override func validateValue(value: AnyObject?) -> Bool {
+        return true
+    }
+}
+
 public class URBNBlockRule: URBNBaseRule {
     public typealias BlockValidation = (value: AnyObject?) -> Bool
     public var blockValidation: BlockValidation
@@ -54,8 +65,9 @@ public class URBNBlockRule: URBNBaseRule {
     }
 }
 
-public class URBNRegexRule: URBNBaseRule {
+public class URBNRegexRule: URBNBaseRule, URBNRequirement {
     internal var pattern: String
+    public var isRequired: Bool = false
     
     public init(pattern: String) {
         self.pattern = pattern
@@ -63,6 +75,8 @@ public class URBNRegexRule: URBNBaseRule {
     }
     
     public override func validateValue(value: AnyObject?) -> Bool {
+        if !isRequired && value == nil { return true }
+        
         let pred = NSPredicate(format: "SELF MATCHES[cd] %@", self.pattern)
         return pred.evaluateWithObject(value)
     }
