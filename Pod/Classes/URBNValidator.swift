@@ -25,7 +25,8 @@ import Foundation
 }
 
 @objc public protocol Validator {
-    func localizationBundle() -> NSBundle
+    var localizationBundle: NSBundle { get }
+    
     /**
      Used to validate a single @value with the given rule.
      If invalid, then will `throw` an error with the localized reason
@@ -35,18 +36,39 @@ import Foundation
     func validate(item: Validateable, stopOnFirstError: Bool) throws
 }
 
+/**
+ Validateable objects are meant to allow direct validation of keys/values of a given model by 
+ defining a validationMap which contains a map of keys -> ValidatingValue's
+*/
 @objc public protocol Validateable {
     func validationMap() -> [String: ValidatingValue]
 }
 
+
+/**
+ This is the main URBNValidator object.   Used to validate objects
+ and localize the results in a nice way.
+*/
+// MARK: - URBNValidator -
 public class URBNValidator: NSObject, Validator {
-    var localizationTable: String?
+    
+    // MARK: - Properties -
+    
+    // You'll probably never use this.   But just incase here's a prop for it
+    public var localizationTable: String?
+    
+    /**
+     You'll probably never need to override this unless you're using a specific bundle
+     other than the bundle of this class.
+     
+     - note: We'll handle falling back to the mainBundle for any localizations for free, so
+     you don't have to override this if you're just trying to localize with the main bundle
+     */
+    public var localizationBundle: NSBundle = NSBundle(forClass: URBNValidator.self)
     
     
-    @objc public func localizationBundle() -> NSBundle {
-        return NSBundle(forClass: URBNValidator.self)
-    }
     
+    // MARK: - Validations -
     
     /**
      This validates a single value with a single rule.   The key is only used for display
@@ -111,7 +133,9 @@ public class URBNValidator: NSObject, Validator {
         }
     }
     
-    // MARK: - Internal
+    
+    
+    // MARK: - Internal -
     
     /**
     The purpose of this function is to wrap up our localization fallback logic, and handle
@@ -127,8 +151,7 @@ public class URBNValidator: NSObject, Validator {
         
         // First we try to localize against the mainBundle.
         let mainBundleStr = NSLocalizedString(ruleKey, tableName: self.localizationTable, comment: "")
-        print("Main Bundle: ", mainBundleStr)
-        let str =  NSLocalizedString(mainBundleStr, tableName: self.localizationTable, bundle: self.localizationBundle(), value: "", comment: "")
+        let str =  NSLocalizedString(mainBundleStr, tableName: self.localizationTable, bundle: self.localizationBundle, comment: "")
         
         // Now we're going to regex the resulting string and replace {{field}}, {{value}}
         var replacementValue: String = ""
@@ -166,6 +189,12 @@ public class URBNValidator: NSObject, Validator {
         
         // Sanity
         if rules.count == 0 {
+            return rules
+        }
+        
+        // If our rules do not contain any URBNRequirement rules, then
+        // we can safely skip the next part
+        if !rules.contains({ $0 is URBNRequirement}) {
             return rules
         }
         
