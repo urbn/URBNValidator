@@ -27,6 +27,15 @@ import Foundation
 }
 
 private let kMultiErrorUserInfoKey = "multi_errors"
+private let kFieldMetaDataInfoKey = "com.urbnvalidator.metadata"
+
+class ErrorMeta {
+    var field: String?
+    
+    init(field: String?) {
+        self.field = field
+    }
+}
 
 public extension NSError {
     
@@ -34,25 +43,30 @@ public extension NSError {
      Helper to check if this error is a multiError
     */
     public var isMultiError: Bool {
-        get {
-            // Make sure we're referencing one of our error domains
-            guard self.domain == ValidationError._NSErrorDomain else { return false }
-            return self.code == ValidationError.MultiFieldInvalid.rawValue
-        }
+        // Make sure we're referencing one of our error domains
+        guard self.domain == ValidationError._NSErrorDomain else { return false }
+        return self.code == ValidationError.MultiFieldInvalid.rawValue
     }
     
     public var underlyingErrors: [NSError]? {
-        get {
-            if !self.isMultiError { return nil }
-            return self.userInfo[kMultiErrorUserInfoKey] as? [NSError]
-        }
+        if !self.isMultiError { return nil }
+        return self.userInfo[kMultiErrorUserInfoKey] as? [NSError]
+    }
+    
+    public var vdMetaFieldName: String? {
+        return self.validationMeta?.field
+    }
+    
+    internal var validationMeta: ErrorMeta? {
+        return self.userInfo[kFieldMetaDataInfoKey] as? ErrorMeta
     }
     
     
     // MARK: - Helpers
-    internal class func fieldError(description: String) -> NSError {
+    internal class func fieldError(field: String?, description: String) -> NSError {
         let userInfo: [NSObject: AnyObject] = [
-            NSLocalizedDescriptionKey: description
+            NSLocalizedDescriptionKey: description,
+            kFieldMetaDataInfoKey: ErrorMeta(field: field)
         ]
         
         return NSError(domain: ValidationError._NSErrorDomain, code: ValidationError.FieldInvalid.rawValue, userInfo: userInfo)

@@ -10,7 +10,7 @@ import Foundation
 
 
 @objc public protocol ValidationRule {
-    var localizationKey: String { get set }
+    var localizationKey: String { get }
     func validateValue(value: AnyObject?) -> Bool
     func validateValue(value: AnyObject?, key: String) -> Bool
 }

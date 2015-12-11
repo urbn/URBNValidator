@@ -87,7 +87,7 @@ public class URBNValidator: NSObject, Validator {
             return
         }
         
-        throw NSError.fieldError(localizeableString(rule, key: key, value: value))
+        throw NSError.fieldError(key, description: localizeableString(rule, key: key, value: value))
     }
     
     
