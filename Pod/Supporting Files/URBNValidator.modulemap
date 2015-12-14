@@ -1,0 +1,6 @@
+framework module URBNValidator {
+  umbrella header "URBNValidator-umbrella.h"
+
+  export *
+  module * { export * }
+}

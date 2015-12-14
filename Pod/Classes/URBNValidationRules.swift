@@ -41,6 +41,12 @@ public class URBNBaseRule: NSObject, ValidationRule {
 public class URBNRequiredRule: URBNBaseRule {
     
     public override func validateValue(value: AnyObject?) -> Bool {
+        if value is String {
+            /// Also validate the value is not empty here.  
+            /// We're only doing this for backwards compatibility with QBValidator.
+            /// We should decide if this is the way to go about this.
+            return (value as! String).length > 0
+        }
         return value != nil
     }
 }
@@ -80,4 +86,6 @@ public class URBNRegexRule: URBNBaseRule, URBNRequirement {
         let pred = NSPredicate(format: "SELF MATCHES[cd] %@", self.pattern)
         return pred.evaluateWithObject(value)
     }
+    
+    public static let emailPattern = "^(?:(?:(?:(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+)(?:\\.(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+))*)|(?:\"(?:\\\\[^\\r\\n]|[^\\\\\"])*\")))\\@(?:(?:(?:(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+)(?:\\.(?:[a-zA-Z0-9_!#\\$%&'*+/=?\\^`{}~|\\-]+))*)|(?:\\[(?:\\\\\\S|[\\x21-\\x5a\\x5e-\\x7e])*\\])))$"
 }

@@ -15,40 +15,59 @@ protocol Lengthable {
 
 extension String: Lengthable {
     var length: Int {
-        get { return self.characters.count }
+        return self.characters.count
     }
 }
 extension NSString: Lengthable {}
 extension Array: Lengthable {
     var length: Int {
-        get { return self.count }
+        return self.count
     }
 }
 
 extension NSArray: Lengthable {
     var length: Int {
-        get { return self.count }
+        return self.count
     }
 }
 
 extension Dictionary: Lengthable {
     var length: Int {
-        get { return self.count }
+        return self.count
     }
 }
 
 extension NSDictionary: Lengthable {
     var length: Int {
-        get { return self.count }
+        return self.count
+    }
+}
+
+extension NSTimeInterval: Lengthable {
+    var length: Int {
+        return Int(self)
+    }
+}
+
+extension NSNumber: Lengthable {
+    var length: Int {
+        return self.integerValue;
     }
 }
 
 public class URBNMinLengthRule: URBNBaseRule, URBNRequirement {
     public var minLength: Int = 0
     public var isRequired: Bool = false
+    public var isInclusive: Bool = false
     
     public init(minLength: Int) {
         self.minLength = minLength
+        super.init()
+    }
+    
+    public init(minLength: Int, inclusive: Bool = false) {
+        self.minLength = minLength
+        self.isInclusive = inclusive
         super.init()
     }
     
@@ -56,7 +75,10 @@ public class URBNMinLengthRule: URBNBaseRule, URBNRequirement {
         if !isRequired && value == nil { return true }
         
         if value is Lengthable {
-            return (value as! Lengthable).length >= minLength
+            if isInclusive {
+                return (value as! Lengthable).length >= minLength
+            }
+            return (value as! Lengthable).length > minLength
         }
         
         return false
@@ -66,9 +88,16 @@ public class URBNMinLengthRule: URBNBaseRule, URBNRequirement {
 public class URBNMaxLengthRule: URBNBaseRule, URBNRequirement {
     public var maxLength: Int = 10
     public var isRequired: Bool = false
+    public var isInclusive: Bool = false
     
     public init(maxLength: Int) {
         self.maxLength = maxLength
+        super.init()
+    }
+    
+    public init(maxLength: Int, inclusive: Bool = false) {
+        self.maxLength = maxLength
+        self.isInclusive = inclusive
         super.init()
     }
     
@@ -76,7 +105,10 @@ public class URBNMaxLengthRule: URBNBaseRule, URBNRequirement {
         if !isRequired && value == nil { return true }
         
         if value is Lengthable {
-            return (value as! Lengthable).length <= maxLength
+            if isInclusive {
+                return (value as! Lengthable).length <= maxLength
+            }
+            return (value as! Lengthable).length < maxLength
         }
         
         return false

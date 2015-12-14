@@ -105,25 +105,49 @@ public class URBNValidator: NSObject, Validator {
      
     */
     public func validate(item: Validateable, stopOnFirstError: Bool = false) throws {
+        do {
+            try self.validate(item, ignoreList: [], stopOnFirstError: stopOnFirstError)
+        } catch let e {
+            throw e
+        }
+    }
+    
+    /**
+     The purpose of this method is to validate the given model.   This will run through
+     the model.validationMap and run validations on each one of the key -> Rules pairs.
+     
+     
+     - parameters:
+     - item: a validateable item to be used for validation
+     - ignoreList: List of keys that should not be validated
+     - stopOnFirstError: indicates that you only care about the first error
+     
+     - throws: An instance of NSError representing the invalid data
+     
+     */
+    public func validate(item: Validateable, ignoreList: [String], stopOnFirstError: Bool = false) throws {
         
         /// Nothing to validate here.   We're all good
         if item.validationMap().count == 0 { return }
         
+        // We want to get our validationMap minus the items in the ignoreList
+        let vdMap = item.validationMap().filter { !ignoreList.contains($0.0) }
+        
         var errs: [NSError] = [NSError]()
-        for (key, v) in item.validationMap() {
+        for (key, v) in vdMap {
             let value = v.value;
             let rules = implicitelyRequiredRules(v.rules)
             
             // Go through all the rules and validate
             for rule in rules {
+                print("Attempting validation \(key) : \(value) ===> \(rule) && \(rule.validateValue(value))")
                 do {
                     try validate(key, value: value, rule: rule)
                 } catch let err as NSError {
                     if stopOnFirstError {
                         throw err
-                    } else {
-                        errs.append(err)
                     }
+                    errs.append(err)
                 }
             }
         }

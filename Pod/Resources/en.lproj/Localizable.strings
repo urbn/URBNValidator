@@ -1,7 +1,5 @@
 
 
 
-"ls_URBNValidator_URBNRequiredRule" = "\"{{field}}\" is required";
+"ls_URBNValidator_URBNRequiredRule" = "{{field}} is required.";
 "ls_URBNValidator_URBNBlockRule" = "\"{{field}}\" is invalid yo";
-"ls_URBNValidator_URBNMaxLengthRule" = "\"{{field}}\" is too long";
-"ls_URBNValidator_URBNMinLengthRule" = "\"{{field}}\" is too short";

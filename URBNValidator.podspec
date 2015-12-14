@@ -27,6 +27,8 @@ Pod::Spec.new do |s|
   s.platform     = :ios, '8.0'
   s.requires_arc = true
 
-  s.source_files = 'Pod/Classes/**/*'
+  s.preserve_paths = "Pod/Supporting Files/**/*"
+  s.module_map = "Pod/Supporting Files/URBNValidator.modulemap"
+  s.source_files = ['Pod/Classes/**/*', "Pod/Supporting Files/**/*.h"]
   s.resources = ['Pod/Resources/**/*.lproj']
 end
