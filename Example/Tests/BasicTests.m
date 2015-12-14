@@ -27,7 +27,7 @@
 }
 
 - (void)testMinLengthRule {
-    URBNMinLengthRule *lengthRule = [[URBNMinLengthRule alloc] initWithMinLength:5];
+    URBNMinLengthRule *lengthRule = [[URBNMinLengthRule alloc] initWithMinLength:5 inclusive:YES];
     
     // String validations
     XCTAssertTrue([lengthRule validateValue:nil], @"Nil should validate by default");
@@ -50,7 +50,7 @@
 }
 
 - (void)testMaxLengthRule {
-    URBNMaxLengthRule *lengthRule = [[URBNMaxLengthRule alloc] initWithMaxLength:5];
+    URBNMaxLengthRule *lengthRule = [[URBNMaxLengthRule alloc] initWithMaxLength:5 inclusive:YES];
     
     // String validations
     XCTAssertTrue([lengthRule validateValue:nil], @"Nil should validate by default");

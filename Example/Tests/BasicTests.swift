@@ -9,11 +9,11 @@ class BasicTests: XCTestCase {
         
         XCTAssertEqual(r.localizationKey, "URBNRequiredRule", "localizationKey should default to the className")
         XCTAssertFalse(r.validateValue(nil), "Nil should be invalid")
-        XCTAssertTrue(r.validateValue(""), "Non-nil should be valid")
+        XCTAssertTrue(r.validateValue("-"), "Non-nil should be valid")
     }
     
     func testMinLengthRule() {
-        let r = URBNMinLengthRule(minLength: 5)
+        let r = URBNMinLengthRule(minLength: 5, inclusive: true)
         
         XCTAssertEqual(r.localizationKey, "URBNMinLengthRule")
         XCTAssertFalse(r.validateValue("1234"))
@@ -29,7 +29,7 @@ class BasicTests: XCTestCase {
     }
     
     func testMaxLengthRule() {
-        let r = URBNMaxLengthRule(maxLength: 5)
+        let r = URBNMaxLengthRule(maxLength: 5, inclusive: true)
         
         XCTAssertEqual(r.localizationKey, "URBNMaxLengthRule")
         XCTAssertTrue(r.validateValue("1234"))

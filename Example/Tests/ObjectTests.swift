@@ -22,13 +22,13 @@ class User: Testable {
     var lastName: String?
     var addresses = [String]()
     
-    override init() {
-        super.init()
-        rules = [
-            "firstName": ValidatingValue(value: self.firstName, rules: URBNRequiredRule(), URBNMinLengthRule(minLength: 2)),
-            "lastName": ValidatingValue(value: self.lastName, rules: URBNMinLengthRule(minLength: 2)),
-            "addresses": ValidatingValue(value: self.addresses, rules: URBNMinLengthRule(minLength: 1))
+    override func validationMap() -> [String : ValidatingValue] {
+        rules = rules.count > 0 ? rules : [
+            "firstName": ValidatingValue(value: self.firstName, rules: URBNRequiredRule(), URBNMinLengthRule(minLength: 2, inclusive: true)),
+            "lastName": ValidatingValue(value: self.lastName, rules: URBNNotRequiredRule(), URBNMinLengthRule(minLength: 2, inclusive: true)),
+            "addresses": ValidatingValue(value: self.addresses, rules: URBNNotRequiredRule(), URBNMinLengthRule(minLength: 1, inclusive: true))
         ]
+        return super.validationMap()
     }
 }
 
@@ -45,7 +45,7 @@ class ObjectTestsSwifty: XCTestCase {
         catch let err as NSError {
             XCTAssertEqual(err.domain, ValidationErrorDomain, "Validation error domain should be proper")
             XCTAssertEqual(err.code, ValidationError.FieldInvalid.rawValue, "Should be single field validation error")
-            XCTAssertEqual(err.localizedDescription, "\"addresses\" is too short")
+            XCTAssertEqual(err.localizedDescription, "ls_URBNValidator_URBNMinLengthRule")
         }
         catch {
             XCTFail("This should not happen")
@@ -54,6 +54,8 @@ class ObjectTestsSwifty: XCTestCase {
     
     func testMultiError() {
         let u = User()
+        u.lastName = "1"
+        u.addresses = []
         
         do {
             try vd.validate(u)
@@ -85,8 +87,8 @@ class ObjectTestsSwifty: XCTestCase {
         catch let err as NSError {
             let fieldErrors = err.underlyingErrors!
             XCTAssertEqual(fieldErrors.count, 2, "Should only have 2 errors")
-            XCTAssertEqual(fieldErrors[0].localizedDescription, "\"prop1\" is required")
-            XCTAssertEqual(fieldErrors[1].localizedDescription, "\"prop1\" is too short")
+            XCTAssertEqual(fieldErrors[0].localizedDescription, "prop1 is required.")
+            XCTAssertEqual(fieldErrors[1].localizedDescription, "ls_URBNValidator_URBNMinLengthRule")
         }
         catch {
             XCTFail("Should never happen")

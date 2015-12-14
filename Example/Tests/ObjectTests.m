@@ -17,8 +17,8 @@
 
 - (NSDictionary<NSString *,NSArray<id<ValidationRule>> *> *)validationMap {
     return @{
-             @"requiredString": [[ValidatingValue alloc] init:self.requiredString rules:@[[URBNRequiredRule new]]],
-             @"requiredList": [[ValidatingValue alloc] init:self.requiredList rules:@[[URBNRequiredRule new], [[URBNMinLengthRule alloc] initWithMinLength:3]]]
+             @"requiredString": [[ValidatingValue alloc] init:self.requiredString rules:@[URBNVRequired]],
+             @"requiredList": [[ValidatingValue alloc] init:self.requiredList rules:@[URBNVRequired, [[URBNMinLengthRule alloc] initWithMinLength:3 inclusive:YES]]]
              };
 }
 
@@ -47,7 +47,7 @@
     XCTAssertEqualObjects(error.domain, ValidationErrorDomain, @"Error domain should be the invalid one");
     XCTAssertEqual(error.code, ValidationErrorFieldInvalid, @"Single field error here");
     XCTAssertFalse([error isMultiError], @"We should not get a multi-error if we use stopOnFirst");
-    XCTAssertEqualObjects(error.localizedDescription, @"\"requiredString\" is required");
+    XCTAssertEqualObjects(error.localizedDescription, @"requiredString is required.");
 }
 
 - (void)testMutlipleErrorValidation {

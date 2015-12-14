@@ -60,11 +60,6 @@ public class URBNMinLengthRule: URBNBaseRule, URBNRequirement {
     public var isRequired: Bool = false
     public var isInclusive: Bool = false
     
-    public init(minLength: Int) {
-        self.minLength = minLength
-        super.init()
-    }
-    
     public init(minLength: Int, inclusive: Bool = false) {
         self.minLength = minLength
         self.isInclusive = inclusive
@@ -89,11 +84,6 @@ public class URBNMaxLengthRule: URBNBaseRule, URBNRequirement {
     public var maxLength: Int = 10
     public var isRequired: Bool = false
     public var isInclusive: Bool = false
-    
-    public init(maxLength: Int) {
-        self.maxLength = maxLength
-        super.init()
-    }
     
     public init(maxLength: Int, inclusive: Bool = false) {
         self.maxLength = maxLength
