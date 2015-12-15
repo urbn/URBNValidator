@@ -10,7 +10,7 @@ import Foundation
 
 
 @objc public protocol ValidationRule {
-    var localizationKey: String { get }
+    var localizationKey: String { get set }
     func validateValue(value: AnyObject?) -> Bool
     func validateValue(value: AnyObject?, key: String) -> Bool
 }
@@ -23,9 +23,9 @@ import Foundation
 public class URBNBaseRule: NSObject, ValidationRule {
     public var localizationKey = "URBNBaseRule"
     
-    public override init() {
+    public init(localizationKey: String = "\(classForCoder)") {
         super.init()
-        self.localizationKey = "\(self.classForCoder)"
+        self.localizationKey = localizationKey
     }
     
     public func validateValue(value: AnyObject?) -> Bool {
