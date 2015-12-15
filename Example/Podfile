@@ -3,4 +3,3 @@ use_frameworks!
 
 
 pod "URBNValidator", :path => "../"
-pod "URBNValidator/ObjC", :path => "../"

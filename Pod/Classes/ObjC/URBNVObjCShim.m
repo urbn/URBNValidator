@@ -1,15 +1,14 @@
 //
-//  Defines.h
+//  URBNVObjCShim.m
 //  URBNValidator
 //
 //  Created by Joseph Ridenour on 12/15/15.
 //
 //
 
-#ifndef URBNValidator_ObjC_Defines_h
-#define URBNValidator_ObjC_Defines_h
+#import "URBNVObjCShim.h"
 
-@import URBNValidator;
+#import <URBNValidator/URBNValidator-Swift.h>
 
 #pragma mark - Greater Than
 URBNVOverloadable id __nonnull URBNVGreaterThan(NSInteger minValue) {
@@ -70,5 +69,3 @@ URBNVOverloadable id __nonnull URBNVBlock(NSString * __nullable localizeString, 
     }
     return r;
 }
-
-#endif /* URBNValidator_ObjC_Defines_h */

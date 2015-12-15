@@ -32,7 +32,4 @@ Pod::Spec.new do |s|
   s.source_files = ['Pod/Classes/**/*', "Pod/Supporting Files/**/*.h"]
   s.resources = ['Pod/Resources/**/*.lproj']
 
-  s.subspec 'ObjC' do |ss|
-    ss.source_files = 'Pod/ObjC/**.*'
-  end
 end
