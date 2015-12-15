@@ -45,7 +45,7 @@ class ObjectTestsSwifty: XCTestCase {
         catch let err as NSError {
             XCTAssertEqual(err.domain, ValidationErrorDomain, "Validation error domain should be proper")
             XCTAssertEqual(err.code, ValidationError.FieldInvalid.rawValue, "Should be single field validation error")
-            XCTAssertEqual(err.localizedDescription, "ls_URBNValidator_URBNMinLengthRule")
+            XCTAssertEqual(err.localizedDescription, "too short")
         }
         catch {
             XCTFail("This should not happen")
@@ -88,7 +88,7 @@ class ObjectTestsSwifty: XCTestCase {
             let fieldErrors = err.underlyingErrors!
             XCTAssertEqual(fieldErrors.count, 2, "Should only have 2 errors")
             XCTAssertEqual(fieldErrors[0].localizedDescription, "prop1 is required.")
-            XCTAssertEqual(fieldErrors[1].localizedDescription, "ls_URBNValidator_URBNMinLengthRule")
+            XCTAssertEqual(fieldErrors[1].localizedDescription, "too short")
         }
         catch {
             XCTFail("Should never happen")

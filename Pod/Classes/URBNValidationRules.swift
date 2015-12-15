@@ -65,6 +65,11 @@ public class URBNBlockRule: URBNBaseRule {
     public typealias BlockValidation = (value: AnyObject?) -> Bool
     public var blockValidation: BlockValidation
     
+    public init(_ validator: BlockValidation) {
+        blockValidation = validator
+        super.init()
+    }
+    
     public init(validator: BlockValidation, localizationKey: String? = nil) {
         blockValidation = validator
         super.init(localizationKey: localizationKey)

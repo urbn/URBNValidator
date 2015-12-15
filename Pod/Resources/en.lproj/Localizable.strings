@@ -3,3 +3,6 @@
 
 "ls_URBNValidator_URBNRequiredRule" = "{{field}} is required.";
 "ls_URBNValidator_URBNBlockRule" = "\"{{field}}\" is invalid yo";
+"ls_URBNValidator_URBNRegexRule" = "Invalid characters";
+"ls_URBNValidator_URBNMinLengthRule" = "too short";
+"ls_URBNValidator_URBNMaxLengthRule" = "too long";

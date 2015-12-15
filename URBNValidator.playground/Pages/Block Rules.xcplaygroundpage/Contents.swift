@@ -28,7 +28,7 @@ blockRule.validateValue("valid")
 
 
 //: With some fancy swift style things.
-let floatRule = URBNBlockRule(validator: { $0 is Float })
+let floatRule = URBNBlockRule { $0 is Float }
 
 floatRule.validateValue(nil)
 floatRule.validateValue("")
