@@ -137,7 +137,6 @@ public class URBNValidator: NSObject, Validator {
             let rules = implicitelyRequiredRules(value.rules)
             
             return try rules.flatMap({ (rule) throws -> NSError? in
-                print("Attempting validation \(key) : \(value.value) ===> \(rule) && \(rule.validateValue(value.value))")
                 do {
                     try validate(key, value: value.value, rule: rule)
                     return nil
