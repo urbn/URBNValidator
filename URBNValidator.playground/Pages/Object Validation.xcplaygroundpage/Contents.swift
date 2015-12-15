@@ -40,5 +40,3 @@ do {
 catch let err as NSError {
     print(err.underlyingErrors!.map({ $0.localizedDescription }))
 }
-
-//: [Next](@next)

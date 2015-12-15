@@ -5,7 +5,12 @@
 
 Here we've got a built in rule to handle length requirements. 
 This will verify lengths of anything that conforms to our Lengthable
-protocol.   Which by default handles strings, arrays and dictionaries
+protocol.   Which by default handles strings, arrays and dictionaries. 
+
+By default length rules are non-inclusive.   Meaning the greater 
+than matches '>' and less than '<'.   If you'd like the rule to be 
+inclusive '>=' or '<=', then you can include the optional `inclusive` 
+param on init.   Optionally you can set the .isInclusive property
 */
 import URBNValidator
 
@@ -13,7 +18,7 @@ import URBNValidator
 ### Max Length
 
 Our first length rule is a maxLength.   This says that 
-the value we're validating should nto be greater than or equal to 5
+the value we're validating should nto be greater than 5
 */
 let maxLengthRule = URBNMaxLengthRule(maxLength: 5)
 
@@ -22,6 +27,10 @@ let maxLengthRule = URBNMaxLengthRule(maxLength: 5)
 maxLengthRule.validateValue([])
 maxLengthRule.validateValue("")
 maxLengthRule.validateValue(["": 1])
+maxLengthRule.validateValue("12345")
+
+// With inclusive
+maxLengthRule.isInclusive = true
 maxLengthRule.validateValue("12345")
 
 /*:
@@ -44,10 +53,10 @@ maxLengthRule.validateValue("123456")
 /*: 
 ### Min Length
 
-Min Length is the same thing except at the bottom end. \n
-The given value should be >= 5
+Min Length is the same thing except at the bottom end.
+The given value should be > 5
 */
-let minLengthRule = URBNMinLengthRule(minLength: 2)
+let minLengthRule = URBNMinLengthRule(minLength: 2, inclusive: true)
 
 // These are valid
 minLengthRule.validateValue("12")

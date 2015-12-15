@@ -15,8 +15,14 @@ let r = URBNRequiredRule()
 //: Calling the required rule with something that's nil will be invalid
 r.validateValue(nil)
 
-//: Passing a valid non-nil object will result valid
-r.validateValue("")
+/*:
+Passing an object will validate in the following conditions.
+
+- The object is non-nil
+- If object is a string it has length > 0
+*/
+r.validateValue("") // 👍
+r.validateValue("-") // 👎
 
 //: You may also optionally pass a localized_key override here
 r.validateValue(nil, key: "test_localized")
