@@ -132,24 +132,23 @@ public class URBNValidator: NSObject, Validator {
         
         // We want to get our validationMap minus the items in the ignoreList
         let vdMap = item.validationMap().filter { !ignoreList.contains($0.0) }
-        
-        var errs: [NSError] = [NSError]()
-        for (key, v) in vdMap {
-            let value = v.value;
-            let rules = implicitelyRequiredRules(v.rules)
+        let errs = try vdMap.reduce([NSError]()) { (var errors, entry: (key: String, value: ValidatingValue)) throws -> [NSError] in
+            let rules = implicitelyRequiredRules(entry.value.rules)
             
-            // Go through all the rules and validate
-            for rule in rules {
-                print("Attempting validation \(key) : \(value) ===> \(rule) && \(rule.validateValue(value))")
+            errors.appendContentsOf(try rules.flatMap({ (rule) throws -> NSError? in
+                print("Attempting validation \(entry.key) : \(entry.value.value) ===> \(rule) && \(rule.validateValue(entry.value.value))")
                 do {
-                    try validate(key, value: value, rule: rule)
+                    try validate(entry.key, value: entry.value.value, rule: rule)
+                    return nil
                 } catch let err as NSError {
                     if stopOnFirstError {
                         throw err
                     }
-                    errs.append(err)
+                    return err
                 }
-            }
+            }))
+            
+            return errors
         }
         
         if errs.count > 0 {
