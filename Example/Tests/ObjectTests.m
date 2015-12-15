@@ -18,7 +18,7 @@
 - (NSDictionary<NSString *,NSArray<id<ValidationRule>> *> *)validationMap {
     return @{
              @"requiredString": [[ValidatingValue alloc] init:self.requiredString rules:@[URBNVRequired]],
-             @"requiredList": [[ValidatingValue alloc] init:self.requiredList rules:@[URBNVRequired, [[URBNMinLengthRule alloc] initWithMinLength:3 inclusive:YES]]]
+             @"requiredList": [[ValidatingValue alloc] init:self.requiredList rules:@[URBNVRequired, URBNVGreaterThanOrEqual(3)]]
              };
 }
 

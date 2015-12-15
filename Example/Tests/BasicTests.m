@@ -20,14 +20,14 @@
 
 - (void)testRequiredRule {
     
-    URBNRequiredRule *requiredRule = [URBNRequiredRule new];
+    URBNRequiredRule *requiredRule = URBNVRequired;
     
     XCTAssertFalse([requiredRule validateValue:nil], @"Should not validate nil");
     XCTAssertTrue([requiredRule validateValue:@"yo"], @"Should validate non-nil");
 }
 
 - (void)testMinLengthRule {
-    URBNMinLengthRule *lengthRule = [[URBNMinLengthRule alloc] initWithMinLength:5 inclusive:YES];
+    URBNMinLengthRule *lengthRule = URBNVGreaterThanOrEqual(5);
     
     // String validations
     XCTAssertTrue([lengthRule validateValue:nil], @"Nil should validate by default");
@@ -50,7 +50,7 @@
 }
 
 - (void)testMaxLengthRule {
-    URBNMaxLengthRule *lengthRule = [[URBNMaxLengthRule alloc] initWithMaxLength:5 inclusive:YES];
+    URBNMaxLengthRule *lengthRule = URBNVLessThanOrEqual(5);
     
     // String validations
     XCTAssertTrue([lengthRule validateValue:nil], @"Nil should validate by default");
@@ -74,10 +74,9 @@
 }
 
 - (void)testBlockRule {
-    URBNBlockRule *blockRule = [[URBNBlockRule alloc] initWithValidator:^BOOL(id obj) {
-        return [obj isKindOfClass:[NSArray class]];
-    }];
-    
+    URBNBlockRule *blockRule = URBNVBlock(^BOOL(id  _Nullable val) {
+        return [val isKindOfClass:[NSArray  class]];
+    });
     
     XCTAssertFalse([blockRule validateValue:nil], @"Should not validate nil since nil is not an array class");
     XCTAssertFalse([blockRule validateValue:@"2343"], @"Should not validate String since String is not an array class");
@@ -85,7 +84,7 @@
 }
 
 - (void)testRegexRule {
-    URBNRegexRule *regexRule = [[URBNRegexRule alloc] initWithPattern:@"\\d+"];
+    URBNRegexRule *regexRule = URBNVMatch(@"\\d+");
     
     XCTAssertTrue([regexRule validateValue:nil], @"Null should be valid by default");
     XCTAssertFalse([regexRule validateValue:@"143k"], @"Anything but numbers should be considered failure");
@@ -94,7 +93,7 @@
 
 - (void)testLocalizationOverride {
     URBNValidator *v = [URBNValidator new];
-    URBNRequiredRule *r = [URBNRequiredRule new];
+    URBNRequiredRule *r = URBNVRequired;
     r.localizationKey = @"URBNRequiredRule_Override";
     
     NSError *error = nil;

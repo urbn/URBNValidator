@@ -60,10 +60,10 @@ public class URBNMinLengthRule: URBNBaseRule, URBNRequirement {
     public var isRequired: Bool = false
     public var isInclusive: Bool = false
     
-    public init(minLength: Int, inclusive: Bool = false) {
+    public init(minLength: Int, inclusive: Bool = false, localizationKey: String? = nil) {
         self.minLength = minLength
         self.isInclusive = inclusive
-        super.init()
+        super.init(localizationKey: localizationKey)
     }
     
     public override func validateValue(value: AnyObject?) -> Bool {
@@ -85,10 +85,10 @@ public class URBNMaxLengthRule: URBNBaseRule, URBNRequirement {
     public var isRequired: Bool = false
     public var isInclusive: Bool = false
     
-    public init(maxLength: Int, inclusive: Bool = false) {
+    public init(maxLength: Int, inclusive: Bool = false, localizationKey: String? = nil) {
         self.maxLength = maxLength
         self.isInclusive = inclusive
-        super.init()
+        super.init(localizationKey: localizationKey)
     }
     
     public override func validateValue(value: AnyObject?) -> Bool {

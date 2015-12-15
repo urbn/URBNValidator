@@ -45,9 +45,9 @@ class BasicTests: XCTestCase {
     }
     
     func testBlockRule() {
-        let r = URBNBlockRule { (value) -> Bool in
+        let r = URBNBlockRule(validator: { (value) -> Bool in
             return value is Int
-        }
+        })
         
         XCTAssertEqual(r.localizationKey, "URBNBlockRule")
         XCTAssertFalse(r.validateValue(nil))

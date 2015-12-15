@@ -109,4 +109,24 @@ class ObjectTestsSwifty: XCTestCase {
         }
     }
     
+    
+    func testCustomLocalizations() {
+        let t = Testable()
+        
+        t.rules = [
+            "prop1":
+                ValidatingValue(value: nil,
+                rules:
+                URBNRequiredRule(localizationKey: "t_required"),
+                URBNBlockRule(validator: { $0 is Int }, localizationKey: "t_integer"))]
+        
+        do {
+            try vd.validate(t)
+            XCTFail("Should not validate")
+        } catch let err as NSError {
+            XCTAssertEqual(err.underlyingErrors!.count, 2)
+            XCTAssertEqual(err.underlyingErrors![0].localizedDescription, "ls_URBNValidator_t_required")
+            XCTAssertEqual(err.underlyingErrors![1].localizedDescription, "ls_URBNValidator_t_integer")
+        }
+    }
 }

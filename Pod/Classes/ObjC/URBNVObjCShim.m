@@ -12,60 +12,52 @@
 
 #pragma mark - Greater Than
 URBNVOverloadable id __nonnull URBNVGreaterThan(NSInteger minValue) {
-    return [[URBNMinLengthRule alloc] initWithMinLength: minValue inclusive: NO];
+    return URBNVGreaterThan(minValue, nil);
 }
 
 URBNVOverloadable id __nonnull URBNVGreaterThan(NSInteger minValue, NSString * __nullable localizeString) {
-    URBNMinLengthRule *r = [[URBNMinLengthRule alloc] initWithMinLength: minValue inclusive: NO];
-    if ([localizeString length] > 0) {
-        r.localizationKey = localizeString;
-    }
-    return r;
+    return [[URBNMinLengthRule alloc] initWithMinLength:minValue inclusive:NO localizationKey:localizeString];
 }
 
 URBNVOverloadable id __nonnull URBNVGreaterThanOrEqual(NSInteger minValue) {
-    return [[URBNMinLengthRule alloc] initWithMinLength: minValue inclusive: YES];
+    return URBNVGreaterThanOrEqual(minValue, nil);
+}
+
+URBNVOverloadable id __nonnull URBNVGreaterThanOrEqual(NSInteger minValue, NSString * __nullable localizeString) {
+    return [[URBNMinLengthRule alloc] initWithMinLength:minValue inclusive:YES localizationKey:localizeString];
 }
 
 #pragma mark - Less than
 URBNVOverloadable id __nonnull URBNVLessThan(NSInteger minValue) {
-    return [[URBNMaxLengthRule alloc] initWithMaxLength: minValue inclusive: NO];
+    return URBNVLessThan(minValue, nil);
 }
 
 URBNVOverloadable id __nonnull URBNVLessThan(NSInteger minValue, NSString * __nullable localizeString) {
-    URBNMaxLengthRule *r = [[URBNMaxLengthRule alloc] initWithMaxLength: minValue inclusive: NO];
-    if ([localizeString length] > 0) {
-        r.localizationKey = localizeString;
-    }
-    return r;
+    return [[URBNMaxLengthRule alloc] initWithMaxLength:minValue inclusive:NO localizationKey:localizeString];
 }
 
 URBNVOverloadable id __nonnull URBNVLessThanOrEqual(NSInteger minValue) {
-    return [[URBNMaxLengthRule alloc] initWithMaxLength: minValue inclusive: YES];
+    return URBNVLessThanOrEqual(minValue, nil);
+}
+
+URBNVOverloadable id __nonnull URBNVLessThanOrEqual(NSInteger minValue, NSString * __nullable localizeString) {
+    return [[URBNMaxLengthRule alloc] initWithMaxLength:minValue inclusive:YES localizationKey:localizeString];
 }
 
 #pragma mark - Matching
 URBNVOverloadable id __nonnull URBNVMatch(NSString * __nonnull pattern) {
-    return [[URBNRegexRule alloc] initWithPattern: pattern];
+    return URBNVMatch(pattern, nil);
 }
 
 URBNVOverloadable id __nonnull URBNVMatch(NSString * __nonnull pattern, NSString * __nullable localizeString) {
-    URBNRegexRule *r = [[URBNRegexRule alloc] initWithPattern: pattern];
-    if ([localizeString length] > 0) {
-        r.localizationKey = localizeString;
-    }
-    return r;
+    return [[URBNRegexRule alloc] initWithPattern: pattern localizationKey: localizeString];
 }
 
 #pragma mark - Blocks
 URBNVOverloadable id __nonnull URBNVBlock(BOOL (^ __nonnull checker)(id __nullable val)) {
-    return [[URBNBlockRule alloc] initWithValidator:checker];
+    return URBNVBlock(nil, checker);
 }
 
 URBNVOverloadable id __nonnull URBNVBlock(NSString * __nullable localizeString, BOOL (^ __nonnull checker)(id __nullable val)) {
-    URBNBlockRule *r = [[URBNBlockRule alloc] initWithValidator:checker];
-    if ([localizeString length] > 0) {
-        r.localizationKey = localizeString;
-    }
-    return r;
+    return [[URBNBlockRule alloc] initWithValidator:checker localizationKey:localizeString];
 }

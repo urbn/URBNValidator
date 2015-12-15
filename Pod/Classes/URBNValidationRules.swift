@@ -21,11 +21,15 @@ import Foundation
 
 
 public class URBNBaseRule: NSObject, ValidationRule {
-    public var localizationKey = "URBNBaseRule"
+    lazy public var localizationKey: String = {
+        return "\(self.dynamicType.classForCoder())"
+    }()
     
-    public init(localizationKey: String = "\(classForCoder)") {
+    public init(localizationKey: String? = nil) {
         super.init()
-        self.localizationKey = localizationKey
+        if localizationKey != nil && localizationKey?.length > 0 {
+            self.localizationKey = localizationKey!
+        }
     }
     
     public func validateValue(value: AnyObject?) -> Bool {
@@ -61,9 +65,9 @@ public class URBNBlockRule: URBNBaseRule {
     public typealias BlockValidation = (value: AnyObject?) -> Bool
     public var blockValidation: BlockValidation
     
-    public init(validator: BlockValidation) {
+    public init(validator: BlockValidation, localizationKey: String? = nil) {
         blockValidation = validator
-        super.init()
+        super.init(localizationKey: localizationKey)
     }
     
     public override func validateValue(value: AnyObject?) -> Bool {
@@ -75,9 +79,9 @@ public class URBNRegexRule: URBNBaseRule, URBNRequirement {
     internal var pattern: String
     public var isRequired: Bool = false
     
-    public init(pattern: String) {
+    public init(pattern: String, localizationKey: String? = nil) {
         self.pattern = pattern
-        super.init()
+        super.init(localizationKey: localizationKey)
     }
     
     public override func validateValue(value: AnyObject?) -> Bool {
