@@ -2,8 +2,5 @@ source 'https://github.com/CocoaPods/Specs.git'
 use_frameworks!
 
 
-target 'URBNValidator_Tests', :exclusive => true do
-  pod "URBNValidator", :path => "../"
-
-  
-end
+pod "URBNValidator", :path => "../"
+pod "URBNValidator/ObjC", :path => "../"

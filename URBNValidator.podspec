@@ -31,4 +31,8 @@ Pod::Spec.new do |s|
   s.module_map = "Pod/Supporting Files/URBNValidator.modulemap"
   s.source_files = ['Pod/Classes/**/*', "Pod/Supporting Files/**/*.h"]
   s.resources = ['Pod/Resources/**/*.lproj']
+
+  s.subspec 'ObjC' do |ss|
+    ss.source_files = 'Pod/ObjC/**.*'
+  end
 end
