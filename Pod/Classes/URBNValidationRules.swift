@@ -10,9 +10,10 @@ import Foundation
 
 
 public protocol ValidationRule {
+    typealias T
     var localizationKey: String { get set }
-    func validateValue(value: AnyObject?) -> Bool
-    func validateValue(value: AnyObject?, key: String) -> Bool
+    func validateValue(value: T?) -> Bool
+    func validateValue(value: T?, key: String) -> Bool
 }
 
 public protocol URBNRequirement {

@@ -9,17 +9,16 @@
 import Foundation
 
 
-public class ValidatingValue: NSObject {
-    public var value: AnyObject?
-    public var rules: [ValidationRule]
+public class ValidatingValue<T, V: ValidationRule> {
+    public var value: T?
+    public var rules: [V]
     
-    public init(_ value: AnyObject?, rules: [ValidationRule]) {
+    public init(_ value: T?, rules: [V]) {
         self.value = value
         self.rules = rules
-        super.init()
     }
     
-    public convenience init(value: AnyObject?, rules: ValidationRule...) {
+    public convenience init(value: T?, rules: V...) {
         self.init(value, rules: rules)
     }
 }
@@ -32,8 +31,8 @@ public protocol Validator {
      If invalid, then will `throw` an error with the localized reason
      why the value failed
     **/
-    func validate(key: String?, value: AnyObject?, rule: ValidationRule) throws
-    func validate(item: Validateable, stopOnFirstError: Bool) throws
+    func validate<T, V: ValidationRule>(key: String?, value: T?, rule: V) throws
+    func validate<Vable: Validateable>(item: Vable , stopOnFirstError: Bool) throws
 }
 
 /**
@@ -41,7 +40,9 @@ public protocol Validator {
  defining a validationMap which contains a map of keys -> ValidatingValue's
 */
 public protocol Validateable {
-    func validationMap() -> [String: ValidatingValue]
+    typealias T
+    typealias V: ValidationRule
+    func validationMap() -> [String: ValidatingValue<T, V>]
 }
 
 
@@ -82,7 +83,7 @@ public class URBNValidator: Validator {
      
      - throws: An instance of NSError with the localized data
     */
-    public func validate(key: String? = nil, value: AnyObject?, rule: ValidationRule) throws {
+    public func validate<T, V: ValidationRule>(key: String? = nil, value: T?, rule: V) throws {
         if rule.validateValue(value) {
             return
         }
@@ -104,7 +105,7 @@ public class URBNValidator: Validator {
      - throws: An instance of NSError representing the invalid data
      
     */
-    public func validate(item: Validateable, stopOnFirstError: Bool = false) throws {
+    public func validate<Vable: Validateable>(item: Vable, stopOnFirstError: Bool = false) throws {
         do {
             try self.validate(item, ignoreList: [], stopOnFirstError: stopOnFirstError)
         } catch let e {
@@ -125,14 +126,14 @@ public class URBNValidator: Validator {
      - throws: An instance of NSError representing the invalid data
      
      */
-    public func validate(item: Validateable, ignoreList: [String], stopOnFirstError: Bool = false) throws {
+    public func validate<Vable: Validateable>(item: Vable, ignoreList: [String], stopOnFirstError: Bool = false) throws {
         
         /// Nothing to validate here.   We're all good
-        if item.validationMap().count == 0 { return }
+        if item.validationMap().length == 0 { return }
         
         // We want to get our validationMap minus the items in the ignoreList
         let vdMap = item.validationMap().filter { !ignoreList.contains($0.0) }
-        
+      
         let errs = try vdMap.flatMap({ (key, value) -> [NSError]? in
             let rules = implicitelyRequiredRules(value.rules)
             
@@ -167,7 +168,7 @@ public class URBNValidator: Validator {
         - key: The key to inject into the localization (if applicable).  Replaces the {{field}}
         - value: The value to inject into the localization (if applicable).  Replaces the {{value}}
     */
-    internal func localizeableString(rule: ValidationRule, key: String?, value: AnyObject?) -> String {
+    internal func localizeableString<T, V: ValidationRule>(rule: V, key: String?, value: T?) -> String {
         let ruleKey = "ls_URBNValidator_\(rule.localizationKey)"
         
         // First we try to localize against the mainBundle.
@@ -177,7 +178,7 @@ public class URBNValidator: Validator {
         // Now we're going to regex the resulting string and replace {{field}}, {{value}}
         var replacementValue: String = ""
         if (value != nil && value is CustomStringConvertible) {
-            replacementValue = value!.description
+            replacementValue = ""//value!.description
         }
         let options: NSRegularExpressionOptions = [NSRegularExpressionOptions.CaseInsensitive]
         
@@ -206,7 +207,7 @@ public class URBNValidator: Validator {
      
      - returns: The resulting rules to use for validation
      */
-    internal func implicitelyRequiredRules(rules: [ValidationRule]) -> [ValidationRule] {
+    internal func implicitelyRequiredRules<V: ValidationRule>(rules: [V]) -> [V] {
         
         // Sanity
         if rules.count == 0 {
@@ -221,9 +222,9 @@ public class URBNValidator: Validator {
         
         let isRequired = rules.contains({ $0 is URBNNotRequiredRule }) == false
         let hasRequirement = rules.contains({ $0 is URBNRequiredRule || $0 is URBNNotRequiredRule })
-        let updatedRules = hasRequirement ? rules : ([URBNRequiredRule()] + rules)
+        let updatedRules = hasRequirement ? rules : ([URBNRequiredRule() as! V] + rules)
         
-        return updatedRules.map({ (r) -> ValidationRule in
+        return updatedRules.map({ (r) -> V in
             if var rr = r as? URBNRequirement {
                 rr.isRequired = isRequired
             }
