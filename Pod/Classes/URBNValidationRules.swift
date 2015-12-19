@@ -21,9 +21,18 @@ public protocol URBNRequirement {
 
 
 public class URBNBaseRule: ValidationRule {
-    public var localizationKey: String = {
-        return NSStringFromClass(self.dynamicType)
-    }()
+    var _localizationKey: String?
+    public var localizationKey: String  {
+        get {
+            if (_localizationKey == nil) {
+                return NSStringFromClass(self.dynamicType)
+            }
+            return _localizationKey!
+        }
+        set {
+            _localizationKey = newValue
+        }
+    }
     
     public init(localizationKey: String? = nil) {
         if localizationKey != nil && localizationKey?.length > 0 {
