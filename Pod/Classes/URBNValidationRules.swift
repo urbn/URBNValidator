@@ -9,24 +9,23 @@
 import Foundation
 
 
-@objc public protocol ValidationRule {
+public protocol ValidationRule {
     var localizationKey: String { get set }
     func validateValue(value: AnyObject?) -> Bool
     func validateValue(value: AnyObject?, key: String) -> Bool
 }
 
-@objc public protocol URBNRequirement {
+public protocol URBNRequirement {
     var isRequired: Bool { get set }
 }
 
 
-public class URBNBaseRule: NSObject, ValidationRule {
-    lazy public var localizationKey: String = {
-        return "\(self.dynamicType.classForCoder())"
+public class URBNBaseRule: ValidationRule {
+    public var localizationKey: String = {
+        return NSStringFromClass(self.dynamicType)
     }()
     
     public init(localizationKey: String? = nil) {
-        super.init()
         if localizationKey != nil && localizationKey?.length > 0 {
             self.localizationKey = localizationKey!
         }

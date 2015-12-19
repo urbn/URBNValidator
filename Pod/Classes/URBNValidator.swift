@@ -9,7 +9,7 @@
 import Foundation
 
 
-@objc public class ValidatingValue: NSObject {
+public class ValidatingValue: NSObject {
     public var value: AnyObject?
     public var rules: [ValidationRule]
     
@@ -24,7 +24,7 @@ import Foundation
     }
 }
 
-@objc public protocol Validator {
+public protocol Validator {
     var localizationBundle: NSBundle { get }
     
     /**
@@ -40,7 +40,7 @@ import Foundation
  Validateable objects are meant to allow direct validation of keys/values of a given model by 
  defining a validationMap which contains a map of keys -> ValidatingValue's
 */
-@objc public protocol Validateable {
+public protocol Validateable {
     func validationMap() -> [String: ValidatingValue]
 }
 
@@ -50,8 +50,8 @@ import Foundation
  and localize the results in a nice way.
 */
 // MARK: - URBNValidator -
-public class URBNValidator: NSObject, Validator {
-    
+public class URBNValidator: Validator {
+    public init() {}
     // MARK: - Properties -
     
     // You'll probably never use this.   But just incase here's a prop for it
@@ -224,9 +224,8 @@ public class URBNValidator: NSObject, Validator {
         let updatedRules = hasRequirement ? rules : ([URBNRequiredRule()] + rules)
         
         return updatedRules.map({ (r) -> ValidationRule in
-            
-            if r is URBNRequirement {
-                (r as! URBNRequirement).isRequired = isRequired
+            if var rr = r as? URBNRequirement {
+                rr.isRequired = isRequired
             }
             
             return r
