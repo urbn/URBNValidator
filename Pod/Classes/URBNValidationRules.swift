@@ -10,10 +10,10 @@ import Foundation
 
 
 public protocol ValidationRule {
-    typealias T
+    typealias VR
     var localizationKey: String { get set }
-    func validateValue(value: T?) -> Bool
-    func validateValue(value: T?, key: String) -> Bool
+    func validateValue(value: VR?) -> Bool
+    func validateValue(value: VR?, key: String) -> Bool
 }
 
 public protocol URBNRequirement {
@@ -21,7 +21,8 @@ public protocol URBNRequirement {
 }
 
 
-public class URBNBaseRule: ValidationRule {
+public class URBNBaseRule<T>: ValidationRule {
+    public typealias VR = T
     var _localizationKey: String?
     public var localizationKey: String  {
         get {
@@ -41,19 +42,19 @@ public class URBNBaseRule: ValidationRule {
         }
     }
     
-    public func validateValue(value: AnyObject?) -> Bool {
+    public func validateValue(value: T?) -> Bool {
         return true
     }
     
-    public func validateValue(value: AnyObject?, key: String) -> Bool {
+    public func validateValue(value: T?, key: String) -> Bool {
         self.localizationKey = key
         return self.validateValue(value)
     }
 }
 
-public class URBNRequiredRule: URBNBaseRule {
-    
-    public override func validateValue(value: AnyObject?) -> Bool {
+public class URBNRequiredRule<T>: URBNBaseRule<T> {
+    public init() {}
+    public override func validateValue(value: T?) -> Bool {
         if value is String {
             /// Also validate the value is not empty here.  
             /// We're only doing this for backwards compatibility with QBValidator.
@@ -64,32 +65,34 @@ public class URBNRequiredRule: URBNBaseRule {
     }
 }
 
-public class URBNNotRequiredRule: URBNBaseRule {
-    public override func validateValue(value: AnyObject?) -> Bool {
+public class URBNNotRequiredRule<T>: URBNBaseRule<T> {
+    public init() {}
+
+    public override func validateValue(value: T?) -> Bool {
         return true
     }
 }
 
-public class URBNBlockRule: URBNBaseRule {
-    public typealias BlockValidation = (value: AnyObject?) -> Bool
-    public var blockValidation: BlockValidation
-    
-    public init(_ validator: BlockValidation) {
-        blockValidation = validator
-        super.init()
-    }
-    
-    public init(validator: BlockValidation, localizationKey: String? = nil) {
-        blockValidation = validator
-        super.init(localizationKey: localizationKey)
-    }
-    
-    public override func validateValue(value: AnyObject?) -> Bool {
-        return self.blockValidation(value: value)
-    }
-}
+//public class URBNBlockRule: URBNBaseRule {
+//    public typealias BlockValidation = (value: AnyObject?) -> Bool
+//    public var blockValidation: BlockValidation
+//    
+//    public init(_ validator: BlockValidation) {
+//        blockValidation = validator
+//        super.init()
+//    }
+//    
+//    public init(validator: BlockValidation, localizationKey: String? = nil) {
+//        blockValidation = validator
+//        super.init(localizationKey: localizationKey)
+//    }
+//    
+//    public override func validateValue<T>(value: T?) -> Bool {
+//        return self.blockValidation(value: value)
+//    }
+//}
 
-public class URBNRegexRule: URBNBaseRule, URBNRequirement {
+public class URBNRegexRule<T>: URBNBaseRule<T>, URBNRequirement {
     internal var pattern: String
     public var isRequired: Bool = false
     
@@ -98,12 +101,12 @@ public class URBNRegexRule: URBNBaseRule, URBNRequirement {
         super.init(localizationKey: localizationKey)
     }
     
-    public override func validateValue(value: AnyObject?) -> Bool {
+    public override func validateValue(value: T?) -> Bool {
         if !isRequired && value == nil { return true }
         
         let pred = NSPredicate(format: "SELF MATCHES[cd] %@", self.pattern)
-        return pred.evaluateWithObject(value)
+        return false//pred.evaluateWithObject(value)
     }
     
-    public static let emailPattern = "^(?:(?:(?:(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+)(?:\\.(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+))*)|(?:\"(?:\\\\[^\\r\\n]|[^\\\\\"])*\")))\\@(?:(?:(?:(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+)(?:\\.(?:[a-zA-Z0-9_!#\\$%&'*+/=?\\^`{}~|\\-]+))*)|(?:\\[(?:\\\\\\S|[\\x21-\\x5a\\x5e-\\x7e])*\\])))$"
+    //public static let emailPattern = "^(?:(?:(?:(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+)(?:\\.(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+))*)|(?:\"(?:\\\\[^\\r\\n]|[^\\\\\"])*\")))\\@(?:(?:(?:(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+)(?:\\.(?:[a-zA-Z0-9_!#\\$%&'*+/=?\\^`{}~|\\-]+))*)|(?:\\[(?:\\\\\\S|[\\x21-\\x5a\\x5e-\\x7e])*\\])))$"
 }

@@ -31,8 +31,9 @@ public protocol Validator {
      If invalid, then will `throw` an error with the localized reason
      why the value failed
     **/
-    func validate<T, V: ValidationRule>(key: String?, value: T?, rule: V) throws
-    func validate<Vable: Validateable>(item: Vable , stopOnFirstError: Bool) throws
+    typealias ValT
+    func validate<V: ValidationRule where V.VR == ValT>(key: String?, value: ValT?, rule: V) throws
+    func validate<Vable: Validateable where Vable.T == ValT, Vable.V.VR == ValT>(item: Vable , stopOnFirstError: Bool) throws
 }
 
 /**
@@ -51,7 +52,8 @@ public protocol Validateable {
  and localize the results in a nice way.
 */
 // MARK: - URBNValidator -
-public class URBNValidator: Validator {
+public class URBNValidator<T>: Validator {
+    public typealias ValT = T
     public init() {}
     // MARK: - Properties -
     
@@ -65,7 +67,7 @@ public class URBNValidator: Validator {
      - note: We'll handle falling back to the mainBundle for any localizations for free, so
      you don't have to override this if you're just trying to localize with the main bundle
      */
-    public var localizationBundle: NSBundle = NSBundle(forClass: URBNValidator.self)
+    public var localizationBundle: NSBundle = NSBundle(forClass: URBNValidator<T>.self)
     
     
     
@@ -83,7 +85,7 @@ public class URBNValidator: Validator {
      
      - throws: An instance of NSError with the localized data
     */
-    public func validate<T, V: ValidationRule>(key: String? = nil, value: T?, rule: V) throws {
+    public func validate<V: ValidationRule where V.VR == T>(key: String? = nil, value: T?, rule: V) throws {
         if rule.validateValue(value) {
             return
         }
@@ -105,7 +107,7 @@ public class URBNValidator: Validator {
      - throws: An instance of NSError representing the invalid data
      
     */
-    public func validate<Vable: Validateable>(item: Vable, stopOnFirstError: Bool = false) throws {
+    public func validate<Vable: Validateable where Vable.T == T, Vable.V.VR == T>(item: Vable, stopOnFirstError: Bool = false) throws {
         do {
             try self.validate(item, ignoreList: [], stopOnFirstError: stopOnFirstError)
         } catch let e {
@@ -126,7 +128,7 @@ public class URBNValidator: Validator {
      - throws: An instance of NSError representing the invalid data
      
      */
-    public func validate<Vable: Validateable>(item: Vable, ignoreList: [String], stopOnFirstError: Bool = false) throws {
+    public func validate<Vable: Validateable where Vable.T == T, Vable.V.VR == T>(item: Vable, ignoreList: [String], stopOnFirstError: Bool = false) throws {
         
         /// Nothing to validate here.   We're all good
         if item.validationMap().length == 0 { return }
@@ -220,9 +222,9 @@ public class URBNValidator: Validator {
             return rules
         }
         
-        let isRequired = rules.contains({ $0 is URBNNotRequiredRule }) == false
-        let hasRequirement = rules.contains({ $0 is URBNRequiredRule || $0 is URBNNotRequiredRule })
-        let updatedRules = hasRequirement ? rules : ([URBNRequiredRule() as! V] + rules)
+        let isRequired = rules.contains({ $0 is URBNNotRequiredRule<T> }) == false
+        let hasRequirement = rules.contains({ $0 is URBNRequiredRule<T> || $0 is URBNNotRequiredRule<T> })
+        let updatedRules = hasRequirement ? rules : ([URBNRequiredRule<T>() as! V] + rules)
         
         return updatedRules.map({ (r) -> V in
             if var rr = r as? URBNRequirement {

@@ -55,12 +55,12 @@ extension NSNumber: Lengthable {
     }
 }
 
-func validate(value: AnyObject?, limit: Int, comparisonFunc: (lhs: Int, rhs: Int) -> Bool) -> Bool {
+func validate<T>(value: T?, limit: Int, comparisonFunc: (lhs: Int, rhs: Int) -> Bool) -> Bool {
     guard let lengthableVal = value as? Lengthable else { return false }
     return comparisonFunc(lhs: lengthableVal.length, rhs: limit)
 }
 
-public class BaseLengthRule: URBNBaseRule, URBNRequirement {
+public class BaseLengthRule<T>: URBNBaseRule<T>, URBNRequirement {
     public var limit: Int = 0
     public var isRequired: Bool = false
     public var isInclusive: Bool = false
@@ -71,7 +71,7 @@ public class BaseLengthRule: URBNBaseRule, URBNRequirement {
         super.init(localizationKey: localizationKey)
     }
     
-    public override func validateValue(value: AnyObject?) -> Bool {
+    public override func validateValue(value: T?) -> Bool {
         if !isRequired && value == nil { return true }
         
         return validate(value, limit: limit, comparisonFunc: comparisonFunc)
@@ -80,7 +80,7 @@ public class BaseLengthRule: URBNBaseRule, URBNRequirement {
     var comparisonFunc: (lhs: Int, rhs: Int) -> Bool { return { _,_ in false } }
 }
 
-public class URBNMinLengthRule: BaseLengthRule {
+public class URBNMinLengthRule<T>: BaseLengthRule<T> {
     public init(minLength: Int, inclusive: Bool = false, localizationKey: String? = nil) {
         super.init(limit: minLength, inclusive: inclusive, localizationKey: localizationKey)
     }
@@ -88,7 +88,7 @@ public class URBNMinLengthRule: BaseLengthRule {
     override var comparisonFunc: (lhs: Int, rhs: Int) -> Bool { return isInclusive ? (>=) : (>) }
 }
 
-public class URBNMaxLengthRule: BaseLengthRule {
+public class URBNMaxLengthRule<T>: BaseLengthRule<T> {
     public init(maxLength: Int, inclusive: Bool = false, localizationKey: String? = nil) {
         super.init(limit: maxLength, inclusive: inclusive, localizationKey: localizationKey)
     }
