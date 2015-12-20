@@ -38,6 +38,15 @@ public class ValidatingValue<T, V: ValidationRule> {
     }
 }
 
+extension CompatValidatingValue {
+    func mapBack() -> ValidatingValue<AnyObject, MapBackRule> {
+        let mrules = rules.map( { MapBackRule(backingOCRule: $0) })
+        let v = ValidatingValue(value, rules: mrules)
+        
+        return v
+    }
+}
+
 public protocol Validator {
     var localizationBundle: NSBundle { get }
     
@@ -68,7 +77,12 @@ public protocol Validator {
 }
 
 extension CompatValidateable {
-    
+    func mapBack() -> [String: ValidatingValue<AnyObject, MapBackRule>] {
+        return validationMap().reduce([String: ValidatingValue<AnyObject, MapBackRule>]()) { (var dict, items: (key: String, value: CompatValidatingValue)) -> [String: ValidatingValue<AnyObject, MapBackRule>] in
+            dict[items.key] = items.value.mapBack()
+            return dict
+        }
+    }
 }
 
 @objc public class URBNCompatValidator: NSObject, CompatValidator {
@@ -88,11 +102,11 @@ extension CompatValidateable {
 }
 class ConvertCompat: Validateable {
     typealias T = AnyObject
-    typealias V = URBNBaseRule<T>
+    typealias V = MapBackRule
     var rules = [String: ValidatingValue<T, V>]()
     
     init(cv: CompatValidateable) {
-        rules = cv.validationMap()
+        rules = cv.mapBack()
     }
     
     func validationMap() -> [String : ValidatingValue<T, V>] {
