@@ -136,3 +136,39 @@ public class URBNRegexRule<T>: URBNBaseRule<T>, URBNRequirement {
         }
     }
 }
+
+@objc public class CompatRegexRule: CompatBaseRule, URBNRequirement {
+    public var isRequired: Bool {
+        get {
+            if let requiredBaseRule = self.baseRule as? URBNRegexRule<AnyObject> {
+                return requiredBaseRule.isRequired
+            }
+        
+            return false
+        }
+        set {
+            if let requiredBaseRule = self.baseRule as? URBNRegexRule<AnyObject> {
+                requiredBaseRule.isRequired = newValue
+            }
+        }
+    }
+    
+    public init(pattern: String, localizationKey: String? = nil) {
+        super.init()
+        self.baseRule = URBNRegexRule<AnyObject>(pattern: pattern, localizationKey: localizationKey)
+    }
+}
+
+@objc public class CompatRequiredRule: CompatBaseRule {
+    public init() {
+        super.init()
+        self.baseRule = URBNRequiredRule<AnyObject>()
+    }
+}
+
+@objc public class CompatNotRequiredRule: CompatBaseRule {
+    public init() {
+        super.init()
+        self.baseRule = URBNNotRequiredRule<AnyObject>()
+    }
+}

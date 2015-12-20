@@ -102,3 +102,10 @@ public class URBNMaxLengthRule<T>: BaseLengthRule<T> {
         self.baseRule = URBNMinLengthRule<AnyObject>(minLength: minLength, inclusive: inclusive, localizationKey: localizationKey)
     }
 }
+
+@objc public class CompatMaxLR: CompatBaseRule {
+    public init(maxLength: Int, inclusive: Bool = false, localizationKey: String? = nil) {
+        super.init()
+        self.baseRule = URBNMaxLengthRule<AnyObject>(maxLength: maxLength, inclusive: inclusive, localizationKey: localizationKey)
+    }
+}
