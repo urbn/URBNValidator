@@ -67,6 +67,10 @@ public protocol Validator {
     func validationMap() -> [String: CompatValidatingValue]
 }
 
+extension CompatValidateable {
+    
+}
+
 @objc public class URBNCompatValidator: NSObject, CompatValidator {
     private let backingValidator: URBNValidator<AnyObject> = URBNValidator<AnyObject>()
     
@@ -79,13 +83,17 @@ public protocol Validator {
     }
     
     public func validate(item: CompatValidateable , stopOnFirstError: Bool) throws {
-        try backingValidator.validate(tempTestable(), stopOnFirstError: stopOnFirstError)
+        try backingValidator.validate(ConvertCompat(cv: item), stopOnFirstError: stopOnFirstError)
     }
 }
-class tempTestable: Validateable {
-    typealias T = Any
+class ConvertCompat: Validateable {
+    typealias T = AnyObject
     typealias V = URBNBaseRule<T>
     var rules = [String: ValidatingValue<T, V>]()
+    
+    init(cv: CompatValidateable) {
+        rules = cv.validationMap()
+    }
     
     func validationMap() -> [String : ValidatingValue<T, V>] {
         return rules
