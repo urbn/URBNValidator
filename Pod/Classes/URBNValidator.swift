@@ -79,7 +79,7 @@ extension CompatValidateable {
     }
     
     public func validate(key: String?, value: AnyObject?, rule: OCValidationRule) throws {
-        try backingValidator.validate(key, value: value, rule: URBNBaseRule())
+        try backingValidator.validate(key, value: value, rule: MapBackRule(backingOCRule: rule))
     }
     
     public func validate(item: CompatValidateable , stopOnFirstError: Bool) throws {

@@ -135,6 +135,31 @@ public class URBNRegexRule<T: AnyObject>: URBNBaseRule<T>, URBNRequirement {
     func validateValue(value: AnyObject?, key: String) -> Bool
 }
 
+public class MapBackRule: ValidationRule {
+    public typealias VR = AnyObject
+    let backingOCRule: OCValidationRule
+    public var localizationKey: String {
+        get {
+            return backingOCRule.localizationKey
+        }
+        set {
+            backingOCRule.localizationKey = newValue
+        }
+    }
+    
+    init(backingOCRule: OCValidationRule) {
+        self.backingOCRule = backingOCRule
+    }
+    
+    public func validateValue(value: VR?) -> Bool {
+        return backingOCRule.validateValue(value)
+    }
+    
+    public func validateValue(value: VR?, key: String) -> Bool {
+        return backingOCRule.validateValue(value, key: key)
+    }
+}
+
 @objc public class CompatBaseRule: NSObject, OCValidationRule {
     var baseRule: URBNBaseRule<AnyObject>
     
