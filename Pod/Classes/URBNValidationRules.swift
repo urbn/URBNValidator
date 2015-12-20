@@ -110,3 +110,29 @@ public class URBNRegexRule<T>: URBNBaseRule<T>, URBNRequirement {
     
     //public static let emailPattern = "^(?:(?:(?:(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+)(?:\\.(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+))*)|(?:\"(?:\\\\[^\\r\\n]|[^\\\\\"])*\")))\\@(?:(?:(?:(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+)(?:\\.(?:[a-zA-Z0-9_!#\\$%&'*+/=?\\^`{}~|\\-]+))*)|(?:\\[(?:\\\\\\S|[\\x21-\\x5a\\x5e-\\x7e])*\\])))$"
 }
+
+@objc public protocol OCValidationRule {
+    var localizationKey: String { get set }
+    func validateValue(value: AnyObject?) -> Bool
+    func validateValue(value: AnyObject?, key: String) -> Bool
+}
+
+@objc public class CompatBaseRule: NSObject, OCValidationRule {
+    var baseRule: URBNBaseRule<AnyObject>
+    
+    public init(localizationKey: String? = nil) {
+        baseRule = URBNBaseRule<AnyObject>(localizationKey: localizationKey)
+        super.init()
+    }
+    
+    public func validateValue(value: AnyObject?) -> Bool { return baseRule.validateValue(value) }
+    public func validateValue(value: AnyObject?, key: String) -> Bool { return baseRule.validateValue(value, key: key) }
+    public var localizationKey: String  {
+        get {
+            return baseRule.localizationKey
+        }
+        set {
+            baseRule.localizationKey = newValue
+        }
+    }
+}

@@ -95,3 +95,10 @@ public class URBNMaxLengthRule<T>: BaseLengthRule<T> {
     
     override var comparisonFunc: (lhs: Int, rhs: Int) -> Bool { return isInclusive ? (<=) : (<) }
 }
+
+@objc public class CompatMinLR: CompatBaseRule {
+    public init(minLength: Int, inclusive: Bool = false, localizationKey: String? = nil) {
+        super.init()
+        self.baseRule = URBNMinLengthRule<AnyObject>(minLength: minLength, inclusive: inclusive, localizationKey: localizationKey)
+    }
+}
