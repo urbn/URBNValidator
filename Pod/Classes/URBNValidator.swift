@@ -51,6 +51,46 @@ public protocol Validator {
     func validate<Vable: Validateable where Vable.T == ValT, Vable.V.VR == ValT>(item: Vable , stopOnFirstError: Bool) throws
 }
 
+@objc public protocol CompatValidator {
+    var localizationBundle: NSBundle { get }
+    
+    /**
+     Used to validate a single @value with the given rule.
+     If invalid, then will `throw` an error with the localized reason
+     why the value failed
+     **/
+    func validate(key: String?, value: AnyObject?, rule: OCValidationRule) throws
+    func validate(item: CompatValidateable , stopOnFirstError: Bool) throws
+}
+
+@objc public protocol CompatValidateable {
+    func validationMap() -> [String: CompatValidatingValue]
+}
+
+@objc public class URBNCompatValidator: NSObject, CompatValidator {
+    private let backingValidator: URBNValidator<AnyObject> = URBNValidator<AnyObject>()
+    
+    public var localizationBundle: NSBundle {
+        return backingValidator.localizationBundle
+    }
+    
+    public func validate(key: String?, value: AnyObject?, rule: OCValidationRule) throws {
+        try backingValidator.validate(key, value: value, rule: URBNBaseRule())
+    }
+    
+    public func validate(item: CompatValidateable , stopOnFirstError: Bool) throws {
+        try backingValidator.validate(tempTestable(), stopOnFirstError: stopOnFirstError)
+    }
+}
+class tempTestable: Validateable {
+    typealias T = Any
+    typealias V = URBNBaseRule<T>
+    var rules = [String: ValidatingValue<T, V>]()
+    
+    func validationMap() -> [String : ValidatingValue<T, V>] {
+        return rules
+    }
+}
 /**
  Validateable objects are meant to allow direct validation of keys/values of a given model by 
  defining a validationMap which contains a map of keys -> ValidatingValue's
@@ -59,10 +99,6 @@ public protocol Validateable {
     typealias T
     typealias V: ValidationRule
     func validationMap() -> [String: ValidatingValue<T, V>]
-}
-
-@objc public protocol CompatValidateable {
-    func validationMap() -> [String: CompatValidatingValue]
 }
 
 /**
