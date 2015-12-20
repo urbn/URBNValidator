@@ -73,24 +73,41 @@ public class URBNNotRequiredRule<T>: URBNBaseRule<T> {
     }
 }
 
-//public class URBNBlockRule: URBNBaseRule {
-//    public typealias BlockValidation = (value: AnyObject?) -> Bool
-//    public var blockValidation: BlockValidation
-//    
-//    public init(_ validator: BlockValidation) {
-//        blockValidation = validator
-//        super.init()
-//    }
-//    
-//    public init(validator: BlockValidation, localizationKey: String? = nil) {
-//        blockValidation = validator
-//        super.init(localizationKey: localizationKey)
-//    }
-//    
-//    public override func validateValue<T>(value: T?) -> Bool {
-//        return self.blockValidation(value: value)
-//    }
-//}
+public class URBNBlockRule<T>: URBNBaseRule<T> {
+    public typealias BlockValidation = (value: T?) -> Bool
+    public var blockValidation: BlockValidation
+    
+    public init(_ validator: BlockValidation) {
+        blockValidation = validator
+        super.init()
+    }
+    
+    public init(validator: BlockValidation, localizationKey: String? = nil) {
+        blockValidation = validator
+        super.init(localizationKey: localizationKey)
+    }
+    
+    public override func validateValue(value: T?) -> Bool {
+        return self.blockValidation(value: value)
+    }
+}
+
+@objc public class CompatBlockRule: CompatBaseRule {
+    public typealias BlockValidation = (value: AnyObject?) -> Bool
+
+    public init(_ validator: BlockValidation) {
+        super.init()
+        let blockRule = URBNBlockRule<AnyObject>(validator)
+        blockRule.blockValidation = validator
+        self.baseRule = blockRule
+    }
+    public init(validator: BlockValidation, localizationKey: String? = nil) {
+        super.init(localizationKey: localizationKey)
+        let blockRule = URBNBlockRule<AnyObject>(validator: validator, localizationKey: localizationKey)
+        blockRule.blockValidation = validator
+        self.baseRule = blockRule
+    }
+}
 
 public class URBNRegexRule<T: AnyObject>: URBNBaseRule<T>, URBNRequirement {
     internal var pattern: String

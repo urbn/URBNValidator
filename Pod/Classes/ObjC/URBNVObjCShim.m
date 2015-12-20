@@ -54,10 +54,10 @@ URBNVOverloadable id __nonnull URBNVMatch(NSString * __nonnull pattern, NSString
 }
 
 #pragma mark - Blocks
-//URBNVOverloadable id __nonnull URBNVBlock(BOOL (^ __nonnull checker)(id __nullable val)) {
-//    return URBNVBlock(nil, checker);
-//}
+URBNVOverloadable id __nonnull URBNVBlock(BOOL (^ __nonnull checker)(id __nullable val)) {
+    return URBNVBlock(nil, checker);
+}
 
-//URBNVOverloadable id __nonnull URBNVBlock(NSString * __nullable localizeString, BOOL (^ __nonnull checker)(id __nullable val)) {
-//    return [[URBNBlockRule alloc] initWithValidator:checker localizationKey:localizeString];
-//}
+URBNVOverloadable id __nonnull URBNVBlock(NSString * __nullable localizeString, BOOL (^ __nonnull checker)(id __nullable val)) {
+    return [[CompatBlockRule alloc] initWithValidator:checker localizationKey:localizeString];
+}

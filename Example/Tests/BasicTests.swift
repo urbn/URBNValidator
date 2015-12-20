@@ -44,14 +44,14 @@ class BasicTests: XCTestCase {
         XCTAssertTrue(r.validateValue(["1":1]))
     }
     
-//    func testBlockRule() {
-//        let r = URBNBlockRule { (value) -> Bool in
-//            return value is Int
-//        }
-//        
-//        XCTAssertEqual(r.localizationKey, "URBNValidator.URBNBlockRule")
-//        XCTAssertFalse(r.validateValue(nil))
-//        XCTAssertTrue(r.validateValue(0.1))
-//        XCTAssertTrue(r.validateValue(1))
-//    }
+    func testBlockRule() {
+        let r = URBNBlockRule<Any> { (value) -> Bool in
+            return value is Int
+        }
+        
+        //XCTAssertEqual(r.localizationKey, "URBNValidator.URBNBlockRule")
+        XCTAssertFalse(r.validateValue(nil))
+        XCTAssertFalse(r.validateValue(0.1))
+        XCTAssertTrue(r.validateValue(1))
+    }
 }
