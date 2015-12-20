@@ -92,7 +92,7 @@ public class URBNNotRequiredRule<T>: URBNBaseRule<T> {
 //    }
 //}
 
-public class URBNRegexRule<T>: URBNBaseRule<T>, URBNRequirement {
+public class URBNRegexRule<T: AnyObject>: URBNBaseRule<T>, URBNRequirement {
     internal var pattern: String
     public var isRequired: Bool = false
     
@@ -105,10 +105,8 @@ public class URBNRegexRule<T>: URBNBaseRule<T>, URBNRequirement {
         if !isRequired && value == nil { return true }
         
         let pred = NSPredicate(format: "SELF MATCHES[cd] %@", self.pattern)
-        return false//pred.evaluateWithObject(value)
+        return pred.evaluateWithObject(value)
     }
-    
-    //public static let emailPattern = "^(?:(?:(?:(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+)(?:\\.(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+))*)|(?:\"(?:\\\\[^\\r\\n]|[^\\\\\"])*\")))\\@(?:(?:(?:(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+)(?:\\.(?:[a-zA-Z0-9_!#\\$%&'*+/=?\\^`{}~|\\-]+))*)|(?:\\[(?:\\\\\\S|[\\x21-\\x5a\\x5e-\\x7e])*\\])))$"
 }
 
 @objc public protocol OCValidationRule {
@@ -157,6 +155,8 @@ public class URBNRegexRule<T>: URBNBaseRule<T>, URBNRequirement {
         super.init()
         self.baseRule = URBNRegexRule<AnyObject>(pattern: pattern, localizationKey: localizationKey)
     }
+    
+    public static let emailPattern = "^(?:(?:(?:(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+)(?:\\.(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+))*)|(?:\"(?:\\\\[^\\r\\n]|[^\\\\\"])*\")))\\@(?:(?:(?:(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+)(?:\\.(?:[a-zA-Z0-9_!#\\$%&'*+/=?\\^`{}~|\\-]+))*)|(?:\\[(?:\\\\\\S|[\\x21-\\x5a\\x5e-\\x7e])*\\])))$"
 }
 
 @objc public class CompatRequiredRule: CompatBaseRule {
@@ -164,11 +164,19 @@ public class URBNRegexRule<T>: URBNBaseRule<T>, URBNRequirement {
         super.init()
         self.baseRule = URBNRequiredRule<AnyObject>()
     }
+    public override init(localizationKey: String? = nil) {
+        super.init(localizationKey: localizationKey)
+        self.baseRule = URBNRequiredRule<AnyObject>()
+    }
 }
 
 @objc public class CompatNotRequiredRule: CompatBaseRule {
     public init() {
         super.init()
+        self.baseRule = URBNNotRequiredRule<AnyObject>()
+    }
+    public override init(localizationKey: String? = nil) {
+        super.init(localizationKey: localizationKey)
         self.baseRule = URBNNotRequiredRule<AnyObject>()
     }
 }
