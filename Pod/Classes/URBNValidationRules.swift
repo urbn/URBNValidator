@@ -53,7 +53,9 @@ public class URBNBaseRule<T>: ValidationRule {
 }
 
 public class URBNRequiredRule<T>: URBNBaseRule<T> {
-    public init() {}
+    public override init(localizationKey: String? = nil) {
+        super.init(localizationKey: localizationKey)
+    }
     public override func validateValue(value: T?) -> Bool {
         if value is String {
             /// Also validate the value is not empty here.  
@@ -66,8 +68,9 @@ public class URBNRequiredRule<T>: URBNBaseRule<T> {
 }
 
 public class URBNNotRequiredRule<T>: URBNBaseRule<T> {
-    public init() {}
-
+    public override init(localizationKey: String? = nil) {
+        super.init(localizationKey: localizationKey)
+    }
     public override func validateValue(value: T?) -> Bool {
         return true
     }
@@ -177,10 +180,6 @@ public class URBNRegexRule<T: AnyObject>: URBNBaseRule<T>, URBNRequirement {
 }
 
 @objc public class CompatRequiredRule: CompatBaseRule {
-    public init() {
-        super.init()
-        self.baseRule = URBNRequiredRule<AnyObject>()
-    }
     public override init(localizationKey: String? = nil) {
         super.init(localizationKey: localizationKey)
         self.baseRule = URBNRequiredRule<AnyObject>()
@@ -188,10 +187,6 @@ public class URBNRegexRule<T: AnyObject>: URBNBaseRule<T>, URBNRequirement {
 }
 
 @objc public class CompatNotRequiredRule: CompatBaseRule {
-    public init() {
-        super.init()
-        self.baseRule = URBNNotRequiredRule<AnyObject>()
-    }
     public override init(localizationKey: String? = nil) {
         super.init(localizationKey: localizationKey)
         self.baseRule = URBNNotRequiredRule<AnyObject>()
