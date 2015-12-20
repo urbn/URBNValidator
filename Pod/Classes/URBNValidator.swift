@@ -23,6 +23,21 @@ public class ValidatingValue<T, V: ValidationRule> {
     }
 }
 
+@objc public class CompatValidatingValue: NSObject {
+    public var value: AnyObject?
+    public var rules: [OCValidationRule]
+    
+    public init(_ value: AnyObject?, rules: [OCValidationRule]) {
+        self.value = value
+        self.rules = rules
+        super.init()
+    }
+    
+    public convenience init(value: AnyObject?, rules: OCValidationRule...) {
+        self.init(value, rules: rules)
+    }
+}
+
 public protocol Validator {
     var localizationBundle: NSBundle { get }
     
@@ -46,6 +61,9 @@ public protocol Validateable {
     func validationMap() -> [String: ValidatingValue<T, V>]
 }
 
+@objc public protocol CompatValidateable {
+    func validationMap() -> [String: CompatValidatingValue]
+}
 
 /**
  This is the main URBNValidator object.   Used to validate objects

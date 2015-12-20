@@ -1,28 +1,28 @@
-////
-////  ObjectTests.m
-////  URBNValidator
-////
-////  Created by Joseph Ridenour on 11/30/15.
-////  Copyright © 2015 URBN. All rights reserved.
-////
 //
-//#import <XCTest/XCTest.h>
-//@import URBNValidator;
+//  ObjectTests.m
+//  URBNValidator
 //
-//@interface TestObject: NSObject <Validateable>
-//@property (nonatomic, copy) NSString *requiredString;
-//@property (nonatomic, copy) NSArray *requiredList;
-//@end
-//@implementation TestObject
+//  Created by Joseph Ridenour on 11/30/15.
+//  Copyright © 2015 URBN. All rights reserved.
 //
-//- (NSDictionary<NSString *,NSArray<id<ValidationRule>> *> *)validationMap {
-//    return @{
-//             @"requiredString": [[ValidatingValue alloc] init:self.requiredString rules:@[URBNVRequired]],
-//             @"requiredList": [[ValidatingValue alloc] init:self.requiredList rules:@[URBNVRequired, URBNVGreaterThanOrEqual(3)]]
-//             };
-//}
-//
-//@end
+
+#import <XCTest/XCTest.h>
+@import URBNValidator;
+
+@interface TestObject: NSObject <CompatValidateable>
+@property (nonatomic, copy) NSString *requiredString;
+@property (nonatomic, copy) NSArray *requiredList;
+@end
+@implementation TestObject
+
+- (NSDictionary<NSString *,NSArray<id<OCValidationRule>> *> *)validationMap {
+    return @{
+             @"requiredString": [[CompatValidatingValue alloc] init:self.requiredString rules:@[URBNVRequired]],
+             @"requiredList": [[CompatValidatingValue alloc] init:self.requiredList rules:@[URBNVRequired, URBNVGreaterThanOrEqual(3)]]
+             };
+}
+
+@end
 //
 //
 //@interface ObjectTests : XCTestCase
