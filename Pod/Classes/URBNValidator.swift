@@ -40,7 +40,19 @@ public class ValidatingValue<T, V: ValidationRule> {
 
 extension CompatValidatingValue {
     func mapBack() -> ValidatingValue<AnyObject, MapBackRule> {
-        let mrules = rules.map( { MapBackRule(backingOCRule: $0) })
+        let mrules = rules.map { (rule) -> MapBackRule in
+            var br = false
+            if let compatRule = rule as? CompatBaseRule where compatRule.baseRule is URBNRequirement {
+                br = true
+            }
+            if rule is URBNRequirement || br {
+                return MapBackReq(backingOCRule: rule)
+            }
+            else {
+                return MapBackRule(backingOCRule: rule)
+            }
+
+        }
         let v = ValidatingValue(value, rules: mrules)
         
         return v
