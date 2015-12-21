@@ -5,7 +5,7 @@ import URBNValidator
 class BasicTests: XCTestCase {
     
     func testRequiredRule() {
-        let r = URBNRequiredRule<Any>()
+        let r = URBNRequiredRule()
         
         //XCTAssertEqual(r.localizationKey, "URBNValidator.URBNRequiredRule", "localizationKey should default to the className")
         XCTAssertFalse(r.validateValue(nil), "Nil should be invalid")
@@ -13,7 +13,7 @@ class BasicTests: XCTestCase {
     }
     
     func testMinLengthRule() {
-        let r = URBNMinLengthRule<Any>(minLength: 5, inclusive: true)
+        let r = URBNMinLengthRule(minLength: 5, inclusive: true)
         
         //XCTAssertEqual(r.localizationKey, "URBNValidator.URBNMinLengthRule")
         XCTAssertFalse(r.validateValue("1234"))
@@ -29,7 +29,7 @@ class BasicTests: XCTestCase {
     }
     
     func testMaxLengthRule() {
-        let r = URBNMaxLengthRule<Any>(maxLength: 5, inclusive: true)
+        let r = URBNMaxLengthRule(maxLength: 5, inclusive: true)
         
         //XCTAssertEqual(r.localizationKey, "URBNValidator.URBNMaxLengthRule")
         XCTAssertTrue(r.validateValue("1234"))
@@ -45,7 +45,7 @@ class BasicTests: XCTestCase {
     }
     
     func testBlockRule() {
-        let r = URBNBlockRule<Any> { (value) -> Bool in
+        let r = URBNBlockRule { (value) -> Bool in
             return value is Int
         }
         

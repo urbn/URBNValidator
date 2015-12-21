@@ -10,11 +10,9 @@ import XCTest
 import URBNValidator
 
 class Testable: Validateable {
-    typealias T = Any
-    typealias V = URBNBaseRule<T>
-    var rules = [String: ValidatingValue<T, V>]()
+    var rules = [String: ValidatingValue]()
     
-    func validationMap() -> [String : ValidatingValue<T, V>] {
+    func validationMap() -> [String : ValidatingValue] {
         return rules
     }
 }
@@ -24,7 +22,7 @@ class User: Testable {
     var lastName: String?
     var addresses = [String]()
     
-    override func validationMap() -> [String : ValidatingValue<T, V>] {
+    override func validationMap() -> [String : ValidatingValue] {
         rules = rules.count > 0 ? rules : [
             "firstName": ValidatingValue(value: self.firstName, rules: URBNRequiredRule(), URBNMinLengthRule(minLength: 2, inclusive: true)),
             "lastName": ValidatingValue(value: self.lastName, rules: URBNNotRequiredRule(), URBNMinLengthRule(minLength: 2, inclusive: true)),
@@ -35,7 +33,7 @@ class User: Testable {
 }
 
 class ObjectTestsSwifty: XCTestCase {
-    var vd = URBNValidator<Any>()
+    var vd = URBNValidator()
     
     func testSingleError() {
         let u = User()

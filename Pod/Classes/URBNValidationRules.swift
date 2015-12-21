@@ -10,10 +10,9 @@ import Foundation
 
 
 public protocol ValidationRule {
-    typealias VR
     var localizationKey: String { get set }
-    func validateValue(value: VR?) -> Bool
-    func validateValue(value: VR?, key: String) -> Bool
+    func validateValue(value: Any?) -> Bool
+    func validateValue(value: Any?, key: String) -> Bool
 }
 
 public protocol URBNRequirement {
@@ -21,8 +20,7 @@ public protocol URBNRequirement {
 }
 
 
-public class URBNBaseRule<T>: ValidationRule {
-    public typealias VR = T
+public class URBNBaseRule: ValidationRule {
     var _localizationKey: String?
     public var localizationKey: String  {
         get {
@@ -42,21 +40,21 @@ public class URBNBaseRule<T>: ValidationRule {
         }
     }
     
-    public func validateValue(value: T?) -> Bool {
+    public func validateValue(value: Any?) -> Bool {
         return true
     }
     
-    public func validateValue(value: T?, key: String) -> Bool {
+    public func validateValue(value: Any?, key: String) -> Bool {
         self.localizationKey = key
         return self.validateValue(value)
     }
 }
 
-public class URBNRequiredRule<T>: URBNBaseRule<T> {
+public class URBNRequiredRule: URBNBaseRule {
     public override init(localizationKey: String? = nil) {
         super.init(localizationKey: localizationKey)
     }
-    public override func validateValue(value: T?) -> Bool {
+    public override func validateValue(value: Any?) -> Bool {
         if value is String {
             /// Also validate the value is not empty here.  
             /// We're only doing this for backwards compatibility with QBValidator.
@@ -67,17 +65,17 @@ public class URBNRequiredRule<T>: URBNBaseRule<T> {
     }
 }
 
-public class URBNNotRequiredRule<T>: URBNBaseRule<T> {
+public class URBNNotRequiredRule: URBNBaseRule {
     public override init(localizationKey: String? = nil) {
         super.init(localizationKey: localizationKey)
     }
-    public override func validateValue(value: T?) -> Bool {
+    public override func validateValue(value: Any?) -> Bool {
         return true
     }
 }
 
-public class URBNBlockRule<T>: URBNBaseRule<T> {
-    public typealias BlockValidation = (value: T?) -> Bool
+public class URBNBlockRule: URBNBaseRule {
+    public typealias BlockValidation = (value: Any?) -> Bool
     public var blockValidation: BlockValidation
     
     public init(_ validator: BlockValidation) {
@@ -90,29 +88,29 @@ public class URBNBlockRule<T>: URBNBaseRule<T> {
         super.init(localizationKey: localizationKey)
     }
     
-    public override func validateValue(value: T?) -> Bool {
+    public override func validateValue(value: Any?) -> Bool {
         return self.blockValidation(value: value)
     }
 }
 
 @objc public class CompatBlockRule: CompatBaseRule {
-    public typealias BlockValidation = (value: AnyObject?) -> Bool
+    public typealias BlockValidation = (value: Any?) -> Bool
 
     public init(_ validator: BlockValidation) {
         super.init()
-        let blockRule = URBNBlockRule<AnyObject>(validator)
+        let blockRule = URBNBlockRule(validator)
         blockRule.blockValidation = validator
         self.baseRule = blockRule
     }
     public init(validator: BlockValidation, localizationKey: String? = nil) {
         super.init(localizationKey: localizationKey)
-        let blockRule = URBNBlockRule<AnyObject>(validator: validator, localizationKey: localizationKey)
+        let blockRule = URBNBlockRule(validator: validator, localizationKey: localizationKey)
         blockRule.blockValidation = validator
         self.baseRule = blockRule
     }
 }
 
-public class URBNRegexRule<T: AnyObject>: URBNBaseRule<T>, URBNRequirement {
+public class URBNRegexRule: URBNBaseRule, URBNRequirement {
     internal var pattern: String
     public var isRequired: Bool = false
     
@@ -121,11 +119,11 @@ public class URBNRegexRule<T: AnyObject>: URBNBaseRule<T>, URBNRequirement {
         super.init(localizationKey: localizationKey)
     }
     
-    public override func validateValue(value: T?) -> Bool {
+    public override func validateValue(value: Any?) -> Bool {
         if !isRequired && value == nil { return true }
         
         let pred = NSPredicate(format: "SELF MATCHES[cd] %@", self.pattern)
-        return pred.evaluateWithObject(value)
+        return pred.evaluateWithObject(value as! AnyObject?)
     }
 }
 
@@ -135,58 +133,11 @@ public class URBNRegexRule<T: AnyObject>: URBNBaseRule<T>, URBNRequirement {
     func validateValue(value: AnyObject?, key: String) -> Bool
 }
 
-public class MapBackRule: ValidationRule {
-    public typealias VR = AnyObject
-    var backingOCRule: OCValidationRule
-    public var localizationKey: String {
-        get {
-            return backingOCRule.localizationKey
-        }
-        set {
-            backingOCRule.localizationKey = newValue
-        }
-    }
-    
-    init(backingOCRule: OCValidationRule) {
-        self.backingOCRule = backingOCRule
-    }
-    
-    public func validateValue(value: VR?) -> Bool {
-        return backingOCRule.validateValue(value)
-    }
-    
-    public func validateValue(value: VR?, key: String) -> Bool {
-        return backingOCRule.validateValue(value, key: key)
-    }
-}
-
-public class MapBackReq: MapBackRule, URBNRequirement {
-    var backingReq: URBNRequirement? {
-        get {
-            return backingOCRule as? URBNRequirement
-        }
-        set {
-            if let newReq = newValue as? OCValidationRule {
-                backingOCRule = newReq
-            }
-        }
-    }
-    public var isRequired: Bool {
-        get {
-            return backingReq?.isRequired ?? false
-        }
-        set {
-            backingReq?.isRequired = newValue
-        }
-    }
-
-}
-
 @objc public class CompatBaseRule: NSObject, OCValidationRule {
-    var baseRule: URBNBaseRule<AnyObject>
+    var baseRule: URBNBaseRule
     
     public init(localizationKey: String? = nil) {
-        baseRule = URBNBaseRule<AnyObject>(localizationKey: localizationKey)
+        baseRule = URBNBaseRule(localizationKey: localizationKey)
         super.init()
     }
     
@@ -205,14 +156,14 @@ public class MapBackReq: MapBackRule, URBNRequirement {
 @objc public class CompatRegexRule: CompatBaseRule, URBNRequirement {
     public var isRequired: Bool {
         get {
-            if let requiredBaseRule = self.baseRule as? URBNRegexRule<AnyObject> {
+            if let requiredBaseRule = self.baseRule as? URBNRegexRule {
                 return requiredBaseRule.isRequired
             }
         
             return false
         }
         set {
-            if let requiredBaseRule = self.baseRule as? URBNRegexRule<AnyObject> {
+            if let requiredBaseRule = self.baseRule as? URBNRegexRule {
                 requiredBaseRule.isRequired = newValue
             }
         }
@@ -220,7 +171,7 @@ public class MapBackReq: MapBackRule, URBNRequirement {
     
     public init(pattern: String, localizationKey: String? = nil) {
         super.init()
-        self.baseRule = URBNRegexRule<AnyObject>(pattern: pattern, localizationKey: localizationKey)
+        self.baseRule = URBNRegexRule(pattern: pattern, localizationKey: localizationKey)
     }
     
     public static let emailPattern = "^(?:(?:(?:(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+)(?:\\.(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+))*)|(?:\"(?:\\\\[^\\r\\n]|[^\\\\\"])*\")))\\@(?:(?:(?:(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+)(?:\\.(?:[a-zA-Z0-9_!#\\$%&'*+/=?\\^`{}~|\\-]+))*)|(?:\\[(?:\\\\\\S|[\\x21-\\x5a\\x5e-\\x7e])*\\])))$"
@@ -229,13 +180,13 @@ public class MapBackReq: MapBackRule, URBNRequirement {
 @objc public class CompatRequiredRule: CompatBaseRule {
     public override init(localizationKey: String? = nil) {
         super.init(localizationKey: localizationKey)
-        self.baseRule = URBNRequiredRule<AnyObject>()
+        self.baseRule = URBNRequiredRule()
     }
 }
 
 @objc public class CompatNotRequiredRule: CompatBaseRule {
     public override init(localizationKey: String? = nil) {
         super.init(localizationKey: localizationKey)
-        self.baseRule = URBNNotRequiredRule<AnyObject>()
+        self.baseRule = URBNNotRequiredRule()
     }
 }

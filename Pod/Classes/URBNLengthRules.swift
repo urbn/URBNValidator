@@ -60,7 +60,7 @@ func validate<T>(value: T?, limit: Int, comparisonFunc: (lhs: Int, rhs: Int) -> 
     return comparisonFunc(lhs: lengthableVal.length, rhs: limit)
 }
 
-public class BaseLengthRule<T>: URBNBaseRule<T>, URBNRequirement {
+public class BaseLengthRule: URBNBaseRule, URBNRequirement {
     public var limit: Int = 0
     public var isRequired: Bool = false
     public var isInclusive: Bool = false
@@ -71,7 +71,7 @@ public class BaseLengthRule<T>: URBNBaseRule<T>, URBNRequirement {
         super.init(localizationKey: localizationKey)
     }
     
-    public override func validateValue(value: T?) -> Bool {
+    public override func validateValue(value: Any?) -> Bool {
         if !isRequired && value == nil { return true }
         
         return validate(value, limit: limit, comparisonFunc: comparisonFunc)
@@ -80,7 +80,7 @@ public class BaseLengthRule<T>: URBNBaseRule<T>, URBNRequirement {
     var comparisonFunc: (lhs: Int, rhs: Int) -> Bool { return { _,_ in false } }
 }
 
-public class URBNMinLengthRule<T>: BaseLengthRule<T> {
+public class URBNMinLengthRule: BaseLengthRule {
     public init(minLength: Int, inclusive: Bool = false, localizationKey: String? = nil) {
         super.init(limit: minLength, inclusive: inclusive, localizationKey: localizationKey)
     }
@@ -88,7 +88,7 @@ public class URBNMinLengthRule<T>: BaseLengthRule<T> {
     override var comparisonFunc: (lhs: Int, rhs: Int) -> Bool { return isInclusive ? (>=) : (>) }
 }
 
-public class URBNMaxLengthRule<T>: BaseLengthRule<T> {
+public class URBNMaxLengthRule: BaseLengthRule {
     public init(maxLength: Int, inclusive: Bool = false, localizationKey: String? = nil) {
         super.init(limit: maxLength, inclusive: inclusive, localizationKey: localizationKey)
     }
@@ -99,13 +99,13 @@ public class URBNMaxLengthRule<T>: BaseLengthRule<T> {
 @objc public class CompatMinLR: CompatBaseRule {
     public init(minLength: Int, inclusive: Bool = false, localizationKey: String? = nil) {
         super.init()
-        self.baseRule = URBNMinLengthRule<AnyObject>(minLength: minLength, inclusive: inclusive, localizationKey: localizationKey)
+        self.baseRule = URBNMinLengthRule(minLength: minLength, inclusive: inclusive, localizationKey: localizationKey)
     }
 }
 
 @objc public class CompatMaxLR: CompatBaseRule {
     public init(maxLength: Int, inclusive: Bool = false, localizationKey: String? = nil) {
         super.init()
-        self.baseRule = URBNMaxLengthRule<AnyObject>(maxLength: maxLength, inclusive: inclusive, localizationKey: localizationKey)
+        self.baseRule = URBNMaxLengthRule(maxLength: maxLength, inclusive: inclusive, localizationKey: localizationKey)
     }
 }

@@ -9,49 +9,39 @@
 import Foundation
 
 
-public class ValidatingValue<T, V: ValidationRule> {
-    public var value: T?
-    public var rules: [V]
+public class ValidatingValue {
+    public var value: Any?
+    public var rules: [ValidationRule]
     
-    public init(_ value: T?, rules: [V]) {
+    public init(_ value: Any?, rules: [ValidationRule]) {
         self.value = value
         self.rules = rules
     }
     
-    public convenience init(value: T?, rules: V...) {
+    public convenience init(value: Any?, rules: ValidationRule...) {
         self.init(value, rules: rules)
     }
 }
 
 @objc public class CompatValidatingValue: NSObject {
     public var value: AnyObject?
-    public var rules: [OCValidationRule]
+    public var rules: [CompatBaseRule]
     
-    public init(_ value: AnyObject?, rules: [OCValidationRule]) {
+    public init(_ value: AnyObject?, rules: [CompatBaseRule]) {
         self.value = value
         self.rules = rules
         super.init()
     }
     
-    public convenience init(value: AnyObject?, rules: OCValidationRule...) {
+    public convenience init(value: AnyObject?, rules: CompatBaseRule...) {
         self.init(value, rules: rules)
     }
 }
 
 extension CompatValidatingValue {
-    func mapBack() -> ValidatingValue<AnyObject, MapBackRule> {
-        let mrules = rules.map { (rule) -> MapBackRule in
-            var br = false
-            if let compatRule = rule as? CompatBaseRule where compatRule.baseRule is URBNRequirement {
-                br = true
-            }
-            if rule is URBNRequirement || br {
-                return MapBackReq(backingOCRule: rule)
-            }
-            else {
-                return MapBackRule(backingOCRule: rule)
-            }
-
+    func mapBack() -> ValidatingValue {
+        let mrules = rules.map { (rule) -> ValidationRule in
+            return rule.baseRule
         }
         let v = ValidatingValue(value, rules: mrules)
         
@@ -67,9 +57,8 @@ public protocol Validator {
      If invalid, then will `throw` an error with the localized reason
      why the value failed
     **/
-    typealias ValT
-    func validate<V: ValidationRule where V.VR == ValT>(key: String?, value: ValT?, rule: V) throws
-    func validate<Vable: Validateable where Vable.T == ValT, Vable.V.VR == ValT>(item: Vable , stopOnFirstError: Bool) throws
+    func validate(key: String?, value: Any?, rule: ValidationRule) throws
+    func validate<Vable: Validateable>(item: Vable , stopOnFirstError: Bool) throws
 }
 
 @objc public protocol CompatValidator {
@@ -80,7 +69,7 @@ public protocol Validator {
      If invalid, then will `throw` an error with the localized reason
      why the value failed
      **/
-    func validate(key: String?, value: AnyObject?, rule: OCValidationRule) throws
+    func validate(key: String?, value: AnyObject?, rule: CompatBaseRule) throws
     func validate(item: CompatValidateable , stopOnFirstError: Bool) throws
 }
 
@@ -89,8 +78,8 @@ public protocol Validator {
 }
 
 extension CompatValidateable {
-    func mapBack() -> [String: ValidatingValue<AnyObject, MapBackRule>] {
-        return validationMap().reduce([String: ValidatingValue<AnyObject, MapBackRule>]()) { (var dict, items: (key: String, value: CompatValidatingValue)) -> [String: ValidatingValue<AnyObject, MapBackRule>] in
+    func mapBack() -> [String: ValidatingValue] {
+        return validationMap().reduce([String: ValidatingValue]()) { (var dict, items: (key: String, value: CompatValidatingValue)) -> [String: ValidatingValue] in
             dict[items.key] = items.value.mapBack()
             return dict
         }
@@ -98,14 +87,14 @@ extension CompatValidateable {
 }
 
 @objc public class URBNCompatValidator: NSObject, CompatValidator {
-    private let backingValidator: URBNValidator<AnyObject> = URBNValidator<AnyObject>()
+    private let backingValidator: URBNValidator = URBNValidator()
     
     public var localizationBundle: NSBundle {
         return backingValidator.localizationBundle
     }
     
-    public func validate(key: String?, value: AnyObject?, rule: OCValidationRule) throws {
-        try backingValidator.validate(key, value: value, rule: MapBackRule(backingOCRule: rule))
+    public func validate(key: String?, value: AnyObject?, rule: CompatBaseRule) throws {
+        try backingValidator.validate(key, value: value, rule: rule.baseRule)
     }
     
     public func validate(item: CompatValidateable , stopOnFirstError: Bool) throws {
@@ -114,14 +103,13 @@ extension CompatValidateable {
 }
 class ConvertCompat: Validateable {
     typealias T = AnyObject
-    typealias V = MapBackRule
-    var rules = [String: ValidatingValue<T, V>]()
+    var rules = [String: ValidatingValue]()
     
     init(cv: CompatValidateable) {
         rules = cv.mapBack()
     }
     
-    func validationMap() -> [String : ValidatingValue<T, V>] {
+    func validationMap() -> [String : ValidatingValue] {
         return rules
     }
 }
@@ -130,9 +118,7 @@ class ConvertCompat: Validateable {
  defining a validationMap which contains a map of keys -> ValidatingValue's
 */
 public protocol Validateable {
-    typealias T
-    typealias V: ValidationRule
-    func validationMap() -> [String: ValidatingValue<T, V>]
+    func validationMap() -> [String: ValidatingValue]
 }
 
 /**
@@ -140,8 +126,7 @@ public protocol Validateable {
  and localize the results in a nice way.
 */
 // MARK: - URBNValidator -
-public class URBNValidator<T>: Validator {
-    public typealias ValT = T
+public class URBNValidator: Validator {
     public init() {}
     // MARK: - Properties -
     
@@ -155,7 +140,7 @@ public class URBNValidator<T>: Validator {
      - note: We'll handle falling back to the mainBundle for any localizations for free, so
      you don't have to override this if you're just trying to localize with the main bundle
      */
-    public var localizationBundle: NSBundle = NSBundle(forClass: URBNValidator<T>.self)
+    public var localizationBundle: NSBundle = NSBundle(forClass: URBNValidator.self)
     
     
     
@@ -173,7 +158,7 @@ public class URBNValidator<T>: Validator {
      
      - throws: An instance of NSError with the localized data
     */
-    public func validate<V: ValidationRule where V.VR == T>(key: String? = nil, value: T?, rule: V) throws {
+    public func validate(key: String? = nil, value: Any?, rule: ValidationRule) throws {
         if rule.validateValue(value) {
             return
         }
@@ -195,7 +180,7 @@ public class URBNValidator<T>: Validator {
      - throws: An instance of NSError representing the invalid data
      
     */
-    public func validate<Vable: Validateable where Vable.T == T, Vable.V.VR == T>(item: Vable, stopOnFirstError: Bool = false) throws {
+    public func validate<Vable: Validateable>(item: Vable, stopOnFirstError: Bool = false) throws {
         do {
             try self.validate(item, ignoreList: [], stopOnFirstError: stopOnFirstError)
         } catch let e {
@@ -216,7 +201,7 @@ public class URBNValidator<T>: Validator {
      - throws: An instance of NSError representing the invalid data
      
      */
-    public func validate<Vable: Validateable where Vable.T == T, Vable.V.VR == T>(item: Vable, ignoreList: [String], stopOnFirstError: Bool = false) throws {
+    public func validate<Vable: Validateable>(item: Vable, ignoreList: [String], stopOnFirstError: Bool = false) throws {
         
         /// Nothing to validate here.   We're all good
         if item.validationMap().length == 0 { return }
@@ -258,7 +243,7 @@ public class URBNValidator<T>: Validator {
         - key: The key to inject into the localization (if applicable).  Replaces the {{field}}
         - value: The value to inject into the localization (if applicable).  Replaces the {{value}}
     */
-    internal func localizeableString<T, V: ValidationRule>(rule: V, key: String?, value: T?) -> String {
+    internal func localizeableString(rule: ValidationRule, key: String?, value: Any?) -> String {
         let ruleKey = "ls_URBNValidator_\(rule.localizationKey)"
         
         // First we try to localize against the mainBundle.
@@ -297,7 +282,7 @@ public class URBNValidator<T>: Validator {
      
      - returns: The resulting rules to use for validation
      */
-    internal func implicitelyRequiredRules<V: ValidationRule>(rules: [V]) -> [V] {
+    internal func implicitelyRequiredRules(rules: [ValidationRule]) -> [ValidationRule] {
         
         // Sanity
         if rules.count == 0 {
@@ -310,11 +295,11 @@ public class URBNValidator<T>: Validator {
             return rules
         }
         
-        let isRequired = rules.contains({ $0 is URBNNotRequiredRule<T> }) == false
-        let hasRequirement = rules.contains({ $0 is URBNRequiredRule<T> || $0 is URBNNotRequiredRule<T> })
-        let updatedRules = hasRequirement ? rules : ([URBNRequiredRule<T>() as! V] + rules)
+        let isRequired = rules.contains({ $0 is URBNNotRequiredRule }) == false
+        let hasRequirement = rules.contains({ $0 is URBNRequiredRule || $0 is URBNNotRequiredRule })
+        let updatedRules = hasRequirement ? rules : ([URBNRequiredRule()] + rules)
         
-        return updatedRules.map({ (r) -> V in
+        return updatedRules.map({ (r) -> ValidationRule in
             if var rr = r as? URBNRequirement {
                 rr.isRequired = isRequired
             }
