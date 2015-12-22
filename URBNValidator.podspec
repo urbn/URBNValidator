@@ -7,8 +7,7 @@
 #
 
 Pod::Spec.new do |s|
-s.name             = "URBN#define URBNVRequired [[URBNCompatRequiredRule alloc] initWithLocalizationKey: nil]
-#define URBNVNotRequired [[URBNCompatNotRequiredRule alloc] initWithLocalizationKey: nil]Validator"
+s.name             = "URBNValidator"
   s.version          = "0.1.0"
   s.summary          = "A short description of URBNValidator."
 
