@@ -74,6 +74,7 @@ public class URBNNotRequiredRule: URBNBaseRule {
         return true
     }
 }
+
 public typealias BlockValidation = (value: Any?) -> Bool
 public class URBNBlockRule: URBNBaseRule {
     public var blockValidation: BlockValidation
