@@ -36,7 +36,7 @@ public class URBNBaseRule: ValidationRule {
     }
     
     public init(localizationKey: String? = nil) {
-        if let key = localizationKey where localizationKey?.length > 0 {
+        if let key = localizationKey where key.length > 0 {
             self.localizationKey = key
         }
     }
