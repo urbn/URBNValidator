@@ -91,15 +91,15 @@
     XCTAssertTrue([regexRule validateValue:@"123451880"], @"Numbers only should validate");
 }
 
-//- (void)testLocalizationOverride {
-//    URBNValidator *v = [URBNValidator new];
-//    URBNRequiredRule *r = URBNVRequired;
-//    r.localizationKey = @"URBNRequiredRule_Override";
-//    
-//    NSError *error = nil;
-//    [v validate:nil value:nil rule:r error:&error];
-//    XCTAssertEqual(error.isMultiError, NO);
-//    XCTAssertEqualObjects(error.localizedDescription, @"What the hell");
-//}
+- (void)testLocalizationOverride {
+    URBNCompatValidator *v = [URBNCompatValidator new];
+    CompatRequiredRule *r = URBNVRequired;
+    r.localizationKey = @"URBNRequiredRule_Override";
+    
+    NSError *error = nil;
+    [v validate:nil value:nil rule:r error:&error];
+    XCTAssertEqual(error.isMultiError, NO);
+    XCTAssertEqualObjects(error.localizedDescription, @"What the hell");
+}
 
 @end
