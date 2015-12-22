@@ -82,8 +82,8 @@ public class URBNDateRule: URBNBaseRule {
     }
     
     public override func validateValue<T: NSDate>(value: T?) -> Bool {
-        if value == nil { return false }
+        guard let value = value else { return false }
         
-        return NSDate().compare(value!) == comparisonType.comparisonResult
+        return NSDate().compare(value) == comparisonType.comparisonResult
     }
 }
