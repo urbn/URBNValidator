@@ -9,13 +9,13 @@
 
 import Foundation
 
-@objc public protocol OCValidationRule {
+@objc public protocol URBNCompatValidationRule {
     var localizationKey: String { get set }
     func validateValue(value: AnyObject?) -> Bool
     func validateValue(value: AnyObject?, key: String) -> Bool
 }
 
-@objc public class CompatBaseRule: NSObject, OCValidationRule {
+@objc public class URBNCompatBaseRule: NSObject, URBNCompatValidationRule {
     var baseRule: URBNBaseRule
     
     public init(localizationKey: String? = nil) {
@@ -35,7 +35,7 @@ import Foundation
     }
 }
 
-@objc public class CompatRegexRule: CompatBaseRule, URBNRequirement {
+@objc public class URBNCompatRegexRule: URBNCompatBaseRule, URBNRequirement {
     public var isRequired: Bool {
         get {
             if let requiredBaseRule = self.baseRule as? URBNRegexRule {
@@ -57,21 +57,21 @@ import Foundation
     }
 }
 
-@objc public class CompatRequiredRule: CompatBaseRule {
+@objc public class URBNCompatRequiredRule: URBNCompatBaseRule {
     public override init(localizationKey: String? = nil) {
         super.init(localizationKey: localizationKey)
         self.baseRule = URBNRequiredRule()
     }
 }
 
-@objc public class CompatNotRequiredRule: CompatBaseRule {
+@objc public class URBNCompatNotRequiredRule: URBNCompatBaseRule {
     public override init(localizationKey: String? = nil) {
         super.init(localizationKey: localizationKey)
         self.baseRule = URBNNotRequiredRule()
     }
 }
 
-@objc public class CompatBlockRule: CompatBaseRule {
+@objc public class URBNCompatBlockRule: URBNCompatBaseRule {
     public typealias CompatBlockValidation = (value: AnyObject?) -> Bool
     
     public init(_ validator: BlockValidation) {

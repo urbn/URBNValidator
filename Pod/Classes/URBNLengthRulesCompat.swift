@@ -9,14 +9,14 @@
 
 import Foundation
 
-@objc public class CompatMinLR: CompatBaseRule {
+@objc public class URBNCompatMinLengthRule: URBNCompatBaseRule {
     public init(minLength: Int, inclusive: Bool = false, localizationKey: String? = nil) {
         super.init()
         self.baseRule = URBNMinLengthRule(minLength: minLength, inclusive: inclusive, localizationKey: localizationKey)
     }
 }
 
-@objc public class CompatMaxLR: CompatBaseRule {
+@objc public class URBNCompatMaxLengthRule: URBNCompatBaseRule {
     public init(maxLength: Int, inclusive: Bool = false, localizationKey: String? = nil) {
         super.init()
         self.baseRule = URBNMaxLengthRule(maxLength: maxLength, inclusive: inclusive, localizationKey: localizationKey)
