@@ -15,7 +15,7 @@
 @end
 @implementation TestObject
 
-- (NSDictionary<NSString *,NSArray<id<URBNCompatValidationRule>> *> *)validationMap {
+- (NSDictionary<NSString *,NSArray<URBNCompatBaseRule *> *> *)validationMap {
     return @{
              @"requiredString": [[CompatValidatingValue alloc] init:self.requiredString rules:@[URBNVRequired]],
              @"requiredList": [[CompatValidatingValue alloc] init:self.requiredList rules:@[URBNVRequired, URBNVGreaterThanOrEqual(3)]]

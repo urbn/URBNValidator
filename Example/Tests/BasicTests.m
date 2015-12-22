@@ -85,7 +85,6 @@
 
 - (void)testRegexRule {
     URBNCompatRegexRule *regexRule = URBNVMatch(@"\\d+");
-    
     XCTAssertTrue([regexRule validateValue:nil], @"Null should be valid by default");
     XCTAssertFalse([regexRule validateValue:@"143k"], @"Anything but numbers should be considered failure");
     XCTAssertTrue([regexRule validateValue:@"123451880"], @"Numbers only should validate");

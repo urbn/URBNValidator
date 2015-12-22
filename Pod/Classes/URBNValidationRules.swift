@@ -8,6 +8,7 @@
 
 import Foundation
 
+
 public protocol ValidationRule {
     var localizationKey: String { get set }
     func validateValue<T>(value: T?) -> Bool

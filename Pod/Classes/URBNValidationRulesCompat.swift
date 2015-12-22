@@ -9,13 +9,8 @@
 
 import Foundation
 
-@objc public protocol URBNCompatValidationRule {
-    var localizationKey: String { get set }
-    func validateValue(value: AnyObject?) -> Bool
-    func validateValue(value: AnyObject?, key: String) -> Bool
-}
 
-@objc public class URBNCompatBaseRule: NSObject, URBNCompatValidationRule {
+@objc public class URBNCompatBaseRule: NSObject {
     var backingRule: URBNBaseRule
     
     public init(localizationKey: String? = nil) {
