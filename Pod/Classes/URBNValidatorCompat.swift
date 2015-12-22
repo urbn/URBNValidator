@@ -12,12 +12,7 @@ import Foundation
 
 @objc public protocol CompatValidator {
     var localizationBundle: NSBundle { get }
-    
-    /**
-     Used to validate a single @value with the given rule.
-     If invalid, then will `throw` an error with the localized reason
-     why the value failed
-     **/
+
     func validate(key: String?, value: AnyObject?, rule: CompatBaseRule) throws
     func validate(item: CompatValidateable , stopOnFirstError: Bool) throws
 }
@@ -52,7 +47,6 @@ extension CompatValidateable {
 }
 
 class ConvertCompat: Validateable {
-    typealias T = AnyObject
     var rules = [String: ValidatingValue]()
     
     init(cv: CompatValidateable) {
@@ -81,9 +75,7 @@ class ConvertCompat: Validateable {
 
 extension CompatValidatingValue {
     func mapBack() -> ValidatingValue {
-        let mrules = rules.map { (rule) -> ValidationRule in
-            return rule.baseRule
-        }
+        let mrules = rules.map { $0.baseRule as ValidationRule }
         let v = ValidatingValue(value, rules: mrules)
         
         return v

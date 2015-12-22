@@ -152,8 +152,6 @@ public class URBNValidator: Validator {
         }
     }
     
-    
-    
     // MARK: - Internal -
     
     /**
@@ -174,11 +172,10 @@ public class URBNValidator: Validator {
         
         // Now we're going to regex the resulting string and replace {{field}}, {{value}}
         var replacementValue: String = ""
-        if (value != nil && value is CustomStringConvertible) {
-            replacementValue = ""//value!.description
+        if let repValue = value as? CustomStringConvertible {
+            replacementValue = repValue.description
         }
         let options: NSRegularExpressionOptions = [NSRegularExpressionOptions.CaseInsensitive]
-        
         
         return [
             // Considering the try! fine here because this is a dev issue.   If you write an invalid
