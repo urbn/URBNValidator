@@ -38,7 +38,7 @@ extension CompatValidateable {
     }
     
     public func validate(key: String?, value: AnyObject?, rule: URBNCompatBaseRule) throws {
-        try backingValidator.validate(key, value: value, rule: rule.baseRule)
+        try backingValidator.validate(key, value: value, rule: rule.backingRule)
     }
     
     public func validate(item: CompatValidateable , stopOnFirstError: Bool) throws {
@@ -75,7 +75,7 @@ class ConvertCompat: Validateable {
 
 extension CompatValidatingValue {
     func backingRules() -> ValidatingValue {
-        let mrules = rules.map { $0.baseRule as ValidationRule }
+        let mrules = rules.map { $0.backingRule as ValidationRule }
         let v = ValidatingValue(value, rules: mrules)
         
         return v

@@ -16,23 +16,23 @@ import Foundation
 }
 
 @objc public class URBNCompatBaseRule: NSObject, URBNCompatValidationRule {
-    var baseRule: URBNBaseRule
+    var backingRule: URBNBaseRule
     
     public init(localizationKey: String? = nil) {
-        baseRule = URBNBaseRule(localizationKey: localizationKey)
+        backingRule = URBNBaseRule(localizationKey: localizationKey)
         super.init()
     }
     
-    public func validateValue(value: AnyObject?) -> Bool { return baseRule.validateValue(value) }
+    public func validateValue(value: AnyObject?) -> Bool { return backingRule.validateValue(value) }
     
-    public func validateValue(value: AnyObject?, key: String) -> Bool { return baseRule.validateValue(value, key: key) }
+    public func validateValue(value: AnyObject?, key: String) -> Bool { return backingRule.validateValue(value, key: key) }
     
     public var localizationKey: String  {
         get {
-            return baseRule.localizationKey
+            return backingRule.localizationKey
         }
         set {
-            baseRule.localizationKey = newValue
+            backingRule.localizationKey = newValue
         }
     }
 }
@@ -40,14 +40,14 @@ import Foundation
 @objc public class URBNCompatRequirementRule: URBNCompatBaseRule, URBNRequirement {
     public var isRequired: Bool {
         get {
-            if let requiredBaseRule = self.baseRule as? URBNRegexRule {
+            if let requiredBaseRule = backingRule as? URBNRegexRule {
                 return requiredBaseRule.isRequired
             }
             
             return false
         }
         set {
-            if let requiredBaseRule = self.baseRule as? URBNRegexRule {
+            if let requiredBaseRule = backingRule as? URBNRegexRule {
                 requiredBaseRule.isRequired = newValue
             }
         }
@@ -57,21 +57,21 @@ import Foundation
 @objc public class URBNCompatRegexRule: URBNCompatRequirementRule {
     public init(pattern: String, localizationKey: String? = nil) {
         super.init()
-        self.baseRule = URBNRegexRule(pattern: pattern, localizationKey: localizationKey)
+        backingRule = URBNRegexRule(pattern: pattern, localizationKey: localizationKey)
     }
 }
 
 @objc public class URBNCompatRequiredRule: URBNCompatBaseRule {
     public override init(localizationKey: String? = nil) {
         super.init(localizationKey: localizationKey)
-        self.baseRule = URBNRequiredRule()
+        backingRule = URBNRequiredRule()
     }
 }
 
 @objc public class URBNCompatNotRequiredRule: URBNCompatBaseRule {
     public override init(localizationKey: String? = nil) {
         super.init(localizationKey: localizationKey)
-        self.baseRule = URBNNotRequiredRule()
+        backingRule = URBNNotRequiredRule()
     }
 }
 
@@ -82,14 +82,14 @@ import Foundation
         super.init()
         let blockRule = URBNBlockRule(validator)
         blockRule.blockValidation = validator
-        self.baseRule = blockRule
+        backingRule = blockRule
     }
     
     public init(validator: BlockValidation, localizationKey: String? = nil) {
         super.init(localizationKey: localizationKey)
         let blockRule = URBNBlockRule(validator: validator, localizationKey: localizationKey)
         blockRule.blockValidation = validator
-        self.baseRule = blockRule
+        backingRule = blockRule
     }
     
     public convenience init(validator: CompatBlockValidation, localizationKey: String?) {
