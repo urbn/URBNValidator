@@ -25,11 +25,11 @@
 @end
 
 
-@interface ObjectTests : XCTestCase
+@interface ObjectCompatTests : XCTestCase
 @property (nonatomic, strong) URBNCompatValidator *vd;
 @end
 
-@implementation ObjectTests
+@implementation ObjectCompatTests
 
 - (void)setUp {
     [super setUp];

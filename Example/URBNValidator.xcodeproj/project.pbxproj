@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		607FACEC1AFB9204008FA782 /* BasicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* BasicTests.swift */; };
 		A3D417D248D58464CBA511A2 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01939DF682E15063CEEF917F /* Pods.framework */; };
-		D81462AF1C0CA259003892B4 /* ObjectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D81462AE1C0CA259003892B4 /* ObjectTests.m */; };
+		D81462AF1C0CA259003892B4 /* ObjectCompatTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D81462AE1C0CA259003892B4 /* ObjectCompatTests.m */; };
 		D8573E051C19E83B00C3BD6C /* ObjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8573E041C19E83B00C3BD6C /* ObjectTests.swift */; };
 		D869D4361C0F6421000CFDA9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D869D4351C0F6421000CFDA9 /* AppDelegate.swift */; };
 		D869D4381C0F6421000CFDA9 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D869D4371C0F6421000CFDA9 /* MasterViewController.swift */; };
@@ -18,7 +18,7 @@
 		D869D43F1C0F6421000CFDA9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D869D43E1C0F6421000CFDA9 /* Assets.xcassets */; };
 		D869D4421C0F6421000CFDA9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D869D4401C0F6421000CFDA9 /* LaunchScreen.storyboard */; };
 		D869D44D1C0F648D000CFDA9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D869D44B1C0F648D000CFDA9 /* Localizable.strings */; };
-		D86E46241BFE1FAB0011B659 /* BasicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D86E46231BFE1FAB0011B659 /* BasicTests.m */; };
+		D86E46241BFE1FAB0011B659 /* BasicCompatTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D86E46231BFE1FAB0011B659 /* BasicCompatTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,7 +42,7 @@
 		8098A375A79CA7E62ABF61F2 /* URBNValidator.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = URBNValidator.podspec; path = ../URBNValidator.podspec; sourceTree = "<group>"; };
 		A718C7CD66BFAE40143B4620 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		C7D679B44209EDA57C0D421C /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
-		D81462AE1C0CA259003892B4 /* ObjectTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjectTests.m; sourceTree = "<group>"; };
+		D81462AE1C0CA259003892B4 /* ObjectCompatTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjectCompatTests.m; sourceTree = "<group>"; };
 		D8531D931BFBCD5700734482 /* URBNValidator.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; name = URBNValidator.playground; path = ../URBNValidator.playground; sourceTree = "<group>"; };
 		D8573E041C19E83B00C3BD6C /* ObjectTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjectTests.swift; sourceTree = "<group>"; };
 		D869D4331C0F6421000CFDA9 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -56,7 +56,7 @@
 		D869D4491C0F6470000CFDA9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
 		D869D44A1C0F6470000CFDA9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		D869D44C1C0F648D000CFDA9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		D86E46231BFE1FAB0011B659 /* BasicTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BasicTests.m; sourceTree = "<group>"; };
+		D86E46231BFE1FAB0011B659 /* BasicCompatTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BasicCompatTests.m; sourceTree = "<group>"; };
 		E69A4D0B7B9F0587A7C1A7A1 /* Pods-URBNValidator_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-URBNValidator_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-URBNValidator_Tests/Pods-URBNValidator_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		EA7AF906B427B28407BAB403 /* Pods-URBNValidator_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-URBNValidator_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-URBNValidator_Tests/Pods-URBNValidator_Tests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -106,9 +106,9 @@
 			isa = PBXGroup;
 			children = (
 				607FACEB1AFB9204008FA782 /* BasicTests.swift */,
-				D86E46231BFE1FAB0011B659 /* BasicTests.m */,
+				D86E46231BFE1FAB0011B659 /* BasicCompatTests.m */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
-				D81462AE1C0CA259003892B4 /* ObjectTests.m */,
+				D81462AE1C0CA259003892B4 /* ObjectCompatTests.m */,
 				D8573E041C19E83B00C3BD6C /* ObjectTests.swift */,
 			);
 			path = Tests;
@@ -321,9 +321,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				607FACEC1AFB9204008FA782 /* BasicTests.swift in Sources */,
-				D81462AF1C0CA259003892B4 /* ObjectTests.m in Sources */,
+				D81462AF1C0CA259003892B4 /* ObjectCompatTests.m in Sources */,
 				D8573E051C19E83B00C3BD6C /* ObjectTests.swift in Sources */,
-				D86E46241BFE1FAB0011B659 /* BasicTests.m in Sources */,
+				D86E46241BFE1FAB0011B659 /* BasicCompatTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
