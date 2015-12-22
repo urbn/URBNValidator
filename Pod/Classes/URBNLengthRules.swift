@@ -71,7 +71,7 @@ public class BaseLengthRule: URBNBaseRule, URBNRequirement {
         super.init(localizationKey: localizationKey)
     }
     
-    public override func validateValue(value: Any?) -> Bool {
+    public override func validateValue<T>(value: T?) -> Bool {
         if !isRequired && value == nil { return true }
         
         return validate(value, limit: limit, comparisonFunc: comparisonFunc)

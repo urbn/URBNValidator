@@ -8,7 +8,7 @@ class BasicTests: XCTestCase {
         let r = URBNRequiredRule()
         
         XCTAssertEqual(r.localizationKey, "URBNValidator.URBNRequiredRule", "localizationKey should default to the className")
-        XCTAssertFalse(r.validateValue(nil), "Nil should be invalid")
+        XCTAssertFalse(r.validateValue(nil as AnyObject?), "Nil should be invalid")
         XCTAssertTrue(r.validateValue("-"), "Non-nil should be valid")
     }
     
@@ -50,7 +50,7 @@ class BasicTests: XCTestCase {
         }
         
         XCTAssertEqual(r.localizationKey, "URBNValidator.URBNBlockRule")
-        XCTAssertFalse(r.validateValue(nil))
+        XCTAssertFalse(r.validateValue(nil as AnyObject?))
         XCTAssertFalse(r.validateValue(0.1))
         XCTAssertTrue(r.validateValue(1))
     }

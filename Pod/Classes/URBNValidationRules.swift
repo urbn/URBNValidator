@@ -10,8 +10,8 @@ import Foundation
 
 public protocol ValidationRule {
     var localizationKey: String { get set }
-    func validateValue(value: Any?) -> Bool
-    func validateValue(value: Any?, key: String) -> Bool
+    func validateValue<T>(value: T?) -> Bool
+    func validateValue<T>(value: T?, key: String) -> Bool
 }
 
 public protocol URBNRequirement {
@@ -40,11 +40,11 @@ public class URBNBaseRule: ValidationRule {
         }
     }
     
-    public func validateValue(value: Any?) -> Bool {
+    public func validateValue<T>(value: T?) -> Bool {
         return true
     }
     
-    public func validateValue(value: Any?, key: String) -> Bool {
+    public func validateValue<T>(value: T?, key: String) -> Bool {
         self.localizationKey = key
         return self.validateValue(value)
     }
@@ -54,7 +54,7 @@ public class URBNRequiredRule: URBNBaseRule {
     public override init(localizationKey: String? = nil) {
         super.init(localizationKey: localizationKey)
     }
-    public override func validateValue(value: Any?) -> Bool {
+    public override func validateValue<T>(value: T?) -> Bool {
         if value is String {
             /// Also validate the value is not empty here.  
             /// We're only doing this for backwards compatibility with QBValidator.
@@ -69,7 +69,7 @@ public class URBNNotRequiredRule: URBNBaseRule {
     public override init(localizationKey: String? = nil) {
         super.init(localizationKey: localizationKey)
     }
-    public override func validateValue(value: Any?) -> Bool {
+    public override func validateValue<T>(value: T?) -> Bool {
         return true
     }
 }
@@ -87,7 +87,7 @@ public class URBNBlockRule: URBNBaseRule {
         super.init(localizationKey: localizationKey)
     }
     
-    public override func validateValue(value: Any?) -> Bool {
+    public override func validateValue<T>(value: T?) -> Bool {
         return self.blockValidation(value: value)
     }
 }
@@ -101,14 +101,12 @@ public class URBNRegexRule: URBNBaseRule, URBNRequirement {
         super.init(localizationKey: localizationKey)
     }
     
-    public override func validateValue(value: Any?) -> Bool {
+    public override func validateValue<T: AnyObject>(value: T?) -> Bool {
         if !isRequired && value == nil { return true }
-        //FIXME: (if possible) this casting could be alleviated using generics
-        guard let anyObjectValue = value as? AnyObject else { return false }
         
         let pred = NSPredicate(format: "SELF MATCHES[cd] %@", self.pattern)
         
-        return pred.evaluateWithObject(anyObjectValue)
+        return pred.evaluateWithObject(value)
     }
     
     public static let emailPattern = "^(?:(?:(?:(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+)(?:\\.(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+))*)|(?:\"(?:\\\\[^\\r\\n]|[^\\\\\"])*\")))\\@(?:(?:(?:(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+)(?:\\.(?:[a-zA-Z0-9_!#\\$%&'*+/=?\\^`{}~|\\-]+))*)|(?:\\[(?:\\\\\\S|[\\x21-\\x5a\\x5e-\\x7e])*\\])))$"
