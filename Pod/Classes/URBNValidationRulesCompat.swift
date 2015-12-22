@@ -40,14 +40,14 @@ import Foundation
 @objc public class URBNCompatRequirementRule: URBNCompatBaseRule, URBNRequirement {
     public var isRequired: Bool {
         get {
-            if let requiredBaseRule = backingRule as? URBNRegexRule {
+            if let requiredBaseRule = backingRule as? URBNRequirement {
                 return requiredBaseRule.isRequired
             }
             
             return false
         }
         set {
-            if let requiredBaseRule = backingRule as? URBNRegexRule {
+            if var requiredBaseRule = backingRule as? URBNRequirement {
                 requiredBaseRule.isRequired = newValue
             }
         }
