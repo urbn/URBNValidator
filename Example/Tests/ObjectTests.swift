@@ -12,7 +12,7 @@ import URBNValidator
 class Testable: Validateable {
     var rules = [String: ValidatingValue]()
     
-    @objc func validationMap() -> [String : ValidatingValue] {
+    func validationMap() -> [String : ValidatingValue] {
         return rules
     }
 }

@@ -7,15 +7,15 @@ class BasicTests: XCTestCase {
     func testRequiredRule() {
         let r = URBNRequiredRule()
         
-        XCTAssertEqual(r.localizationKey, "URBNRequiredRule", "localizationKey should default to the className")
-        XCTAssertFalse(r.validateValue(nil), "Nil should be invalid")
+        XCTAssertEqual(r.localizationKey, "URBNValidator.URBNRequiredRule", "localizationKey should default to the className")
+        XCTAssertFalse(r.validateValue(nil as AnyObject?), "Nil should be invalid")
         XCTAssertTrue(r.validateValue("-"), "Non-nil should be valid")
     }
     
     func testMinLengthRule() {
         let r = URBNMinLengthRule(minLength: 5, inclusive: true)
         
-        XCTAssertEqual(r.localizationKey, "URBNMinLengthRule")
+        XCTAssertEqual(r.localizationKey, "URBNValidator.URBNMinLengthRule")
         XCTAssertFalse(r.validateValue("1234"))
         XCTAssertTrue(r.validateValue("12345"))
         
@@ -31,7 +31,7 @@ class BasicTests: XCTestCase {
     func testMaxLengthRule() {
         let r = URBNMaxLengthRule(maxLength: 5, inclusive: true)
         
-        XCTAssertEqual(r.localizationKey, "URBNMaxLengthRule")
+        XCTAssertEqual(r.localizationKey, "URBNValidator.URBNMaxLengthRule")
         XCTAssertTrue(r.validateValue("1234"))
         XCTAssertFalse(r.validateValue("123456"))
         
@@ -49,9 +49,9 @@ class BasicTests: XCTestCase {
             return value is Int
         }
         
-        XCTAssertEqual(r.localizationKey, "URBNBlockRule")
-        XCTAssertFalse(r.validateValue(nil))
-        XCTAssertTrue(r.validateValue(0.1))
+        XCTAssertEqual(r.localizationKey, "URBNValidator.URBNBlockRule")
+        XCTAssertFalse(r.validateValue(nil as AnyObject?))
+        XCTAssertFalse(r.validateValue(0.1))
         XCTAssertTrue(r.validateValue(1))
     }
 }

@@ -20,14 +20,14 @@
 
 - (void)testRequiredRule {
     
-    URBNRequiredRule *requiredRule = URBNVRequired;
+    URBNCompatRequiredRule *requiredRule = URBNVRequired;
     
     XCTAssertFalse([requiredRule validateValue:nil], @"Should not validate nil");
     XCTAssertTrue([requiredRule validateValue:@"yo"], @"Should validate non-nil");
 }
 
 - (void)testMinLengthRule {
-    URBNMinLengthRule *lengthRule = URBNVGreaterThanOrEqual(5);
+    URBNCompatMinLengthRule *lengthRule = URBNVGreaterThanOrEqual(5);
     
     // String validations
     XCTAssertTrue([lengthRule validateValue:nil], @"Nil should validate by default");
@@ -50,7 +50,7 @@
 }
 
 - (void)testMaxLengthRule {
-    URBNMaxLengthRule *lengthRule = URBNVLessThanOrEqual(5);
+    URBNCompatMaxLengthRule *lengthRule = URBNVLessThanOrEqual(5);
     
     // String validations
     XCTAssertTrue([lengthRule validateValue:nil], @"Nil should validate by default");
@@ -74,7 +74,7 @@
 }
 
 - (void)testBlockRule {
-    URBNBlockRule *blockRule = URBNVBlock(^BOOL(id  _Nullable val) {
+    URBNCompatBlockRule *blockRule = URBNVBlock(^BOOL(id  _Nullable val) {
         return [val isKindOfClass:[NSArray  class]];
     });
     
@@ -84,16 +84,15 @@
 }
 
 - (void)testRegexRule {
-    URBNRegexRule *regexRule = URBNVMatch(@"\\d+");
-    
+    URBNCompatRegexRule *regexRule = URBNVMatch(@"\\d+");
     XCTAssertTrue([regexRule validateValue:nil], @"Null should be valid by default");
     XCTAssertFalse([regexRule validateValue:@"143k"], @"Anything but numbers should be considered failure");
     XCTAssertTrue([regexRule validateValue:@"123451880"], @"Numbers only should validate");
 }
 
 - (void)testLocalizationOverride {
-    URBNValidator *v = [URBNValidator new];
-    URBNRequiredRule *r = URBNVRequired;
+    URBNCompatValidator *v = [URBNCompatValidator new];
+    URBNCompatRequiredRule *r = URBNVRequired;
     r.localizationKey = @"URBNRequiredRule_Override";
     
     NSError *error = nil;

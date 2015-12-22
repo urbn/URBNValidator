@@ -8,6 +8,8 @@
 
 @import Foundation;
 
+#define URBNVRequired [[URBNCompatRequiredRule alloc] initWithLocalizationKey: nil]
+#define URBNVNotRequired [[URBNCompatNotRequiredRule alloc] initWithLocalizationKey: nil]
 #define URBNVOverloadable extern __attribute__((overloadable))
 
 URBNVOverloadable id __nonnull URBNVGreaterThan(NSInteger minValue);

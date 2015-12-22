@@ -9,22 +9,21 @@
 import Foundation
 
 
-@objc public class ValidatingValue: NSObject {
-    public var value: AnyObject?
+public class ValidatingValue {
+    public var value: Any?
     public var rules: [ValidationRule]
     
-    public init(_ value: AnyObject?, rules: [ValidationRule]) {
+    public init(_ value: Any?, rules: [ValidationRule]) {
         self.value = value
         self.rules = rules
-        super.init()
     }
     
-    public convenience init(value: AnyObject?, rules: ValidationRule...) {
+    public convenience init(value: Any?, rules: ValidationRule...) {
         self.init(value, rules: rules)
     }
 }
 
-@objc public protocol Validator {
+public protocol Validator {
     var localizationBundle: NSBundle { get }
     
     /**
@@ -32,26 +31,25 @@ import Foundation
      If invalid, then will `throw` an error with the localized reason
      why the value failed
     **/
-    func validate(key: String?, value: AnyObject?, rule: ValidationRule) throws
-    func validate(item: Validateable, stopOnFirstError: Bool) throws
+    func validate(key: String?, value: Any?, rule: ValidationRule) throws
+    func validate<V: Validateable>(item: V , stopOnFirstError: Bool) throws
 }
 
 /**
  Validateable objects are meant to allow direct validation of keys/values of a given model by 
  defining a validationMap which contains a map of keys -> ValidatingValue's
 */
-@objc public protocol Validateable {
+public protocol Validateable {
     func validationMap() -> [String: ValidatingValue]
 }
-
 
 /**
  This is the main URBNValidator object.   Used to validate objects
  and localize the results in a nice way.
 */
 // MARK: - URBNValidator -
-public class URBNValidator: NSObject, Validator {
-    
+public class URBNValidator: Validator {
+    public init() {}
     // MARK: - Properties -
     
     // You'll probably never use this.   But just incase here's a prop for it
@@ -82,7 +80,7 @@ public class URBNValidator: NSObject, Validator {
      
      - throws: An instance of NSError with the localized data
     */
-    public func validate(key: String? = nil, value: AnyObject?, rule: ValidationRule) throws {
+    public func validate(key: String? = nil, value: Any?, rule: ValidationRule) throws {
         if rule.validateValue(value) {
             return
         }
@@ -104,7 +102,7 @@ public class URBNValidator: NSObject, Validator {
      - throws: An instance of NSError representing the invalid data
      
     */
-    public func validate(item: Validateable, stopOnFirstError: Bool = false) throws {
+    public func validate<V: Validateable>(item: V, stopOnFirstError: Bool = false) throws {
         do {
             try self.validate(item, ignoreList: [], stopOnFirstError: stopOnFirstError)
         } catch let e {
@@ -125,14 +123,14 @@ public class URBNValidator: NSObject, Validator {
      - throws: An instance of NSError representing the invalid data
      
      */
-    public func validate(item: Validateable, ignoreList: [String], stopOnFirstError: Bool = false) throws {
+    public func validate<V: Validateable>(item: V, ignoreList: [String], stopOnFirstError: Bool = false) throws {
         
         /// Nothing to validate here.   We're all good
-        if item.validationMap().count == 0 { return }
+        if item.validationMap().length == 0 { return }
         
         // We want to get our validationMap minus the items in the ignoreList
         let vdMap = item.validationMap().filter { !ignoreList.contains($0.0) }
-        
+      
         let errs = try vdMap.flatMap({ (key, value) -> [NSError]? in
             let rules = implicitelyRequiredRules(value.rules)
             
@@ -154,8 +152,6 @@ public class URBNValidator: NSObject, Validator {
         }
     }
     
-    
-    
     // MARK: - Internal -
     
     /**
@@ -167,7 +163,7 @@ public class URBNValidator: NSObject, Validator {
         - key: The key to inject into the localization (if applicable).  Replaces the {{field}}
         - value: The value to inject into the localization (if applicable).  Replaces the {{value}}
     */
-    internal func localizeableString(rule: ValidationRule, key: String?, value: AnyObject?) -> String {
+    internal func localizeableString(rule: ValidationRule, key: String?, value: Any?) -> String {
         let ruleKey = "ls_URBNValidator_\(rule.localizationKey)"
         
         // First we try to localize against the mainBundle.
@@ -176,11 +172,10 @@ public class URBNValidator: NSObject, Validator {
         
         // Now we're going to regex the resulting string and replace {{field}}, {{value}}
         var replacementValue: String = ""
-        if (value != nil && value is CustomStringConvertible) {
-            replacementValue = value!.description
+        if let repValue = value as? CustomStringConvertible {
+            replacementValue = repValue.description
         }
         let options: NSRegularExpressionOptions = [NSRegularExpressionOptions.CaseInsensitive]
-        
         
         return [
             // Considering the try! fine here because this is a dev issue.   If you write an invalid
@@ -224,14 +219,11 @@ public class URBNValidator: NSObject, Validator {
         let updatedRules = hasRequirement ? rules : ([URBNRequiredRule()] + rules)
         
         return updatedRules.map({ (r) -> ValidationRule in
-            
-            if r is URBNRequirement {
-                (r as! URBNRequirement).isRequired = isRequired
+            if var rr = r as? URBNRequirement {
+                rr.isRequired = isRequired
             }
             
             return r
         })
     }
 }
-
-

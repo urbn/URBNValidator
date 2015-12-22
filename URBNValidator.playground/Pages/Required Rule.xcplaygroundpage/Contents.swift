@@ -9,11 +9,12 @@ ruleset
 
 import URBNValidator
 
+var emptyVal: String? = nil
+
 //: Create the rule
 let r = URBNRequiredRule()
-
 //: Calling the required rule with something that's nil will be invalid
-r.validateValue(nil)
+r.validateValue(emptyVal)
 
 /*:
 Passing an object will validate in the following conditions.
@@ -25,6 +26,6 @@ r.validateValue("") // 👍
 r.validateValue("-") // 👎
 
 //: You may also optionally pass a localized_key override here
-r.validateValue(nil, key: "test_localized")
+r.validateValue(emptyVal, key: "test_localized")
 
 //: [Length Rules](@next)

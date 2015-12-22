@@ -7,7 +7,8 @@
 #
 
 Pod::Spec.new do |s|
-  s.name             = "URBNValidator"
+s.name             = "URBN#define URBNVRequired [[URBNCompatRequiredRule alloc] initWithLocalizationKey: nil]
+#define URBNVNotRequired [[URBNCompatNotRequiredRule alloc] initWithLocalizationKey: nil]Validator"
   s.version          = "0.1.0"
   s.summary          = "A short description of URBNValidator."
 
@@ -27,9 +28,8 @@ Pod::Spec.new do |s|
   s.platform     = :ios, '8.0'
   s.requires_arc = true
 
-  s.preserve_paths = "Pod/Supporting Files/**/*"
-  s.module_map = "Pod/Supporting Files/URBNValidator.modulemap"
-  s.source_files = ['Pod/Classes/**/*', "Pod/Supporting Files/**/*.h"]
+
+  s.source_files = ['Pod/Classes/**/*']
   s.resources = ['Pod/Resources/**/*.lproj']
 
 end

@@ -9,16 +9,16 @@
 #import <XCTest/XCTest.h>
 @import URBNValidator;
 
-@interface TestObject: NSObject <Validateable>
+@interface TestObject: NSObject <CompatValidateable>
 @property (nonatomic, copy) NSString *requiredString;
 @property (nonatomic, copy) NSArray *requiredList;
 @end
 @implementation TestObject
 
-- (NSDictionary<NSString *,NSArray<id<ValidationRule>> *> *)validationMap {
+- (NSDictionary<NSString *,NSArray<URBNCompatBaseRule *> *> *)validationMap {
     return @{
-             @"requiredString": [[ValidatingValue alloc] init:self.requiredString rules:@[URBNVRequired]],
-             @"requiredList": [[ValidatingValue alloc] init:self.requiredList rules:@[URBNVRequired, URBNVGreaterThanOrEqual(3)]]
+             @"requiredString": [[CompatValidatingValue alloc] init:self.requiredString rules:@[URBNVRequired]],
+             @"requiredList": [[CompatValidatingValue alloc] init:self.requiredList rules:@[URBNVRequired, URBNVGreaterThanOrEqual(3)]]
              };
 }
 
@@ -26,14 +26,14 @@
 
 
 @interface ObjectTests : XCTestCase
-@property (nonatomic, strong) URBNValidator *vd;
+@property (nonatomic, strong) URBNCompatValidator *vd;
 @end
 
 @implementation ObjectTests
 
 - (void)setUp {
     [super setUp];
-    self.vd = [URBNValidator new];
+    self.vd = [URBNCompatValidator new];
 }
 
 - (void)testSimpleModelValidaion {

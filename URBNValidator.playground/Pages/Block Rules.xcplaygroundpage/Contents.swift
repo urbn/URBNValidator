@@ -10,6 +10,9 @@ validity.
 */
 import URBNValidator
 
+
+var emptyVal: String? = nil
+
 // We'll expand this for clarity.   Below is a better example of usage of 
 // this kind of rule in swift
 let blockRule = URBNBlockRule { (value) -> Bool in
@@ -21,7 +24,7 @@ let blockRule = URBNBlockRule { (value) -> Bool in
     return false
 }
 
-blockRule.validateValue(nil)
+blockRule.validateValue(emptyVal)
 blockRule.validateValue("")
 blockRule.validateValue([])
 blockRule.validateValue("valid")
@@ -30,7 +33,7 @@ blockRule.validateValue("valid")
 //: With some fancy swift style things.
 let floatRule = URBNBlockRule { $0 is Float }
 
-floatRule.validateValue(nil)
+floatRule.validateValue(emptyVal)
 floatRule.validateValue("")
 floatRule.validateValue(1)
 floatRule.validateValue(-1)

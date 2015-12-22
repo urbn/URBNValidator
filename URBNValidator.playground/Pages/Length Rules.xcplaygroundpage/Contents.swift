@@ -14,6 +14,8 @@ param on init.   Optionally you can set the .isInclusive property
 */
 import URBNValidator
 
+var emptyVal: String? = nil
+
 /*:
 ### Max Length
 
@@ -40,9 +42,9 @@ let the rule know whether or not it accepts nil.   If required,
 then nil will not be valid
 */
 maxLengthRule.isRequired = true
-maxLengthRule.validateValue(nil)    // Not Valid because isRequired=true
+maxLengthRule.validateValue(emptyVal)    // Not Valid because isRequired=true
 maxLengthRule.isRequired = false
-maxLengthRule.validateValue(nil)    // Valid
+maxLengthRule.validateValue(emptyVal)    // Valid
 
 
 // These are invalid
@@ -71,9 +73,9 @@ minLengthRule.validateValue(["1":1])
 
 // Requirements
 minLengthRule.isRequired = true
-minLengthRule.validateValue(nil)    // Not Valid because isRequired=true
+minLengthRule.validateValue(emptyVal)    // Not Valid because isRequired=true
 minLengthRule.isRequired = false
-minLengthRule.validateValue(nil)    // Valid
+minLengthRule.validateValue(emptyVal)    // Valid
 
 
 //: [Block Rules](@next)

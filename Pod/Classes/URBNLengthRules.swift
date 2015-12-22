@@ -55,7 +55,7 @@ extension NSNumber: Lengthable {
     }
 }
 
-func validate(value: AnyObject?, limit: Int, comparisonFunc: (lhs: Int, rhs: Int) -> Bool) -> Bool {
+func validate<T>(value: T?, limit: Int, comparisonFunc: (lhs: Int, rhs: Int) -> Bool) -> Bool {
     guard let lengthableVal = value as? Lengthable else { return false }
     return comparisonFunc(lhs: lengthableVal.length, rhs: limit)
 }
@@ -71,7 +71,7 @@ public class BaseLengthRule: URBNBaseRule, URBNRequirement {
         super.init(localizationKey: localizationKey)
     }
     
-    public override func validateValue(value: AnyObject?) -> Bool {
+    public override func validateValue<T>(value: T?) -> Bool {
         if !isRequired && value == nil { return true }
         
         return validate(value, limit: limit, comparisonFunc: comparisonFunc)

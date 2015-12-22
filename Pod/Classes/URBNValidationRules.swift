@@ -9,42 +9,53 @@
 import Foundation
 
 
-@objc public protocol ValidationRule {
+public protocol ValidationRule {
     var localizationKey: String { get set }
-    func validateValue(value: AnyObject?) -> Bool
-    func validateValue(value: AnyObject?, key: String) -> Bool
+    func validateValue<T>(value: T?) -> Bool
+    func validateValue<T>(value: T?, key: String) -> Bool
 }
 
-@objc public protocol URBNRequirement {
+public protocol URBNRequirement {
     var isRequired: Bool { get set }
 }
 
-
-public class URBNBaseRule: NSObject, ValidationRule {
-    lazy public var localizationKey: String = {
-        return "\(self.dynamicType.classForCoder())"
-    }()
+public class URBNBaseRule: ValidationRule {
+    var _localizationKey: String?
+    public var localizationKey: String  {
+        get {
+            if let key = _localizationKey {
+                return key
+            }
+            else {
+                return NSStringFromClass(self.dynamicType)
+            }
+        }
+        set {
+            _localizationKey = newValue
+        }
+    }
     
     public init(localizationKey: String? = nil) {
-        super.init()
         if localizationKey != nil && localizationKey?.length > 0 {
             self.localizationKey = localizationKey!
         }
     }
     
-    public func validateValue(value: AnyObject?) -> Bool {
+    public func validateValue<T>(value: T?) -> Bool {
         return true
     }
     
-    public func validateValue(value: AnyObject?, key: String) -> Bool {
+    public func validateValue<T>(value: T?, key: String) -> Bool {
         self.localizationKey = key
         return self.validateValue(value)
     }
 }
 
 public class URBNRequiredRule: URBNBaseRule {
-    
-    public override func validateValue(value: AnyObject?) -> Bool {
+    public override init(localizationKey: String? = nil) {
+        super.init(localizationKey: localizationKey)
+    }
+    public override func validateValue<T>(value: T?) -> Bool {
         if value is String {
             /// Also validate the value is not empty here.  
             /// We're only doing this for backwards compatibility with QBValidator.
@@ -56,13 +67,16 @@ public class URBNRequiredRule: URBNBaseRule {
 }
 
 public class URBNNotRequiredRule: URBNBaseRule {
-    public override func validateValue(value: AnyObject?) -> Bool {
+    public override init(localizationKey: String? = nil) {
+        super.init(localizationKey: localizationKey)
+    }
+    public override func validateValue<T>(value: T?) -> Bool {
         return true
     }
 }
 
+public typealias BlockValidation = (value: Any?) -> Bool
 public class URBNBlockRule: URBNBaseRule {
-    public typealias BlockValidation = (value: AnyObject?) -> Bool
     public var blockValidation: BlockValidation
     
     public init(_ validator: BlockValidation) {
@@ -75,26 +89,8 @@ public class URBNBlockRule: URBNBaseRule {
         super.init(localizationKey: localizationKey)
     }
     
-    public override func validateValue(value: AnyObject?) -> Bool {
+    public override func validateValue<T>(value: T?) -> Bool {
         return self.blockValidation(value: value)
     }
 }
 
-public class URBNRegexRule: URBNBaseRule, URBNRequirement {
-    internal var pattern: String
-    public var isRequired: Bool = false
-    
-    public init(pattern: String, localizationKey: String? = nil) {
-        self.pattern = pattern
-        super.init(localizationKey: localizationKey)
-    }
-    
-    public override func validateValue(value: AnyObject?) -> Bool {
-        if !isRequired && value == nil { return true }
-        
-        let pred = NSPredicate(format: "SELF MATCHES[cd] %@", self.pattern)
-        return pred.evaluateWithObject(value)
-    }
-    
-    public static let emailPattern = "^(?:(?:(?:(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+)(?:\\.(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+))*)|(?:\"(?:\\\\[^\\r\\n]|[^\\\\\"])*\")))\\@(?:(?:(?:(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+)(?:\\.(?:[a-zA-Z0-9_!#\\$%&'*+/=?\\^`{}~|\\-]+))*)|(?:\\[(?:\\\\\\S|[\\x21-\\x5a\\x5e-\\x7e])*\\])))$"
-}
