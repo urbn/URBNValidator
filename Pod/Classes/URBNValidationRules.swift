@@ -76,9 +76,9 @@ public enum URBNDateComparision: Int {
 public class URBNDateRule: URBNBaseRule {
     public var comparisonType = URBNDateComparision.Past
     
-    public init(comparisonType: URBNDateComparision = URBNDateComparision.Past) {
+    public init(comparisonType: URBNDateComparision = .Past, localizationKey: String? = nil) {
         self.comparisonType = comparisonType
-        super.init()
+        super.init(localizationKey: localizationKey)
     }
     
     public override func validateValue<T: NSDate>(value: T?) -> Bool {
