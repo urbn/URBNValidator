@@ -22,10 +22,12 @@ public class URBNBaseRule: ValidationRule {
     var _localizationKey: String?
     public var localizationKey: String  {
         get {
-            if (_localizationKey == nil) {
+            if let key = _localizationKey {
+                return key
+            }
+            else {
                 return NSStringFromClass(self.dynamicType)
             }
-            return _localizationKey!
         }
         set {
             _localizationKey = newValue
