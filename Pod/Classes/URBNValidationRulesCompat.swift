@@ -24,7 +24,9 @@ import Foundation
     }
     
     public func validateValue(value: AnyObject?) -> Bool { return baseRule.validateValue(value) }
+    
     public func validateValue(value: AnyObject?, key: String) -> Bool { return baseRule.validateValue(value, key: key) }
+    
     public var localizationKey: String  {
         get {
             return baseRule.localizationKey
@@ -35,7 +37,7 @@ import Foundation
     }
 }
 
-@objc public class URBNCompatRegexRule: URBNCompatBaseRule, URBNRequirement {
+@objc public class URBNCompatRequirementRule: URBNCompatBaseRule, URBNRequirement {
     public var isRequired: Bool {
         get {
             if let requiredBaseRule = self.baseRule as? URBNRegexRule {
@@ -50,7 +52,9 @@ import Foundation
             }
         }
     }
-    
+}
+
+@objc public class URBNCompatRegexRule: URBNCompatRequirementRule {
     public init(pattern: String, localizationKey: String? = nil) {
         super.init()
         self.baseRule = URBNRegexRule(pattern: pattern, localizationKey: localizationKey)
@@ -80,21 +84,23 @@ import Foundation
         blockRule.blockValidation = validator
         self.baseRule = blockRule
     }
+    
     public init(validator: BlockValidation, localizationKey: String? = nil) {
         super.init(localizationKey: localizationKey)
         let blockRule = URBNBlockRule(validator: validator, localizationKey: localizationKey)
         blockRule.blockValidation = validator
         self.baseRule = blockRule
     }
+    
     public convenience init(validator: CompatBlockValidation, localizationKey: String?) {
-        let valB = { (v: Any?) -> Bool in
-            if let anyObjectv = v as? AnyObject {
-                return validator(value: anyObjectv)
+        let compatWrappingBlock = { (anyValue: Any?) -> Bool in
+            if let anyObjectValue = anyValue as? AnyObject {
+                return validator(value: anyObjectValue)
             }
             
             return false
         }
         
-        self.init(validator: valB, localizationKey: localizationKey)
+        self.init(validator: compatWrappingBlock, localizationKey: localizationKey)
     }
 }
