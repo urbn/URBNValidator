@@ -32,7 +32,7 @@ public protocol Validator {
      why the value failed
     **/
     func validate(key: String?, value: Any?, rule: ValidationRule) throws
-    func validate<Vable: Validateable>(item: Vable , stopOnFirstError: Bool) throws
+    func validate<V: Validateable>(item: V , stopOnFirstError: Bool) throws
 }
 
 /**
@@ -102,7 +102,7 @@ public class URBNValidator: Validator {
      - throws: An instance of NSError representing the invalid data
      
     */
-    public func validate<Vable: Validateable>(item: Vable, stopOnFirstError: Bool = false) throws {
+    public func validate<V: Validateable>(item: V, stopOnFirstError: Bool = false) throws {
         do {
             try self.validate(item, ignoreList: [], stopOnFirstError: stopOnFirstError)
         } catch let e {
@@ -123,7 +123,7 @@ public class URBNValidator: Validator {
      - throws: An instance of NSError representing the invalid data
      
      */
-    public func validate<Vable: Validateable>(item: Vable, ignoreList: [String], stopOnFirstError: Bool = false) throws {
+    public func validate<V: Validateable>(item: V, ignoreList: [String], stopOnFirstError: Bool = false) throws {
         
         /// Nothing to validate here.   We're all good
         if item.validationMap().length == 0 { return }
