@@ -103,9 +103,12 @@ public class URBNRegexRule: URBNBaseRule, URBNRequirement {
     
     public override func validateValue(value: Any?) -> Bool {
         if !isRequired && value == nil { return true }
+        //FIXME: (if possible) this casting could be alleviated using generics
+        guard let anyObjectValue = value as? AnyObject else { return false }
         
         let pred = NSPredicate(format: "SELF MATCHES[cd] %@", self.pattern)
-        return pred.evaluateWithObject(value as! AnyObject?)
+        
+        return pred.evaluateWithObject(anyObjectValue)
     }
     
     public static let emailPattern = "^(?:(?:(?:(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+)(?:\\.(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+))*)|(?:\"(?:\\\\[^\\r\\n]|[^\\\\\"])*\")))\\@(?:(?:(?:(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+)(?:\\.(?:[a-zA-Z0-9_!#\\$%&'*+/=?\\^`{}~|\\-]+))*)|(?:\\[(?:\\\\\\S|[\\x21-\\x5a\\x5e-\\x7e])*\\])))$"
