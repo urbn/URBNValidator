@@ -73,15 +73,15 @@
     XCTAssertTrue([lengthRule validateValue:@{@"1": @1}], @"Should validate dictionary with count < 5");
 }
 
-//- (void)testBlockRule {
-//    CompatBlockRule *blockRule = URBNVBlock(^BOOL(id  _Nullable val) {
-//        return [val isKindOfClass:[NSArray  class]];
-//    });
-//    
-//    XCTAssertFalse([blockRule validateValue:nil], @"Should not validate nil since nil is not an array class");
-//    XCTAssertFalse([blockRule validateValue:@"2343"], @"Should not validate String since String is not an array class");
-//    XCTAssertTrue([blockRule validateValue:@[]], @"Should validate since we're passing an array");
-//}
+- (void)testBlockRule {
+    CompatBlockRule *blockRule = URBNVBlock(^BOOL(id  _Nullable val) {
+        return [val isKindOfClass:[NSArray  class]];
+    });
+    
+    XCTAssertFalse([blockRule validateValue:nil], @"Should not validate nil since nil is not an array class");
+    XCTAssertFalse([blockRule validateValue:@"2343"], @"Should not validate String since String is not an array class");
+    XCTAssertTrue([blockRule validateValue:@[]], @"Should validate since we're passing an array");
+}
 
 - (void)testRegexRule {
     CompatRegexRule *regexRule = URBNVMatch(@"\\d+");

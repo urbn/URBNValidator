@@ -73,9 +73,8 @@ public class URBNNotRequiredRule: URBNBaseRule {
         return true
     }
 }
-
+public typealias BlockValidation = (value: Any?) -> Bool
 public class URBNBlockRule: URBNBaseRule {
-    public typealias BlockValidation = (value: Any?) -> Bool
     public var blockValidation: BlockValidation
     
     public init(_ validator: BlockValidation) {
@@ -94,7 +93,7 @@ public class URBNBlockRule: URBNBaseRule {
 }
 
 @objc public class CompatBlockRule: CompatBaseRule {
-    public typealias BlockValidation = (value: Any?) -> Bool
+    public typealias CompatBlockValidation = (value: AnyObject?) -> Bool
 
     public init(_ validator: BlockValidation) {
         super.init()
@@ -107,6 +106,17 @@ public class URBNBlockRule: URBNBaseRule {
         let blockRule = URBNBlockRule(validator: validator, localizationKey: localizationKey)
         blockRule.blockValidation = validator
         self.baseRule = blockRule
+    }
+    public convenience init(validator: CompatBlockValidation, localizationKey: String?) {
+        let valB = { (v: Any?) -> Bool in
+            if let anyObjectv = v as? AnyObject {
+                return validator(value: anyObjectv)
+            }
+            
+            return false
+        }
+        
+        self.init(validator: valB, localizationKey: localizationKey)
     }
 }
 
