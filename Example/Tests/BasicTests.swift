@@ -54,4 +54,20 @@ class BasicTests: XCTestCase {
         XCTAssertFalse(r.validateValue(0.1))
         XCTAssertTrue(r.validateValue(1))
     }
+    
+    func testDateRule() {
+        let r = URBNDateRule()
+        
+        XCTAssertEqual(r.localizationKey, "URBNValidator.URBNDateRule")
+        XCTAssertEqual(r.comparisonType, URBNDateComparision.Past, "Should default to past")
+        
+        r.comparisonType = URBNDateComparision.Past
+        XCTAssertTrue(r.validateValue(NSDate().dateByAddingTimeInterval(-100)), "Should validate past when comparisonType == .Past")
+        XCTAssertFalse(r.validateValue(NSDate().dateByAddingTimeInterval(100)), "Should not validate future when comparisonType == .Past")
+        
+        r.comparisonType = URBNDateComparision.Future
+        XCTAssertTrue(r.validateValue(NSDate().dateByAddingTimeInterval(100)), "Should validate future when comparisonType == .Ascending")
+        XCTAssertFalse(r.validateValue(NSDate().dateByAddingTimeInterval(-100)), "Should not validate past when comparisonType == .Ascending")
+    }
+    
 }

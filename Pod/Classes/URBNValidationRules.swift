@@ -9,52 +9,9 @@
 import Foundation
 
 
-public protocol ValidationRule {
-    var localizationKey: String { get set }
-    func validateValue<T>(value: T?) -> Bool
-    func validateValue<T>(value: T?, key: String) -> Bool
-}
-
-public protocol URBNRequirement {
-    var isRequired: Bool { get set }
-}
-
-public class URBNBaseRule: ValidationRule {
-    var _localizationKey: String?
-    public var localizationKey: String  {
-        get {
-            if let key = _localizationKey {
-                return key
-            }
-            else {
-                return NSStringFromClass(self.dynamicType)
-            }
-        }
-        set {
-            _localizationKey = newValue
-        }
-    }
-    
-    public init(localizationKey: String? = nil) {
-        if localizationKey != nil && localizationKey?.length > 0 {
-            self.localizationKey = localizationKey!
-        }
-    }
-    
-    public func validateValue<T>(value: T?) -> Bool {
-        return true
-    }
-    
-    public func validateValue<T>(value: T?, key: String) -> Bool {
-        self.localizationKey = key
-        return self.validateValue(value)
-    }
-}
 
 public class URBNRequiredRule: URBNBaseRule {
-    public override init(localizationKey: String? = nil) {
-        super.init(localizationKey: localizationKey)
-    }
+    
     public override func validateValue<T>(value: T?) -> Bool {
         if value is String {
             /// Also validate the value is not empty here.  
@@ -66,14 +23,17 @@ public class URBNRequiredRule: URBNBaseRule {
     }
 }
 
+
+
 public class URBNNotRequiredRule: URBNBaseRule {
-    public override init(localizationKey: String? = nil) {
-        super.init(localizationKey: localizationKey)
-    }
+    
     public override func validateValue<T>(value: T?) -> Bool {
         return true
     }
 }
+
+
+
 
 public typealias BlockValidation = (value: Any?) -> Bool
 public class URBNBlockRule: URBNBaseRule {
@@ -94,3 +54,36 @@ public class URBNBlockRule: URBNBaseRule {
     }
 }
 
+
+
+/**
+ URBNDateRule validates that a date is < > than today
+ 
+*/
+
+public enum URBNDateComparision: Int {
+    case Past
+    case Future
+    
+    var comparisonResult: NSComparisonResult {
+        switch(self) {
+        case .Past: return NSComparisonResult.OrderedDescending
+        case .Future: return NSComparisonResult.OrderedAscending
+        }
+    }
+}
+
+public class URBNDateRule: URBNBaseRule {
+    public var comparisonType = URBNDateComparision.Past
+    
+    public init(comparisonType: URBNDateComparision = URBNDateComparision.Past) {
+        self.comparisonType = comparisonType
+        super.init()
+    }
+    
+    public override func validateValue<T: NSDate>(value: T?) -> Bool {
+        if value == nil { return false }
+        
+        return NSDate().compare(value!) == comparisonType.comparisonResult
+    }
+}

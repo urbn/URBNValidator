@@ -14,9 +14,9 @@
  The purpose of these tests are to validate the individual rules.   
  This is also to validate our obj-c interoperability
  */
-@interface BasicTests : XCTestCase @end
+@interface BasicCompatTests : XCTestCase @end
 
-@implementation BasicTests
+@implementation BasicCompatTests
 
 - (void)testRequiredRule {
     
