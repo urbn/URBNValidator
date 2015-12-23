@@ -10,7 +10,7 @@ import XCTest
 import URBNValidator
 
 class Testable: Validateable {
-    typealias V = Any
+    typealias V = Lengthable
     var rules = [String: ValidatingValue<V>]()
     
     func validationMap() -> [String : ValidatingValue<V>] {
@@ -23,13 +23,21 @@ class User: Testable {
     var lastName: String?
     var addresses = [String]()
     
-    override func validationMap() -> [String : ValidatingValue<V>] {
-        rules = rules.count > 0 ? rules : [
-            "firstName": ValidatingValue(value: self.firstName, rules: URBNRequiredRule(), URBNMinLengthRule(minLength: 2, inclusive: true)),
-            "lastName": ValidatingValue(value: self.lastName, rules: URBNNotRequiredRule(), URBNMinLengthRule(minLength: 2, inclusive: true)),
-            "addresses": ValidatingValue(value: self.addresses, rules: URBNNotRequiredRule(), URBNMinLengthRule(minLength: 1, inclusive: true))
-        ]
-        return super.validationMap()
+    override var rules: [String: ValidatingValue<V>] {
+        get {
+            if super.rules.isEmpty {
+                super.rules = [
+                    "firstName": ValidatingValue(value: self.firstName, rules: URBNRequiredRule(), URBNMinLengthRule(minLength: 2, inclusive: true)),
+                    "lastName": ValidatingValue(value: self.lastName, rules: URBNNotRequiredRule(), URBNMinLengthRule(minLength: 2, inclusive: true)),
+                    "addresses": ValidatingValue(value: self.addresses, rules: URBNNotRequiredRule(), URBNMinLengthRule(minLength: 1, inclusive: true))
+                ]
+            }
+            
+            return super.rules
+        }
+        set {
+            super.rules = newValue
+        }
     }
 }
 
