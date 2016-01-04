@@ -41,6 +41,9 @@ Now let's dig into what this thing is about
 - Full localization support (global and per instance).
 
 
+## Usage
+We've outlined most of the usage in our URBNValidator.playground.   Check it out with the documentation rendered.
+
 
 ## Author
 
