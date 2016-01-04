@@ -83,7 +83,7 @@ public class URBNDateRule: URBNBaseRule {
     }
     
     public override func validateValue<T: NSDate>(value: T?) -> Bool {
-        guard let value = value else { return false }
+        guard let value = value as? NSDate else { return false }
         
         let result = NSCalendar.currentCalendar().compareDate(NSDate(), toDate: value, toUnitGranularity: comparisonUnit)
         return comparisonType.comparisonResult.contains(result)

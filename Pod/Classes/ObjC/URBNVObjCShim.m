@@ -63,6 +63,10 @@ URBNVOverloadable id __nonnull URBNVBlock(NSString * __nullable localizeString, 
 }
 
 #pragma mark - Dates
-URBNVOverloadable id __nonnull URBNVDateIsFuture(NSString * __nullable localizeString) {
-    return [[URBNCompatDateRule alloc] initWithComparisonType:URBNDateComparisionFuture localizationKey:localizeString];
+URBNVOverloadable id __nonnull URBNVDateIsFuture(NSCalendarUnit minComparisonUnit) {
+    return URBNVDateIsFuture(minComparisonUnit, nil);
+}
+
+URBNVOverloadable id __nonnull URBNVDateIsFuture(NSCalendarUnit minComparisonUnit, NSString * __nullable localizeString) {
+    return [[URBNCompatDateRule alloc] initWithComparisonType:URBNDateComparisionFuture localizationKey:localizeString comparisonUnit:minComparisonUnit];
 }

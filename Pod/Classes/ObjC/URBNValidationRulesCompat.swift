@@ -102,8 +102,10 @@ import Foundation
 
 @objc public class URBNCompatDateRule: URBNCompatBaseRule {
     
-    public init(comparisonType: URBNDateComparision = .Past, localizationKey: String? = nil) {
+    public init(comparisonType: URBNDateComparision = .Past, localizationKey: String? = nil, comparisonUnit: NSCalendarUnit) {
         super.init()
-        backingRule = URBNDateRule(comparisonType: comparisonType, localizationKey: localizationKey)
+        let r = URBNDateRule(comparisonType: comparisonType, localizationKey: localizationKey)
+        r.comparisonUnit = comparisonUnit
+        backingRule = r
     }
 }
