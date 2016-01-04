@@ -54,6 +54,10 @@ import Foundation
         super.init()
         backingRule = URBNRegexRule(pattern: pattern, localizationKey: localizationKey)
     }
+    
+    public convenience init(patternType: URBNRegexPattern, localizationKey: String? = nil) {
+        self.init(pattern: patternType.patternString, localizationKey: localizationKey)
+    }
 }
 
 @objc public class URBNCompatRequiredRule: URBNCompatBaseRule {
@@ -97,5 +101,15 @@ import Foundation
         }
         
         self.init(validator: compatWrappingBlock, localizationKey: localizationKey)
+    }
+}
+
+@objc public class URBNCompatDateRule: URBNCompatBaseRule {
+    
+    public init(comparisonType: URBNDateComparision = .Past, localizationKey: String? = nil, comparisonUnit: NSCalendarUnit) {
+        super.init()
+        let r = URBNDateRule(comparisonType: comparisonType, localizationKey: localizationKey)
+        r.comparisonUnit = comparisonUnit
+        backingRule = r
     }
 }

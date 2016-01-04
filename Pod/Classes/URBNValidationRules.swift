@@ -61,19 +61,20 @@ public class URBNBlockRule: URBNBaseRule {
  
 */
 
-public enum URBNDateComparision: Int {
+@objc public enum URBNDateComparision: Int {
     case Past
     case Future
     
-    var comparisonResult: NSComparisonResult {
+    var comparisonResult: [NSComparisonResult] {
         switch(self) {
-        case .Past: return NSComparisonResult.OrderedDescending
-        case .Future: return NSComparisonResult.OrderedAscending
+        case .Past: return [NSComparisonResult.OrderedDescending]
+        case .Future: return [NSComparisonResult.OrderedAscending, NSComparisonResult.OrderedSame]
         }
     }
 }
 
 public class URBNDateRule: URBNBaseRule {
+    public var comparisonUnit = NSCalendarUnit.Second
     public var comparisonType = URBNDateComparision.Past
     
     public init(comparisonType: URBNDateComparision = .Past, localizationKey: String? = nil) {
@@ -82,8 +83,9 @@ public class URBNDateRule: URBNBaseRule {
     }
     
     public override func validateValue<T: NSDate>(value: T?) -> Bool {
-        guard let value = value else { return false }
+        guard let value = value as? NSDate else { return false }
         
-        return NSDate().compare(value) == comparisonType.comparisonResult
+        let result = NSCalendar.currentCalendar().compareDate(NSDate(), toDate: value, toUnitGranularity: comparisonUnit)
+        return comparisonType.comparisonResult.contains(result)
     }
 }

@@ -53,6 +53,10 @@ URBNVOverloadable id __nonnull URBNVMatch(NSString * __nonnull pattern, NSString
     return [[URBNCompatRegexRule alloc] initWithPattern: pattern localizationKey: localizeString];
 }
 
+URBNVOverloadable id __nonnull URBNVMatch(NSInteger patternType, NSString * __nullable localizeString) {
+    return [[URBNCompatRegexRule alloc] initWithPatternType:patternType localizationKey:localizeString];
+}
+
 #pragma mark - Blocks
 URBNVOverloadable id __nonnull URBNVBlock(BOOL (^ __nonnull checker)(id __nullable val)) {
     return URBNVBlock(nil, checker);
@@ -60,4 +64,13 @@ URBNVOverloadable id __nonnull URBNVBlock(BOOL (^ __nonnull checker)(id __nullab
 
 URBNVOverloadable id __nonnull URBNVBlock(NSString * __nullable localizeString, BOOL (^ __nonnull checker)(id __nullable val)) {
     return [[URBNCompatBlockRule alloc] initWithValidator:checker localizationKey:localizeString];
+}
+
+#pragma mark - Dates
+URBNVOverloadable id __nonnull URBNVDateIsFuture(NSCalendarUnit minComparisonUnit) {
+    return URBNVDateIsFuture(minComparisonUnit, nil);
+}
+
+URBNVOverloadable id __nonnull URBNVDateIsFuture(NSCalendarUnit minComparisonUnit, NSString * __nullable localizeString) {
+    return [[URBNCompatDateRule alloc] initWithComparisonType:URBNDateComparisionFuture localizationKey:localizeString comparisonUnit:minComparisonUnit];
 }

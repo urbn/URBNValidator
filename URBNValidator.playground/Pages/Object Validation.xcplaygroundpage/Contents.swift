@@ -11,10 +11,11 @@ import Foundation
 import URBNValidator
 
 class Tester: Validateable {
+    typealias V = AnyObject
     var requiredString: String?
     var children = [String]()
     
-    func validationMap() -> [String : ValidatingValue] {
+    func validationMap() -> [String : ValidatingValue<V>] {
         return [
             "requiredString": ValidatingValue(value: self.requiredString, rules: URBNRequiredRule()),
             "children": ValidatingValue(value: self.children, rules: URBNMinLengthRule(minLength: 3))

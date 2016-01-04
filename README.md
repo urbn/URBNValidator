@@ -33,6 +33,17 @@ Now let's dig into what this thing is about
 
 
 
+## Features
+
+- Full swift support
+- Objc compatibility
+- Ability to create your own validations and extend custom types
+- Full localization support (global and per instance).
+
+
+## Usage
+We've outlined most of the usage in our URBNValidator.playground.   Check it out with the documentation rendered.
+
 
 ## Author
 
