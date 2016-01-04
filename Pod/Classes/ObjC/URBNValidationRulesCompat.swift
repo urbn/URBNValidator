@@ -54,6 +54,10 @@ import Foundation
         super.init()
         backingRule = URBNRegexRule(pattern: pattern, localizationKey: localizationKey)
     }
+    
+    public convenience init(patternType: URBNRegexPattern, localizationKey: String? = nil) {
+        self.init(pattern: patternType.patternString, localizationKey: localizationKey)
+    }
 }
 
 @objc public class URBNCompatRequiredRule: URBNCompatBaseRule {

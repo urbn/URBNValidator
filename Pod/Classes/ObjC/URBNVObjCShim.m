@@ -53,6 +53,10 @@ URBNVOverloadable id __nonnull URBNVMatch(NSString * __nonnull pattern, NSString
     return [[URBNCompatRegexRule alloc] initWithPattern: pattern localizationKey: localizeString];
 }
 
+URBNVOverloadable id __nonnull URBNVMatch(NSInteger patternType, NSString * __nullable localizeString) {
+    return [[URBNCompatRegexRule alloc] initWithPatternType:patternType localizationKey:localizeString];
+}
+
 #pragma mark - Blocks
 URBNVOverloadable id __nonnull URBNVBlock(BOOL (^ __nonnull checker)(id __nullable val)) {
     return URBNVBlock(nil, checker);

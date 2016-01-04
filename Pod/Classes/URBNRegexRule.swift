@@ -9,6 +9,18 @@
 import Foundation
 
 
+let emailPattern = "^(?:(?:(?:(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+)(?:\\.(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+))*)|(?:\"(?:\\\\[^\\r\\n]|[^\\\\\"])*\")))\\@(?:(?:(?:(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+)(?:\\.(?:[a-zA-Z0-9_!#\\$%&'*+/=?\\^`{}~|\\-]+))*)|(?:\\[(?:\\\\\\S|[\\x21-\\x5a\\x5e-\\x7e])*\\])))$"
+
+@objc public enum URBNRegexPattern: Int {
+    case Email
+    
+    var patternString: String {
+        switch(self) {
+        case .Email: return emailPattern
+        }
+    }
+}
+
 public class URBNRegexRule: URBNBaseRule, URBNRequirement {
     internal var pattern: String
     public var isRequired: Bool = false
@@ -25,6 +37,10 @@ public class URBNRegexRule: URBNBaseRule, URBNRequirement {
         
         return pred.evaluateWithObject(value as? AnyObject)
     }
-    
-    public static let emailPattern = "^(?:(?:(?:(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+)(?:\\.(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+))*)|(?:\"(?:\\\\[^\\r\\n]|[^\\\\\"])*\")))\\@(?:(?:(?:(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+)(?:\\.(?:[a-zA-Z0-9_!#\\$%&'*+/=?\\^`{}~|\\-]+))*)|(?:\\[(?:\\\\\\S|[\\x21-\\x5a\\x5e-\\x7e])*\\])))$"
+}
+
+extension URBNRegexRule {
+    convenience init(patternType: URBNRegexPattern, localizationKey: String? = nil) {
+        self.init(pattern: patternType.patternString, localizationKey: localizationKey)
+    }
 }
