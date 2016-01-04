@@ -61,3 +61,8 @@ URBNVOverloadable id __nonnull URBNVBlock(BOOL (^ __nonnull checker)(id __nullab
 URBNVOverloadable id __nonnull URBNVBlock(NSString * __nullable localizeString, BOOL (^ __nonnull checker)(id __nullable val)) {
     return [[URBNCompatBlockRule alloc] initWithValidator:checker localizationKey:localizeString];
 }
+
+#pragma mark - Dates
+URBNVOverloadable id __nonnull URBNVDateIsFuture(NSString * __nullable localizeString) {
+    return [[URBNCompatDateRule alloc] initWithComparisonType:URBNDateComparisionFuture localizationKey:localizeString];
+}

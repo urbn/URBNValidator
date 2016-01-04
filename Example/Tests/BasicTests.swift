@@ -68,6 +68,22 @@ class BasicTests: XCTestCase {
         r.comparisonType = URBNDateComparision.Future
         XCTAssertTrue(r.validateValue(NSDate().dateByAddingTimeInterval(100)), "Should validate future when comparisonType == .Ascending")
         XCTAssertFalse(r.validateValue(NSDate().dateByAddingTimeInterval(-100)), "Should not validate past when comparisonType == .Ascending")
+        
+        // Month/Year only
+        r.comparisonUnit = NSCalendarUnit.Month
+        XCTAssertTrue(r.validateValue(NSDate().dateByAddingTimeInterval(-100)), "Should validate when the comparison unit is set to Month")
+    }
+    
+    func testRegexRule() {
+        let r = URBNRegexRule(pattern: "(?<![a-z-#.\\d\\p{Latin}])[a-z-#.\\d\\p{Latin}][a-z-#.\\d\\s\\p{Latin}]+")
+        r.isRequired = false
+        
+        XCTAssertEqual(r.localizationKey, "URBNValidator.URBNRegexRule")
+        
+        XCTAssertFalse(r.validateValue(""), "Should validate empty when required is off")
+        XCTAssertFalse(r.validateValue(" "), "Should not validate")
+        
+        XCTAssertTrue(r.validateValue("123 Test Rd."), "Should validate address")
     }
     
 }

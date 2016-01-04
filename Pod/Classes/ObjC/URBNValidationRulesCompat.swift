@@ -99,3 +99,11 @@ import Foundation
         self.init(validator: compatWrappingBlock, localizationKey: localizationKey)
     }
 }
+
+@objc public class URBNCompatDateRule: URBNCompatBaseRule {
+    
+    public init(comparisonType: URBNDateComparision = .Past, localizationKey: String? = nil) {
+        super.init()
+        backingRule = URBNDateRule(comparisonType: comparisonType, localizationKey: localizationKey)
+    }
+}
