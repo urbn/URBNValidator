@@ -9,16 +9,16 @@
 import Foundation
 
 
-public class ValidatingValue {
-    public var value: Any?
+public class ValidatingValue<V> {
+    public var value: V?
     public var rules: [ValidationRule]
     
-    public init(_ value: Any?, rules: [ValidationRule]) {
+    public init(_ value: V?, rules: [ValidationRule]) {
         self.value = value
         self.rules = rules
     }
     
-    public convenience init(value: Any?, rules: ValidationRule...) {
+    public convenience init(value: V?, rules: ValidationRule...) {
         self.init(value, rules: rules)
     }
 }
@@ -40,7 +40,8 @@ public protocol Validator {
  defining a validationMap which contains a map of keys -> ValidatingValue's
 */
 public protocol Validateable {
-    func validationMap() -> [String: ValidatingValue]
+    typealias V
+    func validationMap() -> [String: ValidatingValue<V>]
 }
 
 /**

@@ -9,48 +9,48 @@
 import Foundation
 
 
-protocol Lengthable {
+public protocol Lengthable {
     var length: Int { get }
 }
 
 extension String: Lengthable {
-    var length: Int {
+    public var length: Int {
         return self.characters.count
     }
 }
 extension NSString: Lengthable {}
 extension Array: Lengthable {
-    var length: Int {
+    public var length: Int {
         return self.count
     }
 }
 
 extension NSArray: Lengthable {
-    var length: Int {
+    public var length: Int {
         return self.count
     }
 }
 
 extension Dictionary: Lengthable {
-    var length: Int {
+    public var length: Int {
         return self.count
     }
 }
 
 extension NSDictionary: Lengthable {
-    var length: Int {
+    public var length: Int {
         return self.count
     }
 }
 
 extension NSTimeInterval: Lengthable {
-    var length: Int {
+    public var length: Int {
         return Int(self)
     }
 }
 
 extension NSNumber: Lengthable {
-    var length: Int {
+    public var length: Int {
         return self.integerValue;
     }
 }

@@ -22,8 +22,8 @@ import Foundation
 }
 
 extension CompatValidateable {
-    func backingValidationMap() -> [String: ValidatingValue] {
-        return validationMap().reduce([String: ValidatingValue]()) { (var dict, items: (key: String, value: CompatValidatingValue)) -> [String: ValidatingValue] in
+    func backingValidationMap() -> [String: ValidatingValue<AnyObject>] {
+        return validationMap().reduce([String: ValidatingValue<AnyObject>]()) { (var dict, items: (key: String, value: CompatValidatingValue)) -> [String: ValidatingValue<AnyObject>] in
             dict[items.key] = items.value.backingRules()
             return dict
         }
@@ -47,13 +47,14 @@ extension CompatValidateable {
 }
 
 class ConvertCompat: Validateable {
-    var rules = [String: ValidatingValue]()
+    typealias V = AnyObject
+    var rules = [String: ValidatingValue<V>]()
     
     init(cv: CompatValidateable) {
         rules = cv.backingValidationMap()
     }
     
-    func validationMap() -> [String : ValidatingValue] {
+    func validationMap() -> [String : ValidatingValue<V>] {
         return rules
     }
 }
@@ -74,7 +75,7 @@ class ConvertCompat: Validateable {
 }
 
 extension CompatValidatingValue {
-    func backingRules() -> ValidatingValue {
+    func backingRules() -> ValidatingValue<AnyObject> {
         let mrules = rules.map { $0.backingRule as ValidationRule }
         let v = ValidatingValue(value, rules: mrules)
         
