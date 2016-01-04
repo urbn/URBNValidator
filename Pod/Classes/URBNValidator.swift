@@ -82,7 +82,7 @@ public class URBNValidator<U>: Validator {
      
      - throws: An instance of NSError with the localized data
     */
-    public func validate<V>(key: String? = nil, value: V?, rule: ValidationRule) throws {
+    public func validate<VALIDATOR>(key: String? = nil, value: VALIDATOR?, rule: ValidationRule) throws {
         if rule.validateValue(value) {
             return
         }
