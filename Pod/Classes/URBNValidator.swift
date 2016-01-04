@@ -31,7 +31,7 @@ public protocol Validator {
      If invalid, then will `throw` an error with the localized reason
      why the value failed
     **/
-    func validate(key: String?, value: Any?, rule: ValidationRule) throws
+    func validate<V>(key: String?, value: V?, rule: ValidationRule) throws
     func validate<V: Validateable>(item: V , stopOnFirstError: Bool) throws
 }
 
@@ -81,7 +81,7 @@ public class URBNValidator: Validator {
      
      - throws: An instance of NSError with the localized data
     */
-    public func validate(key: String? = nil, value: Any?, rule: ValidationRule) throws {
+    public func validate<V>(key: String? = nil, value: V?, rule: ValidationRule) throws {
         if rule.validateValue(value) {
             return
         }
