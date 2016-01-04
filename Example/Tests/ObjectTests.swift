@@ -57,7 +57,7 @@ class ValidatorTests: XCTestCase {
     
     func testNotRequired () {
         
-        let vd = URBNValidator()
+        let vd = URBNValidator<AnyObject>()
         let item = TestItem(prop1: "")
         
         var error: NSError? = nil
@@ -75,7 +75,7 @@ class ValidatorTests: XCTestCase {
 }
 
 class ObjectTestsSwifty: XCTestCase {
-    var vd = URBNValidator()
+    var vd = URBNValidator<Lengthable>()
     
     func testSingleError() {
         let u = User()

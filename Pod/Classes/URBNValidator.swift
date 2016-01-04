@@ -25,14 +25,14 @@ public class ValidatingValue<V> {
 
 public protocol Validator {
     var localizationBundle: NSBundle { get }
-    
+    typealias VALIDATOR
     /**
      Used to validate a single @value with the given rule.
      If invalid, then will `throw` an error with the localized reason
      why the value failed
     **/
-    func validate<V>(key: String?, value: V?, rule: ValidationRule) throws
-    func validate<V: Validateable>(item: V , stopOnFirstError: Bool) throws
+    func validate(key: String?, value: VALIDATOR?, rule: ValidationRule) throws
+    func validate<VALIDATEABLE: Validateable where VALIDATEABLE.V == VALIDATOR>(item: VALIDATEABLE , stopOnFirstError: Bool) throws
 }
 
 /**
@@ -49,8 +49,9 @@ public protocol Validateable {
  and localize the results in a nice way.
 */
 // MARK: - URBNValidator -
-public class URBNValidator: Validator {
+public class URBNValidator<U>: Validator {
     public init() {}
+    public typealias VALIDATOR = U
     // MARK: - Properties -
     
     // You'll probably never use this.   But just incase here's a prop for it
@@ -63,7 +64,7 @@ public class URBNValidator: Validator {
      - note: We'll handle falling back to the mainBundle for any localizations for free, so
      you don't have to override this if you're just trying to localize with the main bundle
      */
-    public var localizationBundle: NSBundle = NSBundle(forClass: URBNValidator.self)
+    public var localizationBundle: NSBundle = NSBundle(forClass: URBNValidator<U>.self)
     
     
     
@@ -103,7 +104,7 @@ public class URBNValidator: Validator {
      - throws: An instance of NSError representing the invalid data
      
     */
-    public func validate<V: Validateable>(item: V, stopOnFirstError: Bool = false) throws {
+    public func validate<VALIDATEABLE: Validateable where VALIDATEABLE.V == VALIDATOR>(item: VALIDATEABLE, stopOnFirstError: Bool = false) throws {
         do {
             try self.validate(item, ignoreList: [], stopOnFirstError: stopOnFirstError)
         } catch let e {
