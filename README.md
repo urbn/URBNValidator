@@ -33,6 +33,14 @@ Now let's dig into what this thing is about
 
 
 
+## Features
+
+- Full swift support
+- Objc compatibility
+- Ability to create your own validations and extend custom types
+- Full localization support (global and per instance).
+
+
 
 ## Author
 

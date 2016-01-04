@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
 s.name             = "URBNValidator"
   s.version          = "0.1.0"
-  s.summary          = "A short description of URBNValidator."
+  s.summary          = "URBNValidator is a simple swift validation library with support for objc"
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -17,7 +17,18 @@ s.name             = "URBNValidator"
 #   * Write the description between the DESC delimiters below.
 #   * Finally, don't worry about the indent, CocoaPods strips it!  
   s.description      = <<-DESC
-                       DESC
+
+    URBNValidator is a lightweight extensible swift validation library.   You can easily add validation to
+    any of your swift objects as well as any objc objects (if you're into that sort of thing).
+
+    Features
+    ========
+    * Full swift support
+    * Objc compatibility
+    * Ability to create your own validations and extend custom types
+    * Full localization support (global and per instance).
+
+  DESC
 
   s.homepage         = "https://github.com/urbn/URBNValidator"
   s.license          = 'MIT'
@@ -26,7 +37,6 @@ s.name             = "URBNValidator"
 
   s.platform     = :ios, '8.0'
   s.requires_arc = true
-
 
   s.source_files = ['Pod/Classes/**/*']
   s.resources = ['Pod/Resources/**/*.lproj']
