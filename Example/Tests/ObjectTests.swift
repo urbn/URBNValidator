@@ -41,6 +41,39 @@ class User: Testable {
     }
 }
 
+struct TestItem: Validateable {
+    typealias V = AnyObject
+    var prop1: String
+    
+    
+    func validationMap() -> [String : ValidatingValue<V>] {
+        return [
+            "prop1": ValidatingValue(value: self.prop1, rules: URBNNotRequiredRule(), URBNRegexRule(pattern: "(?<![a-z-#.\\d\\p{Latin}])[a-z-#.\\d\\p{Latin}][a-z-#.\\d\\s\\p{Latin}]+"))
+        ]
+    }
+}
+class ValidatorTests: XCTestCase {
+    
+    
+    func testNotRequired () {
+        
+        let vd = URBNValidator()
+        let item = TestItem(prop1: "")
+        
+        var error: NSError? = nil
+        do {
+            try vd.validate(item)
+        } catch let err as NSError {
+            error = err
+        }
+        XCTAssertEqual(error!.domain, ValidationErrorDomain, "Should be ValidationErrorDomain")
+        XCTAssertEqual(error!.code, ValidationError.MultiFieldInvalid.rawValue, "Should be single field error type")
+    }
+    
+    
+    
+}
+
 class ObjectTestsSwifty: XCTestCase {
     var vd = URBNValidator()
     
