@@ -67,7 +67,7 @@ class ValidatorTests: XCTestCase {
             error = err
         }
         XCTAssertEqual(error!.domain, ValidationErrorDomain, "Should be ValidationErrorDomain")
-        XCTAssertEqual(error!.code, ValidationError.FieldInvalid.rawValue, "Should be single field error type")
+        XCTAssertEqual(error!.code, ValidationError.MultiFieldInvalid.rawValue, "Should be single field error type")
     }
     
     
