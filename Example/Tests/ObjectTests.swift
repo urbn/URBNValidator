@@ -52,9 +52,7 @@ struct TestItem: Validateable {
         ]
     }
 }
-class ValidatorTests: XCTestCase {
-    
-    
+class ValidatorTests: XCTestCase {    
     func testNotRequired () {
         
         let vd = URBNValidator()
@@ -69,9 +67,6 @@ class ValidatorTests: XCTestCase {
         XCTAssertEqual(error!.domain, ValidationErrorDomain, "Should be ValidationErrorDomain")
         XCTAssertEqual(error!.code, ValidationError.MultiFieldInvalid.rawValue, "Should be single field error type")
     }
-    
-    
-    
 }
 
 class ObjectTestsSwifty: XCTestCase {
