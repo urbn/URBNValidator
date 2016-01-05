@@ -1,7 +1,7 @@
 
 //
 //  URBNLengthRulesCompat.swift
-//  Pods
+//  URBNValidator
 //
 //  Created by Nick DiStefano on 12/21/15.
 //
