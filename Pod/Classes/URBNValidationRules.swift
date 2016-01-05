@@ -71,15 +71,38 @@ public class URBNBlockRule: URBNBaseRule {
         case .Future: return [NSComparisonResult.OrderedAscending, NSComparisonResult.OrderedSame]
         }
     }
+    
+    var localizeString: String {
+        switch(self) {
+        case .Past: return "URBNValidator.URBNDatePastRule"
+        case .Future: return "URBNValidator.URBNDateFutureRule"
+        }
+    }
 }
 
 public class URBNDateRule: URBNBaseRule {
     public var comparisonUnit = NSCalendarUnit.Second
-    public var comparisonType = URBNDateComparision.Past
+    public var comparisonType = URBNDateComparision.Past {
+        didSet {
+            // Only if we have not set the localization directly, then 
+            // we'll reset our localization on change of comparisonType
+            if _localizationIsOverriden == false {
+                self.localizationKey = self.comparisonType.localizeString
+            }
+        }
+    }
+    
+    public override var localizationKey: String {
+        didSet {
+            _localizationIsOverriden = true
+        }
+    }
+    
     
     public init(comparisonType: URBNDateComparision = .Past, localizationKey: String? = nil) {
         self.comparisonType = comparisonType
-        super.init(localizationKey: localizationKey)
+        _localizationIsOverriden = localizationKey != nil
+        super.init(localizationKey: localizationKey ?? comparisonType.localizeString)
     }
     
     public override func validateValue<T: NSDate>(value: T?) -> Bool {
@@ -88,4 +111,6 @@ public class URBNDateRule: URBNBaseRule {
         let result = NSCalendar.currentCalendar().compareDate(NSDate(), toDate: value, toUnitGranularity: comparisonUnit)
         return comparisonType.comparisonResult.contains(result)
     }
+    
+    private var _localizationIsOverriden: Bool = false
 }

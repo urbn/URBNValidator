@@ -19,6 +19,7 @@
 		D869D4421C0F6421000CFDA9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D869D4401C0F6421000CFDA9 /* LaunchScreen.storyboard */; };
 		D869D44D1C0F648D000CFDA9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D869D44B1C0F648D000CFDA9 /* Localizable.strings */; };
 		D86E46241BFE1FAB0011B659 /* BasicCompatTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D86E46231BFE1FAB0011B659 /* BasicCompatTests.m */; };
+		D8D7EBF31C3C25A60085B985 /* LocalizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D7EBF21C3C25A60085B985 /* LocalizationTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +58,7 @@
 		D869D44A1C0F6470000CFDA9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		D869D44C1C0F648D000CFDA9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D86E46231BFE1FAB0011B659 /* BasicCompatTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BasicCompatTests.m; sourceTree = "<group>"; };
+		D8D7EBF21C3C25A60085B985 /* LocalizationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalizationTests.swift; sourceTree = "<group>"; };
 		E69A4D0B7B9F0587A7C1A7A1 /* Pods-URBNValidator_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-URBNValidator_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-URBNValidator_Tests/Pods-URBNValidator_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		EA7AF906B427B28407BAB403 /* Pods-URBNValidator_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-URBNValidator_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-URBNValidator_Tests/Pods-URBNValidator_Tests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -110,6 +112,7 @@
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 				D81462AE1C0CA259003892B4 /* ObjectCompatTests.m */,
 				D8573E041C19E83B00C3BD6C /* ObjectTests.swift */,
+				D8D7EBF21C3C25A60085B985 /* LocalizationTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -321,6 +324,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				607FACEC1AFB9204008FA782 /* BasicTests.swift in Sources */,
+				D8D7EBF31C3C25A60085B985 /* LocalizationTests.swift in Sources */,
 				D81462AF1C0CA259003892B4 /* ObjectCompatTests.m in Sources */,
 				D8573E051C19E83B00C3BD6C /* ObjectTests.swift in Sources */,
 				D86E46241BFE1FAB0011B659 /* BasicCompatTests.m in Sources */,
