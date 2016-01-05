@@ -11,7 +11,7 @@ import Foundation
 
 let emailPattern = "^(?:(?:(?:(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+)(?:\\.(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+))*)|(?:\"(?:\\\\[^\\r\\n]|[^\\\\\"])*\")))\\@(?:(?:(?:(?:[a-zA-Z0-9_!#\\$\\%&'*+/=?\\^`{}~|\\-]+)(?:\\.(?:[a-zA-Z0-9_!#\\$%&'*+/=?\\^`{}~|\\-]+))*)|(?:\\[(?:\\\\\\S|[\\x21-\\x5a\\x5e-\\x7e])*\\])))$"
 let alphaNumericPattern = "^[A-Z\\d]"
-let lettersPattern = "^[A-Z"
+let lettersPattern = "^[A-Z]"
 let numericPattern = "^[\\d]"
 
 @objc public enum URBNRegexPattern: Int {
@@ -26,7 +26,6 @@ let numericPattern = "^[\\d]"
         case .AlphaNumeric: return alphaNumericPattern
         case .Numbers: return numericPattern
         case .Letters: return lettersPattern
-        default: return ""
         }
     }
     
