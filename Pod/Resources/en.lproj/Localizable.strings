@@ -4,5 +4,10 @@
 "ls_URBNValidator_URBNValidator.URBNRequiredRule" = "{{field}} is required.";
 "ls_URBNValidator_URBNValidator.URBNBlockRule" = "\"{{field}}\" is invalid yo";
 "ls_URBNValidator_URBNValidator.URBNRegexRule" = "Invalid characters";
+"ls_URBNValidator_URBNValidator.URBNRegexEmailRule" = "Email is not valid";
+"ls_URBNValidator_URBNValidator.URBNRegexLettersRule" = "Letters only";
+"ls_URBNValidator_URBNValidator.URBNRegexNumbersRule" = "Numbers only";
 "ls_URBNValidator_URBNValidator.URBNMinLengthRule" = "too short";
 "ls_URBNValidator_URBNValidator.URBNMaxLengthRule" = "too long";
+"ls_URBNValidator_URBNValidator.URBNDatePastRule" = "Date must be in the past";
+"ls_URBNValidator_URBNValidator.URBNDateFutureRule" = "Date must be in the future";

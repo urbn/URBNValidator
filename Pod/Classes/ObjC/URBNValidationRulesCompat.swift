@@ -1,7 +1,7 @@
 
 //
 //  URBNValidationRulesCompat.swift
-//  Pods
+//  URBNValidator
 //
 //  Created by Nick DiStefano on 12/21/15.
 //
@@ -111,5 +111,17 @@ import Foundation
         let r = URBNDateRule(comparisonType: comparisonType, localizationKey: localizationKey)
         r.comparisonUnit = comparisonUnit
         backingRule = r
+    }
+    
+    /// Here we're making sure that we're given an NSDate because objc is 
+    /// dumb and will allow the user to not give an NSDate
+    public override func validateValue(value: AnyObject?) -> Bool {
+        guard let value = value as? NSDate else { return false }
+        return super.validateValue(value)
+    }
+    
+    public override func validateValue(value: AnyObject?, key: String) -> Bool {
+        guard let value = value as? NSDate else { return false }
+        return super.validateValue(value, key: key)
     }
 }

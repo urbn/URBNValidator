@@ -58,7 +58,7 @@ class BasicTests: XCTestCase {
     func testDateRule() {
         let r = URBNDateRule()
         
-        XCTAssertEqual(r.localizationKey, "URBNValidator.URBNDateRule")
+        XCTAssertEqual(r.localizationKey, "URBNValidator.URBNDatePastRule")
         XCTAssertEqual(r.comparisonType, URBNDateComparision.Past, "Should default to past")
         
         r.comparisonType = URBNDateComparision.Past
