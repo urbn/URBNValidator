@@ -50,6 +50,7 @@ public class URBNRegexRule: URBNBaseRule, URBNRequirement {
     
     public override func validateValue<T: AnyObject>(value: T?) -> Bool {
         if !isRequired && value == nil { return true }
+        guard let value = value as? AnyObject else { return false }
         
         let pred = NSPredicate(format: "SELF MATCHES[cd] %@", self.pattern)
         
