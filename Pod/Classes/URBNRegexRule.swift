@@ -50,11 +50,15 @@ public class URBNRegexRule: URBNBaseRule, URBNRequirement {
     
     public override func validateValue<T: AnyObject>(value: T?) -> Bool {
         if !isRequired && value == nil { return true }
-        guard let value = value as? AnyObject else { return false }
+        
+        guard let v = value as? AnyObject else {
+            print("WARNING:  Passing \(value) to expected type of AnyObject in URBNRegexRule.  This is technically not allowed, but because objc let's it slide we have to support it.   You're probably doing something wrong.")
+            return false
+        }
         
         let pred = NSPredicate(format: "SELF MATCHES[cd] %@", self.pattern)
         
-        return pred.evaluateWithObject(value)
+        return pred.evaluateWithObject(v)
     }
 }
 

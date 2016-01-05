@@ -106,9 +106,12 @@ public class URBNDateRule: URBNBaseRule {
     }
     
     public override func validateValue<T: NSDate>(value: T?) -> Bool {
-        guard let value = value as? NSDate else { return false }
+        guard let v = value as? NSDate else {
+            print("WARNING:  Passing \(value) to expected type of NSDate in URBNDateRule.  This is technically not allowed, but because objc let's it slide we have to support it.   You're probably doing something wrong.")
+            return false
+        }
         
-        let result = NSCalendar.currentCalendar().compareDate(NSDate(), toDate: value, toUnitGranularity: comparisonUnit)
+        let result = NSCalendar.currentCalendar().compareDate(NSDate(), toDate: v, toUnitGranularity: comparisonUnit)
         return comparisonType.comparisonResult.contains(result)
     }
     
