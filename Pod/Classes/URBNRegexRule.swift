@@ -48,12 +48,12 @@ public class URBNRegexRule: URBNBaseRule, URBNRequirement {
         super.init(localizationKey: localizationKey)
     }
     
-    public override func validateValue<T>(value: T?) -> Bool {
+    public override func validateValue<T: AnyObject>(value: T?) -> Bool {
         if !isRequired && value == nil { return true }
         
         let pred = NSPredicate(format: "SELF MATCHES[cd] %@", self.pattern)
         
-        return pred.evaluateWithObject(value as? AnyObject)
+        return pred.evaluateWithObject(value)
     }
 }
 
