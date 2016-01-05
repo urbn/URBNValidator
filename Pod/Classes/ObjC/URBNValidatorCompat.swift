@@ -31,14 +31,14 @@ extension CompatValidateable {
 }
 
 @objc public class URBNCompatValidator: NSObject, CompatValidator {
-    private let backingValidator: URBNValidator = URBNValidator()
+    private let backingValidator: URBNValidator<AnyObject> = URBNValidator<AnyObject>()
     
     public var localizationBundle: NSBundle {
         return backingValidator.localizationBundle
     }
     
     public func validate(key: String?, value: AnyObject?, rule: URBNCompatBaseRule) throws {
-        try backingValidator.validate(key, value: value, rule: rule.backingRule)
+        try backingValidator.validate(key, value: value, rule: rule)
     }
     
     public func validate(item: CompatValidateable , stopOnFirstError: Bool) throws {
