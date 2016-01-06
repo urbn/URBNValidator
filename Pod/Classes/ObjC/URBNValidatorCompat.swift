@@ -34,7 +34,12 @@ extension CompatValidateable {
     private let backingValidator: URBNValidator = URBNValidator()
     
     public var localizationBundle: NSBundle {
-        return backingValidator.localizationBundle
+        get {
+            return backingValidator.localizationBundle
+        }
+        set {
+            backingValidator.localizationBundle = newValue
+        }
     }
     
     public func validate(key: String?, value: AnyObject?, rule: URBNCompatBaseRule) throws {
