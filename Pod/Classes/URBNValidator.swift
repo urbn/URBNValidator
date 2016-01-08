@@ -165,7 +165,7 @@ public class URBNValidator: Validator {
         - value: The value to inject into the localization (if applicable).  Replaces the {{value}}
     */
     internal func localizeableString(rule: ValidationRule, key: String?, value: Any?) -> String {
-        let ruleKey = "ls_URBNValidator_\(rule.localizationKey)"
+        let ruleKey = rule.localizationKey
         
         // First we try to localize against the mainBundle.
         let mainBundleStr = NSLocalizedString(ruleKey, tableName: self.localizationTable, comment: "")
