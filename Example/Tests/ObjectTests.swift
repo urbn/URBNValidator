@@ -134,8 +134,8 @@ class ObjectTestsSwifty: XCTestCase {
             XCTFail("Should not validate")
         } catch let err as NSError {
             XCTAssertEqual(err.underlyingErrors!.count, 2)
-            XCTAssertEqual(err.underlyingErrors![0].localizedDescription, "ls_URBNValidator_t_required")
-            XCTAssertEqual(err.underlyingErrors![1].localizedDescription, "ls_URBNValidator_t_integer")
+            XCTAssertEqual(err.underlyingErrors![0].localizedDescription, "t_required")
+            XCTAssertEqual(err.underlyingErrors![1].localizedDescription, "t_integer")
         }
     }
 }

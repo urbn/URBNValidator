@@ -14,17 +14,17 @@ class LocalizationTests: XCTestCase {
     
     
     func testDefaultLocalizationKeys() {
-        XCTAssertEqual(URBNRequiredRule().localizationKey, "URBNValidator.URBNRequiredRule")
-        XCTAssertEqual(URBNMinLengthRule(minLength: 0).localizationKey, "URBNValidator.URBNMinLengthRule")
-        XCTAssertEqual(URBNMaxLengthRule(maxLength: 0).localizationKey, "URBNValidator.URBNMaxLengthRule")
-        XCTAssertEqual(URBNRegexRule(pattern: "").localizationKey, "URBNValidator.URBNRegexRule")
-        XCTAssertEqual(URBNRegexRule(patternType: .AlphaNumeric).localizationKey, "URBNValidator.URBNRegexRule")
-        XCTAssertEqual(URBNRegexRule(patternType: .Email).localizationKey, "URBNValidator.URBNRegexEmailRule")
-        XCTAssertEqual(URBNRegexRule(patternType: .Letters).localizationKey, "URBNValidator.URBNRegexLettersRule")
-        XCTAssertEqual(URBNRegexRule(patternType: .Numbers).localizationKey, "URBNValidator.URBNRegexNumbersRule")
-        XCTAssertEqual(URBNDateRule().localizationKey, "URBNValidator.URBNDatePastRule")
-        XCTAssertEqual(URBNDateRule(comparisonType: .Future).localizationKey, "URBNValidator.URBNDateFutureRule")
-        XCTAssertEqual(URBNBlockRule(validator: { _ in true }).localizationKey, "URBNValidator.URBNBlockRule")
+        XCTAssertEqual(URBNRequiredRule().localizationKey, "ls_URBNValidator_URBNValidator.URBNRequiredRule")
+        XCTAssertEqual(URBNMinLengthRule(minLength: 0).localizationKey, "ls_URBNValidator_URBNValidator.URBNMinLengthRule")
+        XCTAssertEqual(URBNMaxLengthRule(maxLength: 0).localizationKey, "ls_URBNValidator_URBNValidator.URBNMaxLengthRule")
+        XCTAssertEqual(URBNRegexRule(pattern: "").localizationKey, "ls_URBNValidator_URBNValidator.URBNRegexRule")
+        XCTAssertEqual(URBNRegexRule(patternType: .AlphaNumeric).localizationKey, "ls_URBNValidator_URBNValidator.URBNRegexRule")
+        XCTAssertEqual(URBNRegexRule(patternType: .Email).localizationKey, "ls_URBNValidator_URBNValidator.URBNRegexEmailRule")
+        XCTAssertEqual(URBNRegexRule(patternType: .Letters).localizationKey, "ls_URBNValidator_URBNValidator.URBNRegexLettersRule")
+        XCTAssertEqual(URBNRegexRule(patternType: .Numbers).localizationKey, "ls_URBNValidator_URBNValidator.URBNRegexNumbersRule")
+        XCTAssertEqual(URBNDateRule().localizationKey, "ls_URBNValidator_URBNValidator.URBNDatePastRule")
+        XCTAssertEqual(URBNDateRule(comparisonType: .Future).localizationKey, "ls_URBNValidator_URBNValidator.URBNDateFutureRule")
+        XCTAssertEqual(URBNBlockRule(validator: { _ in true }).localizationKey, "ls_URBNValidator_URBNValidator.URBNBlockRule")
     }
     
     func testDefaultLocalizationStrings() {
@@ -48,7 +48,7 @@ class LocalizationTests: XCTestCase {
     }
     
     
-    func testLocalizationOverrides() {
+    func testLocalizationOverrideKeys() {
         XCTAssertEqual(URBNRequiredRule(localizationKey: "Required").localizationKey, "Required")
         XCTAssertEqual(URBNMinLengthRule(minLength: 0, inclusive: true, localizationKey: "MinLength").localizationKey, "MinLength")
         XCTAssertEqual(URBNMaxLengthRule(maxLength: 0, inclusive: true, localizationKey: "MaxLength").localizationKey, "MaxLength")
@@ -59,4 +59,20 @@ class LocalizationTests: XCTestCase {
     }
     
     
+    func testLocalizationOverrideStrings() {
+        let vd = URBNValidator()
+        
+        let localizedError: (ValidationRule) -> String? = { (rule) -> String? in
+            return vd.localizeableString(rule, key: "test", value: "value")
+        }
+        
+        
+        XCTAssertEqual(localizedError(URBNRequiredRule(localizationKey: "Required")), "Required")
+        XCTAssertEqual(localizedError(URBNMinLengthRule(minLength: 0, inclusive: true, localizationKey: "MinLength")), "MinLength")
+        XCTAssertEqual(localizedError(URBNMaxLengthRule(maxLength: 0, inclusive: true, localizationKey: "MaxLength")), "MaxLength")
+        XCTAssertEqual(localizedError(URBNRegexRule(pattern: "", localizationKey: "Regex")), "Regex")
+        XCTAssertEqual(localizedError(URBNDateRule(comparisonType: .Past, localizationKey: "DateIsPast")), "DateIsPast")
+        XCTAssertEqual(localizedError(URBNDateRule(comparisonType: .Future, localizationKey: "DateIsFuture")), "DateIsFuture")
+        XCTAssertEqual(localizedError(URBNBlockRule(validator: { _ in true }, localizationKey: "CustomBlockFailed")), "CustomBlockFailed")
+    }
 }

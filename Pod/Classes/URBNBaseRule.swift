@@ -27,7 +27,7 @@ public class URBNBaseRule: ValidationRule {
                 return key
             }
             else {
-                return NSStringFromClass(self.dynamicType)
+                return "ls_URBNValidator_\(NSStringFromClass(self.dynamicType))"
             }
         }
         set {

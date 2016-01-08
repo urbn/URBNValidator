@@ -7,7 +7,7 @@ class BasicTests: XCTestCase {
     func testRequiredRule() {
         let r = URBNRequiredRule()
         
-        XCTAssertEqual(r.localizationKey, "URBNValidator.URBNRequiredRule", "localizationKey should default to the className")
+        XCTAssertEqual(r.localizationKey, "ls_URBNValidator_URBNValidator.URBNRequiredRule", "localizationKey should default to the className")
         XCTAssertFalse(r.validateValue(nil as AnyObject?), "Nil should be invalid")
         XCTAssertTrue(r.validateValue("-"), "Non-nil should be valid")
     }
@@ -15,7 +15,7 @@ class BasicTests: XCTestCase {
     func testMinLengthRule() {
         let r = URBNMinLengthRule(minLength: 5, inclusive: true)
         
-        XCTAssertEqual(r.localizationKey, "URBNValidator.URBNMinLengthRule")
+        XCTAssertEqual(r.localizationKey, "ls_URBNValidator_URBNValidator.URBNMinLengthRule")
         XCTAssertFalse(r.validateValue("1234"))
         XCTAssertTrue(r.validateValue("12345"))
         
@@ -31,7 +31,7 @@ class BasicTests: XCTestCase {
     func testMaxLengthRule() {
         let r = URBNMaxLengthRule(maxLength: 5, inclusive: true)
         
-        XCTAssertEqual(r.localizationKey, "URBNValidator.URBNMaxLengthRule")
+        XCTAssertEqual(r.localizationKey, "ls_URBNValidator_URBNValidator.URBNMaxLengthRule")
         XCTAssertTrue(r.validateValue("1234"))
         XCTAssertFalse(r.validateValue("123456"))
         
@@ -49,7 +49,7 @@ class BasicTests: XCTestCase {
             return value is Int
         }
         
-        XCTAssertEqual(r.localizationKey, "URBNValidator.URBNBlockRule")
+        XCTAssertEqual(r.localizationKey, "ls_URBNValidator_URBNValidator.URBNBlockRule")
         XCTAssertFalse(r.validateValue(nil as AnyObject?))
         XCTAssertFalse(r.validateValue(0.1))
         XCTAssertTrue(r.validateValue(1))
@@ -58,7 +58,7 @@ class BasicTests: XCTestCase {
     func testDateRule() {
         let r = URBNDateRule()
         
-        XCTAssertEqual(r.localizationKey, "URBNValidator.URBNDatePastRule")
+        XCTAssertEqual(r.localizationKey, "ls_URBNValidator_URBNValidator.URBNDatePastRule")
         XCTAssertEqual(r.comparisonType, URBNDateComparision.Past, "Should default to past")
         
         r.comparisonType = URBNDateComparision.Past
@@ -78,7 +78,7 @@ class BasicTests: XCTestCase {
         let r = URBNRegexRule(pattern: "(?<![a-z-#.\\d\\p{Latin}])[a-z-#.\\d\\p{Latin}][a-z-#.\\d\\s\\p{Latin}]+")
         r.isRequired = false
         
-        XCTAssertEqual(r.localizationKey, "URBNValidator.URBNRegexRule")
+        XCTAssertEqual(r.localizationKey, "ls_URBNValidator_URBNValidator.URBNRegexRule")
         
         XCTAssertFalse(r.validateValue(""), "Should validate empty when required is off")
         XCTAssertFalse(r.validateValue(" "), "Should not validate")
