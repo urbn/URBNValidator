@@ -23,9 +23,10 @@ import Foundation
 
 extension CompatValidateable {
     func backingValidationMap() -> [String: ValidatingValue<AnyObject>] {
-        return validationMap().reduce([String: ValidatingValue<AnyObject>]()) { (var dict, items: (key: String, value: CompatValidatingValue)) -> [String: ValidatingValue<AnyObject>] in
-            dict[items.key] = items.value.backingRules()
-            return dict
+        return validationMap().reduce([String: ValidatingValue<AnyObject>]()) { (dict, items: (key: String, value: CompatValidatingValue)) -> [String: ValidatingValue<AnyObject>] in
+            var dictionary = dict
+            dictionary[items.key] = items.value.backingRules()
+            return dictionary
         }
     }
 }

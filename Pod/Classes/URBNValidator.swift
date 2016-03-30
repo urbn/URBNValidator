@@ -40,7 +40,7 @@ public protocol Validator {
  defining a validationMap which contains a map of keys -> ValidatingValue's
 */
 public protocol Validateable {
-    typealias V
+    associatedtype V
     func validationMap() -> [String: ValidatingValue<V>]
 }
 
