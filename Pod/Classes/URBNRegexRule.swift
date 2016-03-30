@@ -63,7 +63,7 @@ public class URBNRegexRule: URBNBaseRule, URBNRequirement {
 }
 
 extension URBNRegexRule {
-    convenience init(patternType: URBNRegexPattern, localizationKey: String? = nil) {
+    public convenience init(patternType: URBNRegexPattern, localizationKey: String? = nil) {
         self.init(pattern: patternType.patternString, localizationKey: localizationKey ?? patternType.localizeString)
     }
 }
