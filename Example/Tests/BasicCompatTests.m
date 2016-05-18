@@ -96,7 +96,7 @@
     r.localizationKey = @"URBNRequiredRule_Override";
     
     NSError *error = nil;
-    [v validate:nil value:nil rule:r error:&error];
+    [v validateKey:@"SomeKey" withValue:nil rule:r error:&error];
     XCTAssertEqual(error.isMultiError, NO);
     XCTAssertEqualObjects(error.localizedDescription, @"What the hell");
 }

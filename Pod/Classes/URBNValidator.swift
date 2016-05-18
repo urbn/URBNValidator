@@ -31,7 +31,7 @@ public protocol Validator {
      If invalid, then will `throw` an error with the localized reason
      why the value failed
     **/
-    func validate<V>(key: String?, value: V?, rule: ValidationRule) throws
+    func validate<V>(key: String, value: V?, rule: ValidationRule) throws
     func validate<V: Validateable>(item: V , stopOnFirstError: Bool) throws
 }
 
@@ -81,7 +81,7 @@ public class URBNValidator: Validator {
      
      - throws: An instance of NSError with the localized data
     */
-    public func validate<V>(key: String? = nil, value: V?, rule: ValidationRule) throws {
+    public func validate<V>(key: String, value: V?, rule: ValidationRule) throws {
         if rule.validateValue(value) {
             return
         }
@@ -164,7 +164,7 @@ public class URBNValidator: Validator {
         - key: The key to inject into the localization (if applicable).  Replaces the {{field}}
         - value: The value to inject into the localization (if applicable).  Replaces the {{value}}
     */
-    internal func localizeableString(rule: ValidationRule, key: String?, value: Any?) -> String {
+    public func localizeableString(rule: ValidationRule, key: String, value: Any?) -> String {
         let ruleKey = rule.localizationKey
         
         // First we try to localize against the mainBundle.
@@ -181,7 +181,7 @@ public class URBNValidator: Validator {
         return [
             // Considering the try! fine here because this is a dev issue.   If you write an invalid
             // regex, then that's your own fault.   Once it's written properly it's guaranteed to not crash
-            (key ?? " "): try! NSRegularExpression(pattern: "\\{\\{field\\}\\}", options: options),
+            key: try! NSRegularExpression(pattern: "\\{\\{field\\}\\}", options: options),
             replacementValue: try! NSRegularExpression(pattern: "\\{\\{value\\}\\}", options: options),
             ].reduce(str) { (s, replacement: (key: String, pattern: NSRegularExpression)) -> String in
                 return replacement.pattern.stringByReplacingMatchesInString(s,
