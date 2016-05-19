@@ -32,7 +32,7 @@ extension CompatValidateable {
 }
 
 @objc public class URBNCompatValidator: NSObject, CompatValidator {
-    private let backingValidator: URBNValidator = URBNValidator()
+    private var backingValidator: URBNValidator = URBNValidator(bundle: NSBundle(forClass: URBNCompatValidator.self))
     
     public var localizationBundle: NSBundle {
         get {

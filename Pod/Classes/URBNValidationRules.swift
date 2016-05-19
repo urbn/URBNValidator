@@ -74,8 +74,8 @@ public class URBNBlockRule: URBNBaseRule {
     
     var localizeString: String {
         switch(self) {
-        case .Past: return "ls_URBNValidator_URBNValidator.URBNDatePastRule"
-        case .Future: return "ls_URBNValidator_URBNValidator.URBNDateFutureRule"
+        case .Past: return "URBNDatePastRule"
+        case .Future: return "URBNDateFutureRule"
         }
     }
 }

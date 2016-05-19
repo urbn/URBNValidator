@@ -31,9 +31,9 @@ let numericPattern = "^[\\d]"
     
     var localizeString: String? {
         switch(self) {
-        case .Email: return "ls_URBNValidator_URBNValidator.URBNRegexEmailRule"
-        case .Letters: return "ls_URBNValidator_URBNValidator.URBNRegexLettersRule"
-        case .Numbers: return "ls_URBNValidator_URBNValidator.URBNRegexNumbersRule"
+        case .Email: return "URBNRegexEmailRule"
+        case .Letters: return "URBNRegexLettersRule"
+        case .Numbers: return "URBNRegexNumbersRule"
         default: return nil
         }
     }
