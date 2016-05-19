@@ -129,8 +129,10 @@ class ObjectTestsSwifty: XCTestCase {
                 URBNRequiredRule(localizationKey: "t_required"),
                 URBNBlockRule(validator: { $0 is Int }, localizationKey: "t_integer"))]
         
+        var validator = vd
+        validator.localizationKeyBuilder = { rule, key in return rule.localizationKey }
         do {
-            try vd.validate(t)
+            try validator.validate(t)
             XCTFail("Should not validate")
         } catch let err as NSError {
             XCTAssertEqual(err.underlyingErrors!.count, 2)
