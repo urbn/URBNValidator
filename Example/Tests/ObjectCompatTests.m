@@ -41,6 +41,7 @@
 - (void)testSimpleModelValidaion {
     
     TestObject *obj = [TestObject new];
+    obj.someObj = @"blah";
     obj.requiredList = @[@1, @2, @3];
     
     NSError *error = nil;

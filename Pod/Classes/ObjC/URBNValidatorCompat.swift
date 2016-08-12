@@ -13,7 +13,7 @@ import Foundation
 @objc public protocol CompatValidator {
     var localizationBundle: NSBundle { get }
 
-    func validate(key: String?, value: AnyObject?, rule: URBNCompatBaseRule) throws
+    func validateKey(key: String, withValue value: AnyObject?, rule: URBNCompatBaseRule) throws
     func validate(item: CompatValidateable , stopOnFirstError: Bool) throws
 }
 
@@ -32,7 +32,7 @@ extension CompatValidateable {
 }
 
 @objc public class URBNCompatValidator: NSObject, CompatValidator {
-    private let backingValidator: URBNValidator = URBNValidator()
+    private var backingValidator: URBNValidator = URBNValidator(bundle: NSBundle(forClass: URBNCompatValidator.self))
     
     public var localizationBundle: NSBundle {
         get {
@@ -43,7 +43,7 @@ extension CompatValidateable {
         }
     }
     
-    public func validate(key: String?, value: AnyObject?, rule: URBNCompatBaseRule) throws {
+    public func validateKey(key: String, withValue value: AnyObject?, rule: URBNCompatBaseRule) throws {
         try backingValidator.validate(key, value: value, rule: rule.backingRule)
     }
     

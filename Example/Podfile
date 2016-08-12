@@ -2,4 +2,10 @@ source 'https://github.com/CocoaPods/Specs.git'
 use_frameworks!
 
 
-pod "URBNValidator", :path => "../"
+target "Example" do
+    pod "URBNValidator", :path => "../"
+
+    target "URBNValidator_Tests" do
+        inherit! :search_paths
+    end
+end
