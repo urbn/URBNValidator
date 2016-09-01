@@ -211,7 +211,7 @@ extension Validator {
             ].reduce(str) { (s, replacement: (key: String, pattern: NSRegularExpression)) -> String in
                 return replacement.pattern.stringByReplacingMatchesInString(s,
                                                                             options: .ReportCompletion,
-                                                                            range: NSMakeRange(0, s.length - 1),
+                                                                            range: NSMakeRange(0, (s as NSString).length),
                                                                             withTemplate: replacement.key
                 )
         }
