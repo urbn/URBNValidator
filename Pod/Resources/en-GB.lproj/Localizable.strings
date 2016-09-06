@@ -1,6 +1,3 @@
-
-
-
 "ls_URBNValidator_URBNValidator.URBNRequiredRule" = "{{field}} is required.";
 "ls_URBNValidator_URBNValidator.URBNBlockRule" = "\"{{field}}\" is invalid";
 "ls_URBNValidator_URBNValidator.URBNRegexRule" = "Invalid characters";
