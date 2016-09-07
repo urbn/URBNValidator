@@ -7,5 +7,5 @@
 "ls_URBNValidator_URBNValidator.URBNMinLengthRule" = "信息太短，请补充完整";
 "ls_URBNValidator_URBNValidator.URBNMaxLengthRule" = "信息太长，请删减";
 "ls_URBNValidator_URBNValidator.URBNDatePastRule" = "时间必须是过去时间";
-"ls_URBNValidator_URBNValidator.URBNDateFutureRule" = "时间必须是将来时间”;
+"ls_URBNValidator_URBNValidator.URBNDateFutureRule" = "时间必须是将来时间";
 
