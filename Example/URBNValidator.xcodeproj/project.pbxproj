@@ -36,6 +36,12 @@
 /* Begin PBXFileReference section */
 		01939DF682E15063CEEF917F /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DDD8D03FD93A39527828471 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		30273E551D8081F0002079CE /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
+		30273E561D8081F0002079CE /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		30273E571D8081F0002079CE /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		30273E581D80820E002079CE /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/Main.strings"; sourceTree = "<group>"; };
+		30273E591D80820E002079CE /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		30273E5A1D80820E002079CE /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		33BF3BA3B1970034FE528166 /* Pods_URBNValidator_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_URBNValidator_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E13484B876FF65988FC2CBD /* Pods-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Example/Pods-Example.debug.xcconfig"; sourceTree = "<group>"; };
 		5BBBCD0B3AE25F8E30F282A2 /* Pods_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -248,6 +254,8 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
+				"en-GB",
 			);
 			mainGroup = 607FACC71AFB9204008FA782;
 			productRefGroup = 607FACD11AFB9204008FA782 /* Products */;
@@ -413,6 +421,8 @@
 			children = (
 				D869D43C1C0F6421000CFDA9 /* Base */,
 				D869D4491C0F6470000CFDA9 /* en */,
+				30273E551D8081F0002079CE /* zh-Hans */,
+				30273E581D80820E002079CE /* en-GB */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -422,6 +432,8 @@
 			children = (
 				D869D4411C0F6421000CFDA9 /* Base */,
 				D869D44A1C0F6470000CFDA9 /* en */,
+				30273E561D8081F0002079CE /* zh-Hans */,
+				30273E591D80820E002079CE /* en-GB */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -430,6 +442,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				D869D44C1C0F648D000CFDA9 /* en */,
+				30273E571D8081F0002079CE /* zh-Hans */,
+				30273E5A1D80820E002079CE /* en-GB */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
