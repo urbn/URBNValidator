@@ -1,0 +1,11 @@
+"ls_URBNValidator_URBNValidator.URBNRequiredRule" = "{{field}} 为必填项。";
+"ls_URBNValidator_URBNValidator.URBNBlockRule" = "\"{{field}}\" 无效";
+"ls_URBNValidator_URBNValidator.URBNRegexRule" = "请确保英文或拼音填写，标点符号为错误字符。";
+"ls_URBNValidator_URBNValidator.URBNRegexEmailRule" = "电子邮件地址无效";
+"ls_URBNValidator_URBNValidator.URBNRegexLettersRule" = "请确保填写拼音或英文";
+"ls_URBNValidator_URBNValidator.URBNRegexNumbersRule" = "请确保填写数字";
+"ls_URBNValidator_URBNValidator.URBNMinLengthRule" = "信息太短，请补充完整";
+"ls_URBNValidator_URBNValidator.URBNMaxLengthRule" = "信息太长，请删减";
+"ls_URBNValidator_URBNValidator.URBNDatePastRule" = "时间必须是过去时间";
+"ls_URBNValidator_URBNValidator.URBNDateFutureRule" = "时间必须是将来时间”;
+
