@@ -11,10 +11,10 @@ import Foundation
 
 
 @objc public protocol CompatValidator {
-    var localizationBundle: NSBundle { get }
+    var localizationBundle: Bundle { get }
 
-    func validateKey(key: String, withValue value: AnyObject?, rule: URBNCompatBaseRule) throws
-    func validate(item: CompatValidateable , stopOnFirstError: Bool) throws
+    func validateKey(_ key: String, withValue value: AnyObject?, rule: URBNCompatBaseRule) throws
+    func validate(_ item: CompatValidateable , stopOnFirstError: Bool) throws
 }
 
 @objc public protocol CompatValidateable {
@@ -31,10 +31,10 @@ extension CompatValidateable {
     }
 }
 
-@objc public class URBNCompatValidator: NSObject, CompatValidator {
-    private var backingValidator: URBNValidator = URBNValidator(bundle: NSBundle(forClass: URBNCompatValidator.self))
+@objc open class URBNCompatValidator: NSObject, CompatValidator {
+    fileprivate var backingValidator: URBNValidator = URBNValidator(bundle: Bundle(for: URBNCompatValidator.self))
     
-    public var localizationBundle: NSBundle {
+    open var localizationBundle: Bundle {
         get {
             return backingValidator.localizationBundle
         }
@@ -43,11 +43,11 @@ extension CompatValidateable {
         }
     }
     
-    public func validateKey(key: String, withValue value: AnyObject?, rule: URBNCompatBaseRule) throws {
+    open func validateKey(_ key: String, withValue value: AnyObject?, rule: URBNCompatBaseRule) throws {
         try backingValidator.validate(key, value: value, rule: rule.backingRule)
     }
     
-    public func validate(item: CompatValidateable , stopOnFirstError: Bool) throws {
+    open func validate(_ item: CompatValidateable , stopOnFirstError: Bool) throws {
         try backingValidator.validate(ConvertCompat(cv: item), stopOnFirstError: stopOnFirstError)
     }
 }
@@ -65,9 +65,9 @@ class ConvertCompat: Validateable {
     }
 }
 
-@objc public class CompatValidatingValue: NSObject {
-    public var value: AnyObject?
-    public var rules: [URBNCompatBaseRule]
+@objc open class CompatValidatingValue: NSObject {
+    open var value: AnyObject?
+    open var rules: [URBNCompatBaseRule]
     
     public init(_ value: AnyObject?, rules: [URBNCompatBaseRule]) {
         self.value = value

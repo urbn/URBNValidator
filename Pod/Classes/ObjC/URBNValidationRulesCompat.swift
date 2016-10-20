@@ -10,7 +10,7 @@
 import Foundation
 
 
-@objc public class URBNCompatBaseRule: NSObject {
+@objc open class URBNCompatBaseRule: NSObject {
     var backingRule: URBNBaseRule
     
     public init(localizationKey: String? = nil) {
@@ -18,11 +18,11 @@ import Foundation
         super.init()
     }
     
-    public func validateValue(value: AnyObject?) -> Bool { return backingRule.validateValue(value) }
+    open func validateValue(_ value: AnyObject?) -> Bool { return backingRule.validateValue(value) }
     
-    public func validateValue(value: AnyObject?, key: String) -> Bool { return backingRule.validateValue(value, key: key) }
+    open func validateValue(_ value: AnyObject?, key: String) -> Bool { return backingRule.validateValue(value, key: key) }
     
-    public var localizationKey: String  {
+    open var localizationKey: String  {
         get {
             return backingRule.localizationKey
         }
@@ -32,8 +32,8 @@ import Foundation
     }
 }
 
-@objc public class URBNCompatRequirementRule: URBNCompatBaseRule, URBNRequirement {
-    public var isRequired: Bool {
+@objc open class URBNCompatRequirementRule: URBNCompatBaseRule, URBNRequirement {
+    open var isRequired: Bool {
         get {
             if let requiredBaseRule = backingRule as? URBNRequirement {
                 return requiredBaseRule.isRequired
@@ -49,7 +49,7 @@ import Foundation
     }
 }
 
-@objc public class URBNCompatRegexRule: URBNCompatRequirementRule {
+@objc open class URBNCompatRegexRule: URBNCompatRequirementRule {
     public init(pattern: String, localizationKey: String? = nil) {
         super.init()
         backingRule = URBNRegexRule(pattern: pattern, localizationKey: localizationKey)
@@ -60,41 +60,41 @@ import Foundation
     }
 }
 
-@objc public class URBNCompatRequiredRule: URBNCompatBaseRule {
+@objc open class URBNCompatRequiredRule: URBNCompatBaseRule {
     public override init(localizationKey: String? = nil) {
         super.init(localizationKey: localizationKey)
         backingRule = URBNRequiredRule()
     }
 }
 
-@objc public class URBNCompatNotRequiredRule: URBNCompatBaseRule {
+@objc open class URBNCompatNotRequiredRule: URBNCompatBaseRule {
     public override init(localizationKey: String? = nil) {
         super.init(localizationKey: localizationKey)
         backingRule = URBNNotRequiredRule()
     }
 }
 
-@objc public class URBNCompatBlockRule: URBNCompatBaseRule {
-    public typealias CompatBlockValidation = (value: AnyObject?) -> Bool
+@objc open class URBNCompatBlockRule: URBNCompatBaseRule {
+    public typealias CompatBlockValidation = (_ value: AnyObject?) -> Bool
     
-    public init(_ validator: BlockValidation) {
+    public init(_ validator: @escaping BlockValidation) {
         super.init()
         let blockRule = URBNBlockRule(validator)
         blockRule.blockValidation = validator
         backingRule = blockRule
     }
     
-    public init(validator: BlockValidation, localizationKey: String? = nil) {
+    public init(validator: @escaping BlockValidation, localizationKey: String? = nil) {
         super.init(localizationKey: localizationKey)
         let blockRule = URBNBlockRule(validator: validator, localizationKey: localizationKey)
         blockRule.blockValidation = validator
         backingRule = blockRule
     }
     
-    public convenience init(validator: CompatBlockValidation, localizationKey: String?) {
+    public convenience init(_ validator: @escaping CompatBlockValidation, localizationKey: String?) {
         let compatWrappingBlock = { (anyValue: Any?) -> Bool in
             if let anyObjectValue = anyValue as? AnyObject {
-                return validator(value: anyObjectValue)
+                return validator(anyObjectValue)
             }
             
             return false
@@ -104,9 +104,9 @@ import Foundation
     }
 }
 
-@objc public class URBNCompatDateRule: URBNCompatBaseRule {
+@objc open class URBNCompatDateRule: URBNCompatBaseRule {
     
-    public init(comparisonType: URBNDateComparision = .Past, localizationKey: String? = nil, comparisonUnit: NSCalendarUnit) {
+    public init(comparisonType: URBNDateComparision = .past, localizationKey: String? = nil, comparisonUnit: NSCalendar.Unit) {
         super.init()
         let r = URBNDateRule(comparisonType: comparisonType, localizationKey: localizationKey)
         r.comparisonUnit = comparisonUnit
@@ -115,13 +115,13 @@ import Foundation
     
     /// Here we're making sure that we're given an NSDate because objc is 
     /// dumb and will allow the user to not give an NSDate
-    public override func validateValue(value: AnyObject?) -> Bool {
-        guard let value = value as? NSDate else { return false }
-        return super.validateValue(value)
+    open override func validateValue(_ value: AnyObject?) -> Bool {
+        guard let value = value as? Date else { return false }
+        return super.validateValue(value as AnyObject?)
     }
     
-    public override func validateValue(value: AnyObject?, key: String) -> Bool {
-        guard let value = value as? NSDate else { return false }
-        return super.validateValue(value, key: key)
+    open override func validateValue(_ value: AnyObject?, key: String) -> Bool {
+        guard let value = value as? Date else { return false }
+        return super.validateValue(value as AnyObject?, key: key)
     }
 }

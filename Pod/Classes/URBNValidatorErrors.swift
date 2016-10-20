@@ -17,13 +17,13 @@ import Foundation
  `FieldInvalid` There is only one invalid field
  `MultiFieldInvalid` There are multiple invalid fields
 */
-@objc public enum ValidationError: Int, ErrorType {
+@objc public enum ValidationError: Int, Error {
     // Swift namespaces this error when it generates the constant. 
     // So if we don't provide that same thing here, then our domain const would
     // differ from what we actually send in the domain. 😢
     public static var _NSErrorDomain = "URBNValidator.ValidationError"
-    case FieldInvalid
-    case MultiFieldInvalid
+    case fieldInvalid
+    case multiFieldInvalid
 }
 
 private let kMultiErrorUserInfoKey = "multi_errors"
@@ -45,7 +45,7 @@ public extension NSError {
     public var isMultiError: Bool {
         // Make sure we're referencing one of our error domains
         guard self.domain == ValidationError._NSErrorDomain else { return false }
-        return self.code == ValidationError.MultiFieldInvalid.rawValue
+        return self.code == ValidationError.multiFieldInvalid.rawValue
     }
     
     public var underlyingErrors: [NSError]? {
@@ -63,21 +63,21 @@ public extension NSError {
     
     
     // MARK: - Helpers
-    internal class func fieldError(field: String?, description: String) -> NSError {
-        let userInfo: [NSObject: AnyObject] = [
+    internal class func fieldError(_ field: String?, description: String) -> NSError {
+        let userInfo: [AnyHashable: Any] = [
             NSLocalizedDescriptionKey: description,
             kFieldMetaDataInfoKey: ErrorMeta(field: field)
         ]
         
-        return NSError(domain: ValidationError._NSErrorDomain, code: ValidationError.FieldInvalid.rawValue, userInfo: userInfo)
+        return NSError(domain: ValidationError._NSErrorDomain, code: ValidationError.fieldInvalid.rawValue, userInfo: userInfo)
     }
     
-    internal class func multiErrorWithErrors(errors: [NSError]) -> NSError {
-        let userInfo: [NSObject: AnyObject] = [
+    internal class func multiErrorWithErrors(_ errors: [NSError]) -> NSError {
+        let userInfo: [AnyHashable: Any] = [
             NSLocalizedDescriptionKey: "Multiple errors occurred",
             kMultiErrorUserInfoKey: errors
         ]
         
-        return NSError(domain: ValidationError._NSErrorDomain, code: ValidationError.MultiFieldInvalid.rawValue, userInfo: userInfo)
+        return NSError(domain: ValidationError._NSErrorDomain, code: ValidationError.multiFieldInvalid.rawValue, userInfo: userInfo)
     }
 }

@@ -10,9 +10,9 @@ import Foundation
 
 
 
-public class URBNRequiredRule: URBNBaseRule {
+open class URBNRequiredRule: URBNBaseRule {
     
-    public override func validateValue<T>(value: T?) -> Bool {
+    open override func validateValue<T>(_ value: T?) -> Bool {
         if value is String {
             /// Also validate the value is not empty here.  
             /// We're only doing this for backwards compatibility with QBValidator.
@@ -25,9 +25,9 @@ public class URBNRequiredRule: URBNBaseRule {
 
 
 
-public class URBNNotRequiredRule: URBNBaseRule {
+open class URBNNotRequiredRule: URBNBaseRule {
     
-    public override func validateValue<T>(value: T?) -> Bool {
+    open override func validateValue<T>(_ value: T?) -> Bool {
         return true
     }
 }
@@ -35,22 +35,22 @@ public class URBNNotRequiredRule: URBNBaseRule {
 
 
 
-public typealias BlockValidation = (value: Any?) -> Bool
-public class URBNBlockRule: URBNBaseRule {
-    public var blockValidation: BlockValidation
+public typealias BlockValidation = (_ value: Any?) -> Bool
+open class URBNBlockRule: URBNBaseRule {
+    open var blockValidation: BlockValidation
     
-    public init(_ validator: BlockValidation) {
+    public init(_ validator: @escaping BlockValidation) {
         blockValidation = validator
         super.init()
     }
     
-    public init(validator: BlockValidation, localizationKey: String? = nil) {
+    public init(validator: @escaping BlockValidation, localizationKey: String? = nil) {
         blockValidation = validator
         super.init(localizationKey: localizationKey)
     }
     
-    public override func validateValue<T>(value: T?) -> Bool {
-        return self.blockValidation(value: value)
+    open override func validateValue<T>(_ value: T?) -> Bool {
+        return self.blockValidation(value)
     }
 }
 
@@ -62,27 +62,27 @@ public class URBNBlockRule: URBNBaseRule {
 */
 
 @objc public enum URBNDateComparision: Int {
-    case Past
-    case Future
+    case past
+    case future
     
-    var comparisonResult: [NSComparisonResult] {
+    var comparisonResult: [ComparisonResult] {
         switch(self) {
-        case .Past: return [NSComparisonResult.OrderedDescending]
-        case .Future: return [NSComparisonResult.OrderedAscending, NSComparisonResult.OrderedSame]
+        case .past: return [ComparisonResult.orderedDescending]
+        case .future: return [ComparisonResult.orderedAscending, ComparisonResult.orderedSame]
         }
     }
     
     var localizeString: String {
         switch(self) {
-        case .Past: return "URBNDatePastRule"
-        case .Future: return "URBNDateFutureRule"
+        case .past: return "URBNDatePastRule"
+        case .future: return "URBNDateFutureRule"
         }
     }
 }
 
-public class URBNDateRule: URBNBaseRule {
-    public var comparisonUnit = NSCalendarUnit.Second
-    public var comparisonType = URBNDateComparision.Past {
+open class URBNDateRule: URBNBaseRule {
+    open var comparisonUnit = NSCalendar.Unit.second
+    open var comparisonType = URBNDateComparision.past {
         didSet {
             // Only if we have not set the localization directly, then 
             // we'll reset our localization on change of comparisonType
@@ -92,28 +92,32 @@ public class URBNDateRule: URBNBaseRule {
         }
     }
     
-    public override var localizationKey: String {
+    open override var localizationKey: String {
         didSet {
             _localizationIsOverriden = true
         }
     }
     
     
-    public init(comparisonType: URBNDateComparision = .Past, localizationKey: String? = nil) {
+    public init(comparisonType: URBNDateComparision = .past, localizationKey: String? = nil) {
         self.comparisonType = comparisonType
         _localizationIsOverriden = localizationKey != nil
         super.init(localizationKey: localizationKey ?? comparisonType.localizeString)
     }
     
-    public override func validateValue<T: NSDate>(value: T?) -> Bool {
-        guard let v = value as? NSDate else {
-            print("WARNING:  Passing \(value) to expected type of NSDate in URBNDateRule.  This is technically not allowed, but because objc let's it slide we have to support it.   You're probably doing something wrong.")
-            return false
+    open override func validateValue<T>(_ value: T?) -> Bool {
+        if value is Date {
+            guard let v = value as? Date else {
+                print("WARNING:  Passing \(value) to expected type of NSDate in URBNDateRule.  This is technically not allowed, but because objc let's it slide we have to support it.   You're probably doing something wrong.")
+                return false
+            }
+
+            let result = (Calendar.current as NSCalendar).compare(Date(), to: v, toUnitGranularity: comparisonUnit)
+            return comparisonType.comparisonResult.contains(result)
         }
-        
-        let result = NSCalendar.currentCalendar().compareDate(NSDate(), toDate: v, toUnitGranularity: comparisonUnit)
-        return comparisonType.comparisonResult.contains(result)
+
+        return value != nil
     }
     
-    private var _localizationIsOverriden: Bool = false
+    fileprivate var _localizationIsOverriden: Bool = false
 }
