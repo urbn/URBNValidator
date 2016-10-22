@@ -101,5 +101,22 @@
     XCTAssertEqualObjects(error.localizedDescription, @"What the hell");
 }
 
+-(void)testDateRule {
+    NSDate *currentDate = [NSDate date];
+    XCTAssertTrue([URBNVDateIsFuture(NSCalendarUnitMonth) validateValue:currentDate]);
+    XCTAssertTrue([URBNVDateIsFuture(NSCalendarUnitMonth) validateValue:currentDate key:@"current_test_key"]);
+
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    
+    NSDate *futureDate = [cal dateByAddingUnit:NSCalendarUnitMonth value:1 toDate:currentDate options:0];
+    XCTAssertTrue([URBNVDateIsFuture(NSCalendarUnitMonth) validateValue:futureDate]);
+    XCTAssertTrue([URBNVDateIsFuture(NSCalendarUnitMonth) validateValue:futureDate key:@"future_test_key"]);
+    
+    NSDate *pastDate = [cal dateByAddingUnit:NSCalendarUnitMonth value:-1 toDate:currentDate options:0];
+    XCTAssertFalse([URBNVDateIsFuture(NSCalendarUnitMonth) validateValue:pastDate]);
+    XCTAssertFalse([URBNVDateIsFuture(NSCalendarUnitMonth) validateValue:pastDate key:@"future_test_key"]);
+    
+    XCTAssertFalse([URBNVDateIsFuture(NSCalendarUnitMonth) validateValue:@"definitely not a date"]);
+}
 
 @end
