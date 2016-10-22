@@ -18,9 +18,9 @@ import Foundation
         super.init()
     }
     
-    open func validateValue(_ value: AnyObject?) -> Bool { return backingRule.validateValue(value) }
+    open func validateValue(_ value: Any?) -> Bool { return backingRule.validateValue(value) }
     
-    open func validateValue(_ value: AnyObject?, key: String) -> Bool { return backingRule.validateValue(value, key: key) }
+    open func validateValue(_ value: Any?, key: String) -> Bool { return backingRule.validateValue(value, key: key) }
     
     open var localizationKey: String  {
         get {
@@ -115,13 +115,13 @@ import Foundation
     
     /// Here we're making sure that we're given an NSDate because objc is 
     /// dumb and will allow the user to not give an NSDate
-    open override func validateValue(_ value: AnyObject?) -> Bool {
+    open override func validateValue(_ value: Any?) -> Bool {
         guard let value = value as? Date else { return false }
-        return super.validateValue(value as AnyObject?)
+        return super.validateValue(value)
     }
     
-    open override func validateValue(_ value: AnyObject?, key: String) -> Bool {
+    open override func validateValue(_ value: Any?, key: String) -> Bool {
         guard let value = value as? Date else { return false }
-        return super.validateValue(value as AnyObject?, key: key)
+        return super.validateValue(value, key: key)
     }
 }
