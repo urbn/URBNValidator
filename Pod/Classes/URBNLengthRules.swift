@@ -43,7 +43,7 @@ extension NSDictionary: Lengthable {
     }
 }
 
-extension NSTimeInterval: Lengthable {
+extension TimeInterval: Lengthable {
     public var length: Int {
         return Int(self)
     }
@@ -51,19 +51,19 @@ extension NSTimeInterval: Lengthable {
 
 extension NSNumber: Lengthable {
     public var length: Int {
-        return self.integerValue;
+        return self.intValue;
     }
 }
 
-func validate<T>(value: T?, limit: Int, comparisonFunc: (lhs: Int, rhs: Int) -> Bool) -> Bool {
+func validate<T>(_ value: T?, limit: Int, comparisonFunc: (_ lhs: Int, _ rhs: Int) -> Bool) -> Bool {
     guard let lengthableVal = value as? Lengthable else { return false }
-    return comparisonFunc(lhs: lengthableVal.length, rhs: limit)
+    return comparisonFunc(lengthableVal.length, limit)
 }
 
-public class BaseLengthRule: URBNBaseRule, URBNRequirement {
-    public var limit: Int = 0
-    public var isRequired: Bool = false
-    public var isInclusive: Bool = false
+open class BaseLengthRule: URBNBaseRule, URBNRequirement {
+    open var limit: Int = 0
+    open var isRequired: Bool = false
+    open var isInclusive: Bool = false
     
     public init(limit: Int, inclusive: Bool = false, localizationKey: String? = nil) {
         self.limit = limit
@@ -71,27 +71,27 @@ public class BaseLengthRule: URBNBaseRule, URBNRequirement {
         super.init(localizationKey: localizationKey)
     }
     
-    public override func validateValue<T>(value: T?) -> Bool {
+    open override func validateValue<T>(_ value: T?) -> Bool {
         if !isRequired && value == nil { return true }
         
         return validate(value, limit: limit, comparisonFunc: comparisonFunc)
     }
     
-    var comparisonFunc: (lhs: Int, rhs: Int) -> Bool { return { _,_ in false } }
+    var comparisonFunc: (_ lhs: Int, _ rhs: Int) -> Bool { return { _,_ in false } }
 }
 
-public class URBNMinLengthRule: BaseLengthRule {
+open class URBNMinLengthRule: BaseLengthRule {
     public init(minLength: Int, inclusive: Bool = false, localizationKey: String? = nil) {
         super.init(limit: minLength, inclusive: inclusive, localizationKey: localizationKey)
     }
     
-    override var comparisonFunc: (lhs: Int, rhs: Int) -> Bool { return isInclusive ? (>=) : (>) }
+    override var comparisonFunc: (_ lhs: Int, _ rhs: Int) -> Bool { return isInclusive ? (>=) : (>) }
 }
 
-public class URBNMaxLengthRule: BaseLengthRule {
+open class URBNMaxLengthRule: BaseLengthRule {
     public init(maxLength: Int, inclusive: Bool = false, localizationKey: String? = nil) {
         super.init(limit: maxLength, inclusive: inclusive, localizationKey: localizationKey)
     }
     
-    override var comparisonFunc: (lhs: Int, rhs: Int) -> Bool { return isInclusive ? (<=) : (<) }
+    override var comparisonFunc: (_ lhs: Int, _ rhs: Int) -> Bool { return isInclusive ? (<=) : (<) }
 }

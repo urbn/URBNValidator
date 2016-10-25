@@ -59,19 +59,19 @@ class BasicTests: XCTestCase {
         let r = URBNDateRule()
         
         XCTAssertEqual(r.localizationKey, "URBNDatePastRule")
-        XCTAssertEqual(r.comparisonType, URBNDateComparision.Past, "Should default to past")
+        XCTAssertEqual(r.comparisonType, URBNDateComparision.past, "Should default to past")
         
-        r.comparisonType = URBNDateComparision.Past
-        XCTAssertTrue(r.validateValue(NSDate().dateByAddingTimeInterval(-100)), "Should validate past when comparisonType == .Past")
-        XCTAssertFalse(r.validateValue(NSDate().dateByAddingTimeInterval(100)), "Should not validate future when comparisonType == .Past")
+        r.comparisonType = URBNDateComparision.past
+        XCTAssertTrue(r.validateValue(Date().addingTimeInterval(-100)), "Should validate past when comparisonType == .Past")
+        XCTAssertFalse(r.validateValue(Date().addingTimeInterval(100)), "Should not validate future when comparisonType == .Past")
         
-        r.comparisonType = URBNDateComparision.Future
-        XCTAssertTrue(r.validateValue(NSDate().dateByAddingTimeInterval(100)), "Should validate future when comparisonType == .Ascending")
-        XCTAssertFalse(r.validateValue(NSDate().dateByAddingTimeInterval(-100)), "Should not validate past when comparisonType == .Ascending")
+        r.comparisonType = URBNDateComparision.future
+        XCTAssertTrue(r.validateValue(Date().addingTimeInterval(100)), "Should validate future when comparisonType == .Ascending")
+        XCTAssertFalse(r.validateValue(Date().addingTimeInterval(-100)), "Should not validate past when comparisonType == .Ascending")
         
         // Month/Year only
-        r.comparisonUnit = NSCalendarUnit.Month
-        XCTAssertTrue(r.validateValue(NSDate().dateByAddingTimeInterval(-100)), "Should validate when the comparison unit is set to Month")
+        r.comparisonUnit = NSCalendar.Unit.month
+        XCTAssertTrue(r.validateValue(Date().addingTimeInterval(-100)), "Should validate when the comparison unit is set to Month")
     }
     
     func testRegexRule() {
@@ -79,7 +79,7 @@ class BasicTests: XCTestCase {
         r.isRequired = false
         
         XCTAssertEqual(r.localizationKey, "URBNRegexRule")
-        
+
         XCTAssertFalse(r.validateValue(""), "Should validate empty when required is off")
         XCTAssertFalse(r.validateValue(" "), "Should not validate")
         

@@ -15,50 +15,50 @@ let lettersPattern = "^[A-Z]"
 let numericPattern = "^[\\d]"
 
 @objc public enum URBNRegexPattern: Int {
-    case AlphaNumeric
-    case Email
-    case Letters
-    case Numbers
+    case alphaNumeric
+    case email
+    case letters
+    case numbers
     
     var patternString: String {
         switch(self) {
-        case .Email: return emailPattern
-        case .AlphaNumeric: return alphaNumericPattern
-        case .Numbers: return numericPattern
-        case .Letters: return lettersPattern
+        case .email: return emailPattern
+        case .alphaNumeric: return alphaNumericPattern
+        case .numbers: return numericPattern
+        case .letters: return lettersPattern
         }
     }
     
     var localizeString: String? {
         switch(self) {
-        case .Email: return "URBNRegexEmailRule"
-        case .Letters: return "URBNRegexLettersRule"
-        case .Numbers: return "URBNRegexNumbersRule"
+        case .email: return "URBNRegexEmailRule"
+        case .letters: return "URBNRegexLettersRule"
+        case .numbers: return "URBNRegexNumbersRule"
         default: return nil
         }
     }
 }
 
-public class URBNRegexRule: URBNBaseRule, URBNRequirement {
+open class URBNRegexRule: URBNBaseRule, URBNRequirement {
     internal var pattern: String
-    public var isRequired: Bool = false
+    open var isRequired: Bool = false
     
     public init(pattern: String, localizationKey: String? = nil) {
         self.pattern = pattern
         super.init(localizationKey: localizationKey)
     }
     
-    public override func validateValue<T: AnyObject>(value: T?) -> Bool {
+    open override func validateValue<T>(_ value: T?) -> Bool {
         if !isRequired && value == nil { return true }
-        
-        guard let v = value as? AnyObject else {
+
+        guard let v = value else {
             print("WARNING:  Passing \(value) to expected type of AnyObject in URBNRegexRule.  This is technically not allowed, but because objc let's it slide we have to support it.   You're probably doing something wrong.")
             return false
         }
         
         let pred = NSPredicate(format: "SELF MATCHES[cd] %@", self.pattern)
         
-        return pred.evaluateWithObject(v)
+        return pred.evaluate(with: v)
     }
 }
 

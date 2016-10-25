@@ -53,7 +53,7 @@ class ObjectTestsSwifty: XCTestCase {
         }
         catch let err as NSError {
             XCTAssertEqual(err.domain, ValidationErrorDomain, "Validation error domain should be proper")
-            XCTAssertEqual(err.code, ValidationError.FieldInvalid.rawValue, "Should be single field validation error")
+            XCTAssertEqual(err.code, ValidationError.fieldInvalid.rawValue, "Should be single field validation error")
             XCTAssertEqual(err.localizedDescription, "too short")
         }
         catch {
@@ -71,7 +71,7 @@ class ObjectTestsSwifty: XCTestCase {
         }
         catch let err as NSError {
             XCTAssertEqual(err.domain, ValidationErrorDomain, "Validation error domain should be proper")
-            XCTAssertEqual(err.code, ValidationError.MultiFieldInvalid.rawValue, "Should be multiple field validation error")
+            XCTAssertEqual(err.code, ValidationError.multiFieldInvalid.rawValue, "Should be multiple field validation error")
             XCTAssertEqual(err.underlyingErrors?.count, 4, "Should have 1 error for each validation rule")
         }
         catch {

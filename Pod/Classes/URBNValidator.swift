@@ -63,7 +63,7 @@ public protocol Validator {
      - note: We'll handle falling back to the mainBundle for any localizations for free, so
      you don't have to override this if you're just trying to localize with the main bundle
      */
-    var localizationBundle: NSBundle { get }
+    var localizationBundle: Bundle { get }
     
     // You'll probably never use this.   But just incase here's a prop for it
     var localizationTable: String? { get }
@@ -74,7 +74,7 @@ public protocol Validator {
      
      -  parameter bundle: Optional `NSBundle` to use for localizations
     */
-    init(bundle: NSBundle?)
+    init(bundle: Bundle?)
     
     /**
      This validates a single value with a single rule.   The key is only used for display
@@ -88,7 +88,7 @@ public protocol Validator {
      
      - throws: An instance of NSError with the localized data
      */
-    func validate<V>(key: String, value: V?, rule: ValidationRule) throws
+    func validate<V>(_ key: String, value: V?, rule: ValidationRule) throws
     
     /**
      The purpose of this method is to validate the given model.   This will run through
@@ -102,7 +102,7 @@ public protocol Validator {
      - throws: An instance of NSError representing the invalid data
      
      */
-    func validate<V: Validateable>(item: V , stopOnFirstError: Bool) throws
+    func validate<V: Validateable>(_ item: V , stopOnFirstError: Bool) throws
     
     /**
      The purpose of this method is to validate the given model.   This will run through
@@ -117,7 +117,7 @@ public protocol Validator {
      - throws: An instance of NSError representing the invalid data
      
      */
-    func validate<V: Validateable>(item: V, ignoreList: [String], stopOnFirstError: Bool) throws
+    func validate<V: Validateable>(_ item: V, ignoreList: [String], stopOnFirstError: Bool) throws
     
     /**
      The purpose of this function is to wrap up our localization fallback logic, and handle
@@ -128,23 +128,23 @@ public protocol Validator {
      - key: The key to inject into the localization (if applicable).  Replaces the {{field}}
      - value: The value to inject into the localization (if applicable).  Replaces the {{value}}
      */
-    func localizeableString(rule: ValidationRule, key: String, value: Any?) -> String
+    func localizeableString(_ rule: ValidationRule, key: String, value: Any?) -> String
 }
 
 
 
 
-private let DefaultBundle = NSBundle(identifier: "org.cocoapods.URBNValidator") ?? NSBundle.mainBundle()
+private let DefaultBundle = Bundle(identifier: "org.cocoapods.URBNValidator") ?? Bundle.main
 private let DefaultLocalizationKeyBuilder: (ValidationRule, String) -> String = { rule, key in "ls_URBNValidator_URBNValidator.\(rule.localizationKey)" }
 
 // MARK: - Default Implementations
 extension Validator {
     
-    public var localizationBundle: NSBundle { return DefaultBundle }
+    public var localizationBundle: Bundle { return DefaultBundle }
     public var localizationTable: String? { return nil }
     public var localizationKeyBuilder: (ValidationRule, String) -> String { return DefaultLocalizationKeyBuilder }
     
-    public func validate<V>(key: String, value: V?, rule: ValidationRule) throws {
+    public func validate<V>(_ key: String, value: V?, rule: ValidationRule) throws {
         if rule.validateValue(value) {
             return
         }
@@ -152,7 +152,7 @@ extension Validator {
         throw NSError.fieldError(key, description: localizeableString(rule, key: key, value: value))
     }
     
-    public func validate<V: Validateable>(item: V, stopOnFirstError: Bool = false) throws {
+    public func validate<V: Validateable>(_ item: V, stopOnFirstError: Bool = false) throws {
         do {
             try self.validate(item, ignoreList: [], stopOnFirstError: stopOnFirstError)
         } catch let e {
@@ -160,7 +160,7 @@ extension Validator {
         }
     }
     
-    public func validate<V: Validateable>(item: V, ignoreList: [String], stopOnFirstError: Bool = false) throws {
+    public func validate<V: Validateable>(_ item: V, ignoreList: [String], stopOnFirstError: Bool = false) throws {
         
         /// Nothing to validate here.   We're all good
         if item.validationMap().length == 0 { return }
@@ -189,7 +189,7 @@ extension Validator {
         }
     }
     
-    public func localizeableString(rule: ValidationRule, key: String, value: Any?) -> String {
+    public func localizeableString(_ rule: ValidationRule, key: String, value: Any?) -> String {
         let ruleKey = localizationKeyBuilder(rule, key)
         
         // First we try to localize against the mainBundle.
@@ -201,7 +201,7 @@ extension Validator {
         if let repValue = value as? CustomStringConvertible {
             replacementValue = repValue.description
         }
-        let options: NSRegularExpressionOptions = [NSRegularExpressionOptions.CaseInsensitive]
+        let options: NSRegularExpression.Options = [NSRegularExpression.Options.caseInsensitive]
         
         return [
             // Considering the try! fine here because this is a dev issue.   If you write an invalid
@@ -209,8 +209,8 @@ extension Validator {
             key: try! NSRegularExpression(pattern: "\\{\\{field\\}\\}", options: options),
             replacementValue: try! NSRegularExpression(pattern: "\\{\\{value\\}\\}", options: options),
             ].reduce(str) { (s, replacement: (key: String, pattern: NSRegularExpression)) -> String in
-                return replacement.pattern.stringByReplacingMatchesInString(s,
-                                                                            options: .ReportCompletion,
+                return replacement.pattern.stringByReplacingMatches(in: s,
+                                                                            options: .reportCompletion,
                                                                             range: NSMakeRange(0, (s as NSString).length),
                                                                             withTemplate: replacement.key
                 )
@@ -230,7 +230,7 @@ extension Validator {
      
      - returns: The resulting rules to use for validation
      */
-    internal func implicitelyRequiredRules(rules: [ValidationRule]) -> [ValidationRule] {
+    internal func implicitelyRequiredRules(_ rules: [ValidationRule]) -> [ValidationRule] {
         
         // Sanity
         if rules.count == 0 {
@@ -239,12 +239,12 @@ extension Validator {
         
         // If our rules do not contain any URBNRequirement rules, then
         // we can safely skip the next part
-        if !rules.contains({ $0 is URBNRequirement}) {
+        if !rules.contains(where: { $0 is URBNRequirement}) {
             return rules
         }
         
-        let isRequired = rules.contains({ $0 is URBNNotRequiredRule }) == false
-        let hasRequirement = rules.contains({ $0 is URBNRequiredRule || $0 is URBNNotRequiredRule })
+        let isRequired = rules.contains(where: { $0 is URBNNotRequiredRule }) == false
+        let hasRequirement = rules.contains(where: { $0 is URBNRequiredRule || $0 is URBNNotRequiredRule })
         let updatedRules = hasRequirement ? rules : ([URBNRequiredRule()] + rules)
         
         return updatedRules.map({ (r) -> ValidationRule in
@@ -265,11 +265,11 @@ extension Validator {
 // MARK: - URBNValidator -
 public struct URBNValidator: Validator {
     
-    public var localizationBundle: NSBundle = DefaultBundle
+    public var localizationBundle: Bundle = DefaultBundle
     public var localizationTable: String? = nil
     public var localizationKeyBuilder: (ValidationRule, String) -> String = DefaultLocalizationKeyBuilder
     
-    public init(bundle: NSBundle? = nil) {
+    public init(bundle: Bundle? = nil) {
         if let bundle = bundle  {
             localizationBundle = bundle
         }
