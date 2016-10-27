@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
 s.name             = "URBNValidator"
-  s.version          = "2"
+  s.version          = "1.0.0"
   s.summary          = "URBNValidator is a simple swift validation library with support for objc"
 
 # This description is used to generate tags and improve search results.
